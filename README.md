@@ -31,7 +31,6 @@
 ---
 
 
-> 💡 Tip: Add more screenshots or a GIF to better showcase the extension.
 
 ---
 
@@ -63,7 +62,7 @@ You're done! 🎉
 ```
 📦 Summaries_Chrome_Bot
  ┣ 📄 background.js         # Background script
- ┣ 📄 content.js            # Handles webpage content
+ ┣ 📄 content.js            # Handles webpage 
  ┣ 📄 icon.png              # Extension icon
  ┣ 📄 manifest.json         # Extension manifest
  ┣ 📄 options.html/.js      # Options UI + Logic
@@ -125,5 +124,5 @@ Feel free to check the [issues page](https://github.com/Sangram03/Summaries_Chro
 4. Paste the full code above
 5. Commit the file to `main`
 
-Let me know if you'd like a walkthrough video or screenshots of each step!
+
 ```
