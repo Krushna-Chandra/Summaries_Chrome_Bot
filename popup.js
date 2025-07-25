@@ -9,6 +9,7 @@ document.getElementById("summarize").addEventListener("click", async () => {
     if (!result.geminiApiKey) {
       resultDiv.innerHTML =
         "API key not found. Please set your API key in the extension options.";
+      
       return;
     }
 
@@ -59,6 +60,26 @@ document.getElementById("copy-btn").addEventListener("click", () => {
       .catch((err) => {
         console.error("Failed to copy text: ", err);
       });
+  }
+});
+
+
+document.getElementById("share-btn").addEventListener("click", () => {
+  const summaryText = document.getElementById("result")?.innerText?.trim();
+
+  if (summaryText) {
+    const encodedText = encodeURIComponent(summaryText);
+    const shareUrl = window.location.href;
+
+    // Choose a platform: WhatsApp, Twitter, Facebook, etc.
+    const platforms = {
+      whatsapp: `https://wa.me/?text=${encodedText}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodedText}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${encodedText}`,
+    };
+
+    // Example: open Twitter share in new tab
+    window.open(platforms.twitter, "_blank");
   }
 });
 
@@ -122,3 +143,50 @@ async function getGeminiSummary(text, summaryType, apiKey) {
  document.getElementById("close-btn").onclick = () => {
     window.close();
   };
+// first Element
+const blackblue = document.getElementById("black-blue");
+
+blackblue.onclick = () => {
+  document.body.style.background = 'linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.height = '300'; // full viewport height
+};
+
+// second element
+const yellowgreen = document.getElementById("yellow-green");
+
+yellowgreen.onclick = () => {
+  document.body.style.background = 'linear-gradient(90deg, rgba(237, 221, 83, 1) 0%,rgba(42, 123, 155, 1) 35%, rgba(87, 199, 133, 1) 100%)';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.height = '300'; // full viewport height
+};
+
+//third element
+
+const redpink = document.getElementById("red-pink");
+
+redpink.onclick = ()=> {
+  document.body.style.background = 'linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.height = '300';
+}
+
+
+
+
+
+
+
+
+
+
+  // last element
+const blackred = document.getElementById("black-red");
+
+blackred.onclick = () => {
+  document.body.style.background = 'linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.height = '300'; // full viewport height
+};
+
+
