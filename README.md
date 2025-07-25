@@ -7,6 +7,10 @@
 
 [Prakash Jena](https://github.com/prakashjena938)
 
+
+## Instructions Video 
+[YOUTUBE](https://youtu.be/zC4idSoEVgw?si=HVAGfzKGC5cc9CKb
+
 ## 📸 Preview
 <img width="661" height="416" alt="Image" src="https://github.com/user-attachments/assets/1904f362-9af2-4150-b307-bd387255c473" /><br>
 
