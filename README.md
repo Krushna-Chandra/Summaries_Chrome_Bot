@@ -1,5 +1,9 @@
 ### Summaries\_Chrome\_Bot
 
+![Screenshot](https://raw.githubusercontent.com/Sangram03/Summaries_Chrome_Bot/main/icon.png)
+
+
+## 📸 Preview
 <img width="661" height="416" alt="Image" src="https://github.com/user-attachments/assets/1904f362-9af2-4150-b307-bd387255c473" /><br>
 
 <img width="1022" height="501" alt="Image" src="https://github.com/user-attachments/assets/747b2e12-e45f-4d9e-b8dc-8aa59e365dc7" />
@@ -18,9 +22,6 @@
 
 ---
 
-## 📸 Preview
-
-![Screenshot](https://raw.githubusercontent.com/Sangram03/Summaries_Chrome_Bot/main/icon.png)
 
 > 💡 Tip: Add more screenshots or a GIF to better showcase the extension.
 
