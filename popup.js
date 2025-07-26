@@ -143,50 +143,80 @@ async function getGeminiSummary(text, summaryType, apiKey) {
  document.getElementById("close-btn").onclick = () => {
     window.close();
   };
-// first Element
-const blackblue = document.getElementById("black-blue");
 
-blackblue.onclick = () => {
-  document.body.style.background = 'linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)';
+let currentBackground = ""; // store latest applied background
+
+// Apply background and reset checkbox
+function applyBackground(bg, height) {
+  document.body.style.background = bg;
   document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.height = '300'; // full viewport height
-};
+  document.body.style.height = height;
 
-// second element
-const yellowgreen = document.getElementById("yellow-green");
-
-yellowgreen.onclick = () => {
-  document.body.style.background = 'linear-gradient(90deg, rgba(237, 221, 83, 1) 0%,rgba(42, 123, 155, 1) 35%, rgba(87, 199, 133, 1) 100%)';
-  document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.height = '300'; // full viewport height
-};
-
-//third element
-
-const redpink = document.getElementById("red-pink");
-
-redpink.onclick = ()=> {
-  document.body.style.background = 'linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)';
-  document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.height = '300';
+  // Reset checkbox spinner and icon
+  if (notchIcon) notchIcon.style.display = "block";
+  if (checkIcon) checkIcon.style.opacity = "0";
 }
 
-  // last element
-const blackred = document.getElementById("black-red");
+// 1. Gradient buttons
 
-blackred.onclick = () => {
-  document.body.style.background = 'linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)';
-  document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.height = '300'; // full viewport height
+const whiteblack = document.getElementById("white-black");
+whiteblack.onclick = () => {
+  currentBackground = 'linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%)';
+  applyBackground(currentBackground, '350px');
 };
 
+const blackblue = document.getElementById("black-blue");
+blackblue.onclick = () => {
+  currentBackground = 'linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)';
+  applyBackground(currentBackground, '350px');
+};
+
+const redpink = document.getElementById("red-pink");
+redpink.onclick = () => {
+  currentBackground = 'linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)';
+  applyBackground(currentBackground, '350px');
+};
+
+const blackred = document.getElementById("black-red");
+blackred.onclick = () => {
+  currentBackground = 'linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)';
+  applyBackground(currentBackground, '350px');
+};
+
+// 2. Color picker (Yellow-Green)
+
+const yellowgreen = document.getElementById("yellow-green");
+yellowgreen.onclick = () => {
+  currentBackground = 'linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))';
+  applyBackground(currentBackground, '350px');
+};
+
+// 3. Save background on "check" click
+const checkButton = document.getElementById("check");
+checkButton.onclick = (e) => {
+  e.preventDefault();
+  if (currentBackground) {
+    localStorage.setItem('customBackground', currentBackground);
+  }
+};
+
+// 4. Restore background on page load
+window.addEventListener("DOMContentLoaded", () => {
+  const savedBg = localStorage.getItem('customBackground');
+  if (savedBg) {
+    currentBackground = savedBg;
+    applyBackground(savedBg, '350px');
+  }
+});
+
+// 5. Checkbox spinner and check icon logic
 const checkbox = document.getElementById("checkbox");
 const notchIcon = document.getElementById("notch");
 const checkIcon = document.getElementById("check");
 
 checkbox.addEventListener("click", () => {
-  notchIcon.style.display = "none";
-  checkIcon.style.opacity = "1";
+  if (notchIcon) notchIcon.style.display = "none";
+  if (checkIcon) checkIcon.style.opacity = "1";
 });
 
 
