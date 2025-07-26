@@ -143,22 +143,28 @@ async function getGeminiSummary(text, summaryType, apiKey) {
  document.getElementById("close-btn").onclick = () => {
     window.close();
   };
-
 let currentBackground = ""; // store latest applied background
 
-// Apply background and reset checkbox
+// Icons
+const checkbox = document.getElementById("checkbox");
+const notchIcon = document.getElementById("notch");
+const checkIcon = document.getElementById("check"); // renamed to avoid conflict with "check" button
+const checkButton = document.getElementById("check"); // actual save button
+
+// Apply background and reset checkbox visuals
 function applyBackground(bg, height) {
   document.body.style.background = bg;
   document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.height = height;
+  // document.body.style.height = height;
+  document.body.style.height = '350px'; // instead of 350px
+  document.body.style.minHeight = '350px';
 
-  // Reset checkbox spinner and icon
+  // Reset checkbox spinner and check icon state
   if (notchIcon) notchIcon.style.display = "block";
   if (checkIcon) checkIcon.style.opacity = "0";
 }
 
-// 1. Gradient buttons
-
+// Gradient buttons
 const whiteblack = document.getElementById("white-black");
 whiteblack.onclick = () => {
   currentBackground = 'linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%)';
@@ -183,24 +189,25 @@ blackred.onclick = () => {
   applyBackground(currentBackground, '350px');
 };
 
-// 2. Color picker (Yellow-Green)
-
 const yellowgreen = document.getElementById("yellow-green");
 yellowgreen.onclick = () => {
   currentBackground = 'linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))';
   applyBackground(currentBackground, '350px');
 };
 
-// 3. Save background on "check" click
-const checkButton = document.getElementById("check");
+// Save background on "check" button click
 checkButton.onclick = (e) => {
   e.preventDefault();
   if (currentBackground) {
     localStorage.setItem('customBackground', currentBackground);
+
+    // Show check icon as confirmation
+    if (notchIcon) notchIcon.style.display = "none";
+    if (checkIcon) checkIcon.style.opacity = "1";
   }
 };
 
-// 4. Restore background on page load
+// Restore background on page load
 window.addEventListener("DOMContentLoaded", () => {
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
@@ -209,15 +216,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// 5. Checkbox spinner and check icon logic
-const checkbox = document.getElementById("checkbox");
-const notchIcon = document.getElementById("notch");
-const checkIcon = document.getElementById("check");
-
+// Checkbox spinner control
 checkbox.addEventListener("click", () => {
   if (notchIcon) notchIcon.style.display = "none";
   if (checkIcon) checkIcon.style.opacity = "1";
 });
-
-
-
