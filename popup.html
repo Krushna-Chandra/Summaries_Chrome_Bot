@@ -25,7 +25,6 @@
         background-image: linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%);
         background-repeat: no-repeat;
 
-
         
       }
 
@@ -200,6 +199,22 @@ border: 1px solid rgba(255, 255, 255, 0.3);
         justify-content: space-between;
         
       }
+.checkbox {
+  cursor: pointer;
+  position: relative;
+}
+.fa-circle-notch, .fa-circle-check {
+  font-size: 16px;
+  transition: opacity 0.3s ease;
+  position: absolute;
+}
+.fa-circle-notch {
+  color: limegreen;
+}
+.fa-circle-check {
+  color: red; /* use solid color here */
+  opacity: 0;
+}
     </style>
   </head>
   <body>
@@ -216,11 +231,16 @@ border: 1px solid rgba(255, 255, 255, 0.3);
       </div>
 
       <div class="modification">
-        <div class="h2">
+        <div class="h2" style="position: relative;">
         <span>AI Summary</span> 
         </div>
 
-        <div class="icon-added" style="margin-top: 5px;">
+        <div class="icon-added" style="margin-top: 0px; position: f;;">
+          <span class="checkbox" id="checkbox" style="position: relative;
+    margin-right: 30px;" >
+            <i id="notch" class="fa-solid fa-circle-notch"></i>
+            <i id="check" class="fa-regular fa-circle-check" ></i>
+          </span>
       <span id="black-blue" ><i class="fa-solid fa-circle" style="
     background: linear-gradient(to right,black, blue);
     -webkit-background-clip: text;

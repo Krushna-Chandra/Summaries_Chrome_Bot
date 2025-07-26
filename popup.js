@@ -171,15 +171,6 @@ redpink.onclick = ()=> {
   document.body.style.height = '300';
 }
 
-
-
-
-
-
-
-
-
-
   // last element
 const blackred = document.getElementById("black-red");
 
@@ -188,5 +179,15 @@ blackred.onclick = () => {
   document.body.style.backgroundRepeat = 'no-repeat';
   document.body.style.height = '300'; // full viewport height
 };
+
+const checkbox = document.getElementById("checkbox");
+const notchIcon = document.getElementById("notch");
+const checkIcon = document.getElementById("check");
+
+checkbox.addEventListener("click", () => {
+  notchIcon.style.display = "none";
+  checkIcon.style.opacity = "1";
+});
+
 
 
