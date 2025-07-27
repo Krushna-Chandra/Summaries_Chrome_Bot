@@ -258,8 +258,82 @@ border: 1px solid rgba(255, 255, 255, 0.3);
   color: red; /* use solid color here */
   opacity: 0;
 }
+.newdiv {
+    position: relative;
+    width: 250px;
+    height: 35px;
+    background: #f1cbcb;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+/* Rotating Gradient Border */
+.newdiv::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: conic-gradient(
+    #111111,
+    #ff2e2e,
+    #ff0099,
+    #ffcc00,
+    #ff2e2e,
+    #ddd4d4
+);
+
+    border-radius: 30px;
+    z-index: 0;
+    animation: rotateBorder 3s linear infinite;
+        filter: blur(2px); /* soft glow */
+    box-shadow: 0 0 12px rgba(201, 197, 197, 0.8); /* glowing border shadow */
+
+}
+
+/* Inner Background (to create border effect) */
+.newdiv::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    background:linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(173, 164, 137, 1) 0%, rgba(166, 145, 76, 1) 47%, rgba(191, 189, 172, 1) 100%);
+    border-radius: 30px;
+    z-index: 1;
+}
+
+/* Rotate Animation */
+@keyframes rotateBorder {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  0% {
+    transform: rotateZ(360deg);
+  }
+}
 
 
+/* Link styling */
+.newdiv a {
+    text-decoration: none;
+    color: rgb(13, 12, 12);
+    
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
     </style>
   </head>
   <body>
@@ -372,11 +446,13 @@ border: 1px solid rgba(255, 255, 255, 0.3);
         Select a summary type and click ' 👆🏻 Summarize This Page' to generate a
         summary.
       </div>
-      <div style="text-align: center; color: white; font-size: 12px; margin-top: 15px;">
-  <a href="https://github.com/Sangram03" target="_blank" style="text-decoration: none; color: inherit;">
-     Developed by <i class="fa-brands fa-github"></i>Sangram Das
+      <div class="footer" style="display: flex; justify-content: center;">
+        <div class="newdiv" style="text-align: center; color: white; font-size: 12px; margin-top: 15px;">
+  <a href="https://github.com/Sangram03" target="_blank" style="text-decoration: none; color: inherit; color:black;">
+     Developed by <i class="fa-brands fa-github" style="color: red;"></i>Sangram Das
   </a>
 </div>
+      </div>
     </div>
     
     </div>
