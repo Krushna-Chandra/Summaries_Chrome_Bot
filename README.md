@@ -95,7 +95,8 @@ You're done! 🎉
 
 * [ ] Add light/dark theme toggle 🌗
 * [ ] Auto-detect article sections 🧩
-* [ ] Summary download as PDF 📄
+* [ ] Summary download as PDF
+* [ ] Use More Free API Keys added soon
 
 ---
 
