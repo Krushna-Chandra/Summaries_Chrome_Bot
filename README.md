@@ -1,26 +1,39 @@
-### Summaries\_Chrome\_Bot
 
-![Screenshot](https://raw.githubusercontent.com/Sangram03/Summaries_Chrome_Bot/main/icon.png)
+# 🤖 Summaries_Chrome_Bot – Your AI-Powered Web Summarizer
 
+***Powered by [Vercel](https://vercel.com/oss)*** ⚡
 
+---
+
+<div align="center">
+  <img alt="Summaries Chrome Bot Banner" src="https://github.com/user-attachments/assets/c387e71c-5b18-4d7a-aee0-0f08f8746959" />
+  <br>
+  <p>
+    <strong>The official interactive platform for <em>Summaries_Chrome_Bot</em> – your go-to extension for instant webpage summaries.</strong>  
+    Featuring an elegant dark UI, AI-driven insights, and seamless browsing integration – built for students, researchers, and knowledge seekers alike.
+  </p>
+</div>
+
+![Extension Icon](https://raw.githubusercontent.com/Sangram03/Summaries_Chrome_Bot/main/icon.png)
+
+---
 
 ## UI Credit 
 
 [Prakash Jena](https://github.com/prakashjena938)
 
-
 ## Instructions Video 
+
 [YOUTUBE](https://youtu.be/zC4idSoEVgw?si=HVAGfzKGC5cc9CKb)
 
+---
 
 ## 📸 Preview
-<img width="661" height="416" alt="Image" src="https://github.com/user-attachments/assets/1904f362-9af2-4150-b307-bd387255c473" /><br>
 
-<img width="1022" height="501" alt="Image" src="https://github.com/user-attachments/assets/747b2e12-e45f-4d9e-b8dc-8aa59e365dc7" />
+<img width="661" height="416" alt="Preview 1" src="https://github.com/user-attachments/assets/1904f362-9af2-4150-b307-bd387255c473" /><br>
+<img width="1022" height="501" alt="Preview 2" src="https://github.com/user-attachments/assets/747b2e12-e45f-4d9e-b8dc-8aa59e365dc7" />
 
-
-
-
+---
 
 ## 🚀 Features
 
@@ -32,13 +45,7 @@
 
 ---
 
-
-
----
-
 ## 🛠️ Installation & Cloning
-
-To clone and use this extension in Chrome:
 
 ### 1️⃣ Clone the Repository
 
@@ -55,7 +62,7 @@ cd Summaries_Chrome_Bot
 4. Click **"Load unpacked"**
 5. Select the folder you cloned (`Summaries_Chrome_Bot/`)
 
-You're done! 🎉
+🎉 You're done!
 
 ---
 
@@ -64,11 +71,11 @@ You're done! 🎉
 ```
 📦 Summaries_Chrome_Bot
  ┣ 📄 background.js         # Background script
- ┣ 📄 content.js            # Handles webpage 
+ ┣ 📄 content.js            # Handles webpage content
  ┣ 📄 icon.png              # Extension icon
  ┣ 📄 manifest.json         # Extension manifest
- ┣ 📄 options.html/.js      # Options UI + Logic
- ┣ 📄 popup.html/.js        # Main popup UI + Logic
+ ┣ 📄 options.html/.js      # Options UI + logic
+ ┣ 📄 popup.html/.js        # Main popup UI + logic
 ```
 
 ---
@@ -87,7 +94,7 @@ You're done! 🎉
 "permissions": ["tabs", "storage", "scripting", "activeTab"]
 ```
 
-> Required to access current tab and manage storage for your API key.
+> Required to access the current tab and manage storage for your API key.
 
 ---
 
@@ -96,14 +103,14 @@ You're done! 🎉
 * [ ] Add light/dark theme toggle 🌗
 * [ ] Auto-detect article sections 🧩
 * [ ] Summary download as PDF
-* [ ] Use More Free API Keys added soon (FREE API KEY)
+* [ ] More free API keys support
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!
-Feel free to check the [issues page](https://github.com/Sangram03/Summaries_Chrome_Bot/issues).
+Contributions, issues, and feature requests are welcome!
+Check the [issues page](https://github.com/Sangram03/Summaries_Chrome_Bot/issues).
 
 ---
 
@@ -117,15 +124,6 @@ Feel free to check the [issues page](https://github.com/Sangram03/Summaries_Chro
 
 ```
 
----
 
-### ✅ How to Add It to Your Repo
-
-1. Open your repository on GitHub
-2. Click on `Add file` → `Create new file`
-3. Name the file: `README.md`
-4. Paste the full code above
-5. Commit the file to `main`
-
-
+Do you want me to do that?
 ```
