@@ -42,6 +42,56 @@ document.getElementById("summarize").addEventListener("click", async () => {
   });
 });
 
+// ==================== Voice Control ====================
+let isSpeaking = false;
+let currentUtterance = null;
+
+function stopSpeaking() {
+  window.speechSynthesis.cancel();
+  isSpeaking = false;
+  const voiceBtn = document.getElementById("speak-btn");
+  if (voiceBtn) {
+    voiceBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color: black;"></i> speak';
+  }
+}
+
+document.getElementById("speak-btn").addEventListener("click", () => {
+  const voiceBtn = document.getElementById("speak-btn");
+  const summaryText = document.getElementById("result").innerText;
+
+  if (!summaryText || summaryText.trim() === "") return;
+
+  if (!isSpeaking) {
+    stopSpeaking(); // reset before speaking
+    currentUtterance = new SpeechSynthesisUtterance(summaryText);
+    currentUtterance.lang = "en-US";
+    currentUtterance.rate = 1.0;
+    currentUtterance.pitch = 1.0;
+    currentUtterance.volume = 1.0;
+
+    currentUtterance.onend = () => stopSpeaking();
+
+    window.speechSynthesis.speak(currentUtterance);
+    isSpeaking = true;
+    voiceBtn.innerHTML = '<i class="fa-solid fa-stop" style="color: black;"></i> Stop';
+  } else {
+    stopSpeaking();
+  }
+});
+
+// Auto-stop when other controls are used
+["options","summarize", "copy-btn", "share-btn", "summary-type"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener("click", () => {
+      if (isSpeaking) stopSpeaking();
+    });
+  }
+});
+// ==================== Voice Control ====================
+
+
+
 document.getElementById("copy-btn").addEventListener("click", () => {
   const summaryText = document.getElementById("result").innerText;
 
