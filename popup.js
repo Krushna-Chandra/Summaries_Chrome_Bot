@@ -345,12 +345,12 @@ async function saveFile(type) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Add title
+    // Title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
     doc.text("Article Summary", 10, 15);
 
-    // Add summary text
+    // Summary content
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
     const lines = doc.splitTextToSize(summaryText, 180);
@@ -361,7 +361,6 @@ async function saveFile(type) {
   }
 }
 
-// ================= Share Link =================
 function copyLink() {
   const summaryText = document.getElementById("result")?.innerText?.trim();
   if (!summaryText) {
@@ -369,11 +368,19 @@ function copyLink() {
     return;
   }
 
-  // Encode summary into URL
   const encoded = encodeURIComponent(summaryText);
   const sharePageUrl = `https://example.com/share.html?text=${encoded}`;
 
   navigator.clipboard.writeText(sharePageUrl)
-    .then(() => alert("Share link copied!"))
-    .catch(err => console.error("Error copying link: ", err));
+    .then(() => alert("✅ Share link copied!"))
+    .catch(err => console.error("Error copying link:", err));
 }
+
+// Attach event listeners (Chrome extension-safe, no inline JS)
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("download-pdf-btn")
+    .addEventListener("click", () => saveFile("PDF"));
+
+  document.getElementById("copy-link-btn")
+    .addEventListener("click", copyLink);
+});
