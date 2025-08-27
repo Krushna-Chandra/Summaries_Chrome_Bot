@@ -271,3 +271,35 @@ checkbox.addEventListener("click", () => {
   if (notchIcon) notchIcon.style.display = "none";
   if (checkIcon) checkIcon.style.opacity = "1";
 });
+
+
+// updates option working conditions
+ const repos = [
+    { owner: "Sangram03", repo: "Summaries_Chrome_Bot" },
+  ];
+
+  document.getElementById("updates-btn").addEventListener("click", () => {
+    const container = document.getElementById("updates-container");
+    container.innerHTML = "⏳ Checking for updates...";
+
+    Promise.all(
+      repos.map(r =>
+        fetch(`https://api.github.com/repos/${r.owner}/${r.repo}/releases/latest`)
+          .then(res => res.json())
+          .then(data => ({
+            name: `${r.owner}/${r.repo}`,
+            version: data.tag_name,
+            url: data.html_url
+          }))
+      )
+    ).then(releases => {
+      container.innerHTML = "<b>🔄 Extension Updates:</b><br>";
+      releases.forEach(r => {
+        container.innerHTML += `✅ ${r.name}: Latest <b>${r.version}</b> → 
+          <a href="${r.url}" target="_blank">Download</a><br>`;
+      });
+    }).catch(err => {
+      container.innerHTML = "⚠️ Failed to fetch updates.";
+      console.error(err);
+    });
+  });
