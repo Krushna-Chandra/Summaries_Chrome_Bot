@@ -4,6 +4,8 @@
 <head>
   <title>AI Summary</title>
   <meta charset="UTF-8" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -366,6 +368,59 @@
     #speak-btn:hover {
       background-color: rgb(66, 58, 180);
     }
+
+      .dropdown-btn {
+      background: wheat;
+      border: 2px solid black;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: absolute;
+      top: 45px;
+      right: 0;
+      background: black;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      flex-direction: column;
+      min-width: 180px;
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: flex;
+    }
+
+    .dropdown button {
+      background: none;
+      border: none;
+      padding: 10px 14px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .dropdown button:hover {
+      background: #bd6262;
+    }
+
+    .dropdown i {
+      width: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -490,18 +545,19 @@
       Select a summary type and click ' 👆🏻 Summarize This Page' to generate a
       summary.
     </div>
-    <div class="footer" style="display: flex; justify-content: center; margin-top: 15px;">
+ <div class="footer" style="display: flex;  margin-top: 15px;">
   <div class="newdiv" 
        style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
               border-radius: 25px; 
-              padding: 3px 20px; 
+              padding: px; 
               font-size: 13px; 
-              font-weight: 600; 
+              font-weight: 700; 
               color: black; 
               box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
               display: flex; 
-              align-items: center; 
-              gap: 15px;">
+      
+              gap: 2px;
+              ">
 
 
 
@@ -518,7 +574,7 @@
 
     <!-- Contributor 2 -->
     <a href="https://github.com/Krushna-Chandra" target="_blank" 
-       style="display: flex; align-items: center; text-decoration: none; color: black; gap: 5px;">
+       style="display: flex; align-items: center; text-decoration: none; color: black;">
        <span>Contributor</span>
        <img src="https://github.com/Krushna-Chandra.png" 
             alt="Other Contributor" 
@@ -526,9 +582,32 @@
        
 
     </a>
+    <a href="https://github.com/prakashjena938" target="_blank" 
+       style="display: flex; align-items: center; text-decoration: none; color: black;">
+       <img src="https://github.com/prakashjena938.png" 
+            alt="Other Contributor" 
+            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
+       
+
+    </a>
 
   </div>
+  <div style="position: relative; margin-left: 20px;">
+  <!-- Dropdown Button -->
+  <div id="dropdownBtn" class="dropdown-btn">
+    <i style="color: black;" class="fa-solid fa-download"></i>
+    <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
+  </div>
+
+  <!-- Dropdown Menu -->
+  <div id="dropdownMenu" class="dropdown">
+    <button onclick="saveFile('PDF')"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
+    <button onclick="copyLink()"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+  </div>
 </div>
+  
+</div>
+
 
   </div>
 
