@@ -127,13 +127,3 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 
 ```
 
----
-
-### 🔥 What’s new in this version:
-- **Badges:** all upgraded with emojis + labels for readability.  
-- **Tech Stack:** now aligned in one centered row (*toolbox style*).  
-- **Contributors:** profile cards look **premium** with rounded borders + subtle shadows.  
-- **Sections:** clear horizontal spacing for readability.  
-
----
-
