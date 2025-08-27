@@ -4,7 +4,6 @@
 <head>
   <title>AI Summary</title>
   <meta charset="UTF-8" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -368,59 +367,52 @@
     #speak-btn:hover {
       background-color: rgb(66, 58, 180);
     }
+/* Dropdown container */
+.dropdown-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f8f8f8;
+}
 
-      .dropdown-btn {
-      background: wheat;
-      border: 2px solid black;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      position: relative;
-    }
+.dropdown {
+  display: none;
+  position: absolute;
+  bottom: 100%;   /* 👈 ensures it appears BELOW the button */
+  left: 0;
+  margin-top: 5px; /* small spacing */
+  background: #1a0606;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  min-width: 160px;
+  z-index: 999;
+}
 
-    /* Dropdown */
-    .dropdown {
-      position: absolute;
-      top: 45px;
-      right: 0;
-      background: black;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: none;
-      flex-direction: column;
-      min-width: 180px;
-      z-index: 1000;
-    }
+.dropdown.show {
+  display: block;
+}
 
-    .dropdown.show {
-      display: flex;
-    }
+.dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
 
-    .dropdown button {
-      background: none;
-      border: none;
-      padding: 10px 14px;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+.dropdown button:hover {
+  background: #ca1919;
+}
 
-    .dropdown button:hover {
-      background: #bd6262;
-    }
-
-    .dropdown i {
-      width: 20px;
-      text-align: center;
-    }
   </style>
 </head>
 
@@ -592,7 +584,10 @@
     </a>
 
   </div>
-  <div style="position: relative; margin-left: 20px;">
+  <!-- Add jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<div style="position: relative; margin-left: 20px;">
   <!-- Dropdown Button -->
   <div id="dropdownBtn" class="dropdown-btn">
     <i style="color: black;" class="fa-solid fa-download"></i>
@@ -604,6 +599,9 @@
     <button onclick="saveFile('PDF')"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
     <button onclick="copyLink()"><i class="fa-solid fa-link"></i> Copy Share Link</button>
   </div>
+</div>
+
+
 </div>
   
 </div>

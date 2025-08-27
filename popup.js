@@ -307,74 +307,73 @@ checkbox.addEventListener("click", () => {
 
 
   // download option working
+const dropdownBtn = document.getElementById("dropdownBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
+const angleIcon = document.getElementById("angleIcon");
 
-    const dropdownBtn = document.getElementById("dropdownBtn");
-  const dropdownMenu = document.getElementById("dropdownMenu");
-  const angleIcon = document.getElementById("angleIcon");
+// Toggle dropdown
+dropdownBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent immediate close
+  dropdownMenu.classList.toggle("show");
 
-  // Toggle dropdown
-  dropdownBtn.addEventListener("click", () => {
-    dropdownMenu.classList.toggle("show");
+  // Toggle angle icon
+  if (dropdownMenu.classList.contains("show")) {
+    angleIcon.classList.remove("fa-angle-down");
+    angleIcon.classList.add("fa-angle-up");
+  } else {
+    angleIcon.classList.remove("fa-angle-up");
+    angleIcon.classList.add("fa-angle-down");
+  }
+});
 
-    // Toggle angle icon
-    if (dropdownMenu.classList.contains("show")) {
-      angleIcon.classList.remove("fa-angle-down");
-      angleIcon.classList.add("fa-angle-up");
-    } else {
-      angleIcon.classList.remove("fa-angle-up");
-      angleIcon.classList.add("fa-angle-down");
-    }
-  });
+// Close when clicking outside
+window.addEventListener("click", () => {
+  dropdownMenu.classList.remove("show");
+  angleIcon.classList.remove("fa-angle-up");
+  angleIcon.classList.add("fa-angle-down");
+});
 
-  // Close when clicking outside
-  window.addEventListener("click", (e) => {
-    if (!dropdownBtn.contains(e.target)) {
-      dropdownMenu.classList.remove("show");
-      angleIcon.classList.remove("fa-angle-up");
-      angleIcon.classList.add("fa-angle-down");
-    }
-  });
-
-   async function saveFile(type) {
-    const summaryText = document.getElementById("result")?.innerText?.trim();
-    if (!summaryText) {
-      alert("No summary to download.");
-      return;
-    }
-
-    if (type === "PDF") {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Add title
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.text("Article Summary", 10, 15);
-
-      // Add summary text (auto wraps)
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      const lines = doc.splitTextToSize(summaryText, 180);
-      doc.text(lines, 10, 30);
-
-      // Save PDF
-      doc.save("summary.pdf");
-    }
+// ================= Download PDF =================
+async function saveFile(type) {
+  const summaryText = document.getElementById("result")?.innerText?.trim();
+  if (!summaryText) {
+    alert("No summary to download.");
+    return;
   }
 
-  // ================= Share Link =================
-  function copyLink() {
-    const summaryText = document.getElementById("result")?.innerText?.trim();
-    if (!summaryText) {
-      alert("No summary available to share.");
-      return;
-    }
+  if (type === "PDF") {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    // Encode summary into URL (using a sharer page)
-    const encoded = encodeURIComponent(summaryText);
-    const sharePageUrl = `https://yourdomain.com/share.html?text=${encoded}`;
+    // Add title
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Article Summary", 10, 15);
 
-    navigator.clipboard.writeText(sharePageUrl)
-      .then(() => alert("Share link copied!"))
-      .catch(err => console.error("Error copying link: ", err));
+    // Add summary text
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    const lines = doc.splitTextToSize(summaryText, 180);
+    doc.text(lines, 10, 30);
+
+    // Save PDF
+    doc.save("summary.pdf");
   }
+}
+
+// ================= Share Link =================
+function copyLink() {
+  const summaryText = document.getElementById("result")?.innerText?.trim();
+  if (!summaryText) {
+    alert("No summary available to share.");
+    return;
+  }
+
+  // Encode summary into URL
+  const encoded = encodeURIComponent(summaryText);
+  const sharePageUrl = `https://example.com/share.html?text=${encoded}`;
+
+  navigator.clipboard.writeText(sharePageUrl)
+    .then(() => alert("Share link copied!"))
+    .catch(err => console.error("Error copying link: ", err));
+}
