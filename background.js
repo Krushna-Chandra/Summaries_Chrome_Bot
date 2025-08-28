@@ -9,3 +9,22 @@ chrome.runtime.onInstalled.addListener(() => {
     }
   });
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "downloadPDF") {
+    chrome.downloads.download({
+      url: message.url,
+      filename: "summary.pdf",
+      saveAs: true
+    }, (downloadId) => {
+      if (chrome.runtime.lastError) {
+        console.error("Download Error:", chrome.runtime.lastError.message);
+        sendResponse({ status: "error", message: chrome.runtime.lastError.message });
+      } else {
+        sendResponse({ status: "ok", downloadId });
+      }
+    });
+    return true; // keeps sendResponse async
+  }
+});
+

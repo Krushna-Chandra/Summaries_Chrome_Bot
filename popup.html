@@ -367,52 +367,54 @@
     #speak-btn:hover {
       background-color: rgb(66, 58, 180);
     }
-/* Dropdown container */
-.dropdown-btn {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f8f8f8;
-}
 
-.dropdown {
-  display: none;
-  position: absolute;
-  bottom: 100%;   /* 👈 ensures it appears BELOW the button */
-  left: 0;
-  margin-top: 5px; /* small spacing */
-  background: #1a0606;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  min-width: 160px;
-  z-index: 999;
-}
+    /* Dropdown container */
+    .dropdown-btn {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f8f8f8;
+    }
 
-.dropdown.show {
-  display: block;
-}
+    .dropdown {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      /* 👈 ensures it appears BELOW the button */
+      left: 0;
+      margin-top: 5px;
+      /* small spacing */
+      background: #1a0606;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      min-width: 160px;
+      z-index: 999;
+    }
 
-.dropdown button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-}
+    .dropdown.show {
+      display: block;
+    }
 
-.dropdown button:hover {
-  background: #ca1919;
-}
+    .dropdown button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
 
+    .dropdown button:hover {
+      background: #19ca54;
+    }
   </style>
 </head>
 
@@ -437,57 +439,81 @@
           <span>AI Summary</span>
         </div>
 
-        <div class="icon-added" style="margin-top: 0px; position: f;;">
-          
-          <span class="checkbox" id="checkbox" style="position: relative;
-    margin-right: 30px;">
-            <i id="notch" class="fa-solid fa-circle-notch"></i>
-            <i id="check" class="fa-regular fa-circle-check"></i>
-          </span>
-          <span>
-            <i id="updates-btn" class="fa-solid fa-upload" style="cursor: pointer;"></i>
-          </span>
-          
-          <span id="white-black"><i class="fa-solid fa-circle" style="
-    background-image: linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%);
-    -webkit-background-clip: text;
+        <div class="icon-added" style="margin-top: 0px; position: relative;">
 
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  "></i></span>
-          <span id="black-blue"><i class="fa-solid fa-circle" style="
-    background: linear-gradient(to right,black, blue);
-    -webkit-background-clip: text;
+  <!-- Checkbox + Updates -->
+  <span class="checkbox" id="checkbox" style="position: absolute; margin-left: 0px;">
+    <i id="notch" class="fa-solid fa-circle-notch"></i>
+    <i id="check" class="fa-regular fa-circle-check"></i>
+  </span>
 
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  "></i></span>
-          <span id="yellow-green"><i class="fa-solid fa-circle" style="
-    background: linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5));
-    -webkit-background-clip: text;
+  <!-- Updates button + container -->
+ <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; margin-left: 20px; position: relative;">
+  <i id="updates-btn" class="fa-solid fa-upload" style="cursor: pointer;"></i>
+  <!-- Red dot for updates -->
+  <span id="update-badge" style="
+    position: absolute;
+    top: 0;
+    left: 18px;
+    width: 10px;
+    height: 10px;
+    background: red;
+    border-radius: 50%;
+    display: none;
+  "></span>
 
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  "></i></span>
-          <span id="red-pink"><i class="fa-solid fa-circle" style="
-    background: linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222));
-    -webkit-background-clip: text;
-
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  "></i></span>
-
-          <span id="black-red"><i class="fa-solid fa-circle" style="
-    background: linear-gradient(to right, rgb(208, 16, 16), blue);
-    -webkit-background-clip: text;
-
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-  "></i></span>
-          </span>
+  <div id="updates-container"></div>
+</div>
 
 
-        </div>
+  <!-- Color theme buttons -->
+  <span id="white-black">
+    <i class="fa-solid fa-circle" style="
+      background-image: linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;">
+    </i>
+  </span>
+
+  <span id="black-blue">
+    <i class="fa-solid fa-circle" style="
+      background: linear-gradient(to right, black, blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;">
+    </i>
+  </span>
+
+  <span id="yellow-green">
+    <i class="fa-solid fa-circle" style="
+      background: linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;">
+    </i>
+  </span>
+
+  <span id="red-pink">
+    <i class="fa-solid fa-circle" style="
+      background: linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;">
+    </i>
+  </span>
+
+  <span id="black-red">
+    <i class="fa-solid fa-circle" style="
+      background: linear-gradient(to right, rgb(208, 16, 16), blue);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;">
+    </i>
+  </span>
+
+</div>
+
 
 
       </div>
@@ -513,33 +539,48 @@
         <i class="fa-solid fa-copy" style="color: black;"></i>
         Copy
       </button>
-      <button id="share-btn">
-        <i class="fa-solid fa-share-nodes" style="color: black;"></i>
-        Share
-      </button>
-      <div id="share-menu"
-        style="display: none; position: absolute; background: #fff; border: 1px solid #ccc; padding: 7px; z-index: 999; margin-left: 20px;">
-        <button onclick="shareTo('whatsapp')"
-          style="background-color: green;padding: 10px; display: flex; justify-content: center;">
-          <i class="fa-brands fa-whatsapp"></i></button>
-        <button onclick="shareTo('twitter')"
-          style="background-color: black;padding: 10px; display: flex; justify-content: center;">
+      <button id="share-btn" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+  <i class="fa-solid fa-share-nodes" style="color: black;"></i> Share
+</button>
 
-          <i class="fa-brands fa-x-twitter"></i>
-        </button>
-        <button onclick="shareTo('facebook')" style="padding: 10px;">
-          <i class="fa-brands fa-square-facebook"></i>
-        </button>
-      </div>
+<div id="share-menu" style="
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 999;
+      margin-top: -71px;
+    margin-left: 162px;
+    margin-right: -3px;
+">
+  <button class="share-btn" data-platform="whatsapp" style="background-color: #25D366; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
+  <button class="share-btn" data-platform="twitter" style="background-color: #1DA1F2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
+    <i class="fa-brands fa-twitter"></i>
+  </button>
+  <button class="share-btn" data-platform="facebook" style="background-color: #1877F2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
+    <i class="fa-brands fa-facebook"></i>
+  </button>
+  <button class="share-btn" data-platform="linkedin" style="background-color: #0A66C2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
+    <i class="fa-brands fa-linkedin"></i>
+  </button>
+  <button class="share-btn" data-platform="copy" style="background-color: #333; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
+    <i class="fa-solid fa-link"></i>
+  </button>
+</div>
+
     </div>
 
     <div id="result" style="color: white;">
       Select a summary type and click ' 👆🏻 Summarize This Page' to generate a
       summary.
     </div>
- <div class="footer" style="display: flex;  margin-top: 15px;">
-  <div class="newdiv" 
-       style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+    <div class="footer" style="display: flex;  margin-top: 15px;">
+      <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
               border-radius: 25px; 
               padding: px; 
               font-size: 13px; 
@@ -553,58 +594,57 @@
 
 
 
-    <!-- Contributor 1 -->
-    <a href="https://github.com/Sangram03" target="_blank" 
-       style="display: flex; align-items: center; text-decoration: none; color: black; gap: 5px;">
-       <span>Develop by</span>
-       <img href="https://github.com/Sangram03" target="_blank" src="https://github.com/Sangram03.png" 
-            alt="Sangram Das" 
+        <!-- Contributor 1 -->
+        <a href="https://github.com/Sangram03" target="_blank"
+          style="display: flex; align-items: center; text-decoration: none; color: black; gap: 5px;">
+          <span>Develop by</span>
+          <img href="https://github.com/Sangram03" target="_blank" src="https://github.com/Sangram03.png"
+            alt="Sangram Das" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
+
+
+        </a>
+
+        <!-- Contributor 2 -->
+        <a href="https://github.com/Krushna-Chandra" target="_blank"
+          style="display: flex; align-items: center; text-decoration: none; color: black;">
+          <span>Contributor</span>
+          <img src="https://github.com/Krushna-Chandra.png" alt="Other Contributor"
             style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
 
-       
-    </a>
 
-    <!-- Contributor 2 -->
-    <a href="https://github.com/Krushna-Chandra" target="_blank" 
-       style="display: flex; align-items: center; text-decoration: none; color: black;">
-       <span>Contributor</span>
-       <img src="https://github.com/Krushna-Chandra.png" 
-            alt="Other Contributor" 
+        </a>
+        <a href="https://github.com/prakashjena938" target="_blank"
+          style="display: flex; align-items: center; text-decoration: none; color: black;">
+          <img src="https://github.com/prakashjena938.png" alt="Other Contributor"
             style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-       
 
-    </a>
-    <a href="https://github.com/prakashjena938" target="_blank" 
-       style="display: flex; align-items: center; text-decoration: none; color: black;">
-       <img src="https://github.com/prakashjena938.png" 
-            alt="Other Contributor" 
-            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-       
 
-    </a>
+        </a>
+
+      </div>
+      <!-- Add jsPDF -->
+
+
+      <div style="position: relative; margin-left: 20px;">
+        <!-- Dropdown Button -->
+        <div id="dropdownBtn" class="dropdown-btn">
+          <i style="color: black;" class="fa-solid fa-download"></i>
+          <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div id="dropdownMenu" class="dropdown hidden">
+          <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
+          <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+        </div>
+
+      </div>
+
+
+
+    </div>
 
   </div>
-  <!-- Add jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<div style="position: relative; margin-left: 20px;">
-  <!-- Dropdown Button -->
-  <div id="dropdownBtn" class="dropdown-btn">
-    <i style="color: black;" class="fa-solid fa-download"></i>
-    <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
-  </div>
-
-  <!-- Dropdown Menu -->
-  <div id="dropdownMenu" class="dropdown">
-    <button onclick="saveFile('PDF')"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
-    <button onclick="copyLink()"><i class="fa-solid fa-link"></i> Copy Share Link</button>
-  </div>
-</div>
-
-
-</div>
-  
-</div>
 
 
   </div>
@@ -612,6 +652,9 @@
   </div>
 
 
+  <!-- Load local jsPDF first -->
+  <script src="lib/jspdf.umd.min.js"></script>
+  <!-- Then load your extension logic -->
   <script src="popup.js"></script>
 </body>
 

@@ -1,4 +1,3 @@
-
 document.getElementById("summarize").addEventListener("click", async () => {
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML = '<div class="loading"><div class="loader"></div></div>';
@@ -115,24 +114,56 @@ document.getElementById("copy-btn").addEventListener("click", () => {
 });
 
 
-document.getElementById("share-btn").addEventListener("click", () => {
-  const summaryText = document.getElementById("result")?.innerText?.trim();
+const shareBtn = document.getElementById("share-btn");
+const shareMenu = document.getElementById("share-menu");
 
-  if (summaryText) {
-    const encodedText = encodeURIComponent(summaryText);
-    const shareUrl = window.location.href;
-
-    // Choose a platform: WhatsApp, Twitter, Facebook, etc.
-    const platforms = {
-      whatsapp: `https://wa.me/?text=${encodedText}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodedText}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${encodedText}`,
-    };
-
-    // Example: open Twitter share in new tab
-    window.open(platforms.twitter, "_blank");
-  }
+shareBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  shareMenu.style.display = shareMenu.style.display === "block" ? "none" : "block";
 });
+
+// Close menu when clicking outside
+document.addEventListener("click", () => {
+  shareMenu.style.display = "none";
+});
+
+// Share functionality
+document.querySelectorAll(".share-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const platform = btn.dataset.platform;
+    const resultText = document.getElementById("result")?.innerText?.trim() || "";
+    const encodedText = encodeURIComponent(resultText);
+    const shareUrl = encodeURIComponent(window.location.href); // optional
+
+    if (!resultText) {
+      alert("No result to share!");
+      return;
+    }
+
+    switch(platform) {
+      case "whatsapp":
+        window.open(`https://wa.me/?text=${encodedText}`, "_blank");
+        break;
+      case "twitter":
+        window.open(`https://twitter.com/intent/tweet?text=${encodedText}`, "_blank");
+        break;
+      case "facebook":
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${encodedText}`, "_blank");
+        break;
+      case "linkedin":
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}&summary=${encodedText}`, "_blank");
+        break;
+      case "copy":
+        navigator.clipboard.writeText(resultText)
+          .then(() => alert("Result copied to clipboard!"))
+          .catch(err => alert("Copy failed: " + err));
+        break;
+    }
+
+    shareMenu.style.display = "none"; // close menu after click
+  });
+});
+
 
 async function getGeminiSummary(text, summaryType, apiKey) {
   // Truncate very long texts to avoid API limits (typically around 30K tokens)
@@ -275,45 +306,26 @@ checkbox.addEventListener("click", () => {
 
 
 // updates option working conditions
- const repos = [
-    { owner: "Sangram03", repo: "Summaries_Chrome_Bot" },
-  ];
 
-  document.getElementById("updates-btn").addEventListener("click", () => {
-    const container = document.getElementById("updates-container");
-    container.innerHTML = "⏳ Checking for updates...";
-
-    Promise.all(
-      repos.map(r =>
-        fetch(`https://api.github.com/repos/${r.owner}/${r.repo}/releases/latest`)
-          .then(res => res.json())
-          .then(data => ({
-            name: `${r.owner}/${r.repo}`,
-            version: data.tag_name,
-            url: data.html_url
-          }))
-      )
-    ).then(releases => {
-      container.innerHTML = "<b>🔄 Extension Updates:</b><br>";
-      releases.forEach(r => {
-        container.innerHTML += `✅ ${r.name}: Latest <b>${r.version}</b> → 
-          <a href="${r.url}" target="_blank">Download</a><br>`;
-      });
-    }).catch(err => {
-      container.innerHTML = "⚠️ Failed to fetch updates.";
-      console.error(err);
-    });
+document.getElementById("updates-btn").addEventListener("click", () => {
+  chrome.windows.create({
+    url: "updates.html",
+    type: "popup",
+    width: 420,
+    height: 320
   });
+});
 
 
-  // download option working
+
+  // Get elements
 const dropdownBtn = document.getElementById("dropdownBtn");
 const dropdownMenu = document.getElementById("dropdownMenu");
 const angleIcon = document.getElementById("angleIcon");
 
 // Toggle dropdown
 dropdownBtn.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevent immediate close
+  e.stopPropagation();
   dropdownMenu.classList.toggle("show");
 
   // Toggle angle icon
@@ -326,18 +338,33 @@ dropdownBtn.addEventListener("click", (e) => {
   }
 });
 
-// Close when clicking outside
-window.addEventListener("click", () => {
-  dropdownMenu.classList.remove("show");
-  angleIcon.classList.remove("fa-angle-up");
-  angleIcon.classList.add("fa-angle-down");
+// Close dropdown when clicking outside
+document.addEventListener("click", (event) => {
+  if (!dropdownMenu.contains(event.target) && !dropdownBtn.contains(event.target)) {
+    dropdownMenu.classList.remove("show");
+    angleIcon.classList.remove("fa-angle-up");
+    angleIcon.classList.add("fa-angle-down");
+  }
 });
 
-// ================= Download PDF =================
+
+
+// Get buttons
+const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+const copyLinkBtn = document.getElementById("copyLinkBtn");
+
+// Attach events
+if (downloadPdfBtn) {
+  downloadPdfBtn.addEventListener("click", () => saveFile("PDF"));
+}
+if (copyLinkBtn) {
+  copyLinkBtn.addEventListener("click", copyLink);
+}
+
 async function saveFile(type) {
-  const summaryText = document.getElementById("result")?.innerText?.trim();
-  if (!summaryText) {
-    alert("No summary to download.");
+  const resultDiv = document.getElementById("result");
+  if (!resultDiv || !resultDiv.innerText.trim()) {
+    alert("No content to save!");
     return;
   }
 
@@ -345,42 +372,44 @@ async function saveFile(type) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Title
+    // Add title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.text("Article Summary", 10, 15);
+    doc.text("AI Summary", 10, 15);
 
-    // Summary content
+    // Add summary text
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
-    const lines = doc.splitTextToSize(summaryText, 180);
-    doc.text(lines, 10, 30);
+    const textLines = doc.splitTextToSize(resultDiv.innerText, 180);
+    doc.text(textLines, 10, 30);
 
-    // Save PDF
-    doc.save("summary.pdf");
+    // ✅ Generate Blob instead of dataurlstring
+    const pdfBlob = doc.output("blob");
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    // ✅ Send message to background.js
+    chrome.runtime.sendMessage(
+      { action: "downloadPDF", url: pdfUrl },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          console.error("Message error:", chrome.runtime.lastError.message);
+          return;
+        }
+        if (response?.status === "ok") {
+          console.log("Download started");
+        } else {
+          console.error("Download failed", response);
+        }
+      }
+    );
   }
 }
 
+// Copy link feature
 function copyLink() {
-  const summaryText = document.getElementById("result")?.innerText?.trim();
-  if (!summaryText) {
-    alert("No summary available to share.");
-    return;
-  }
-
-  const encoded = encodeURIComponent(summaryText);
-  const sharePageUrl = `https://example.com/share.html?text=${encoded}`;
-
-  navigator.clipboard.writeText(sharePageUrl)
-    .then(() => alert("✅ Share link copied!"))
-    .catch(err => console.error("Error copying link:", err));
+  const dummyLink = "https://example.com/share";
+  navigator.clipboard.writeText(dummyLink)
+    .then(() => alert("Link copied!"))
+    .catch((err) => alert("Copy failed: " + err));
 }
 
-// Attach event listeners (Chrome extension-safe, no inline JS)
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("download-pdf-btn")
-    .addEventListener("click", () => saveFile("PDF"));
-
-  document.getElementById("copy-link-btn")
-    .addEventListener("click", copyLink);
-});
