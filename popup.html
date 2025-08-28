@@ -614,8 +614,24 @@
       </div>
 
 
-      <!-- insert this inside the .options div next to #summary-type -->
-        <select id="language-select" title="Select language">
+     
+
+      <div style="position: relative; margin-left: 20px;">
+        <!-- Dropdown Button -->
+        <div style="padding: 7px;" id="dropdownBtn" class="dropdown-btn">
+          <i style="color: black;" class="fa-solid fa-download"></i>
+          <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div id="dropdownMenu" class="dropdown hidden">
+          <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
+          <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+        </div>
+
+      </div>
+       <!-- insert this inside the .options div next to #summary-type -->
+        <select style="border-radius: 10px; margin-left: 15px; " id="language-select" title="Select language">
           <option value="auto">🌐 Auto-detect (Default)</option>
           <option value="en-US">English (en-US)</option>
           <option value="hi-IN">हिन्दी / Hindi (hi-IN)</option>
@@ -631,21 +647,6 @@
 
       <!-- Add jsPDF -->
 
-
-      <div style="position: relative; margin-left: 20px;">
-        <!-- Dropdown Button -->
-        <div id="dropdownBtn" class="dropdown-btn">
-          <i style="color: black;" class="fa-solid fa-download"></i>
-          <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
-        </div>
-
-        <!-- Dropdown Menu -->
-        <div id="dropdownMenu" class="dropdown hidden">
-          <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
-          <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
-        </div>
-
-      </div>
 
 
     </div>
