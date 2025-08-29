@@ -415,6 +415,45 @@
     .dropdown button:hover {
       background: #19ca54;
     }
+    #history-container {
+  display: none;
+  margin-top: 10px;
+  max-height: 250px;       /* 🔹 Made taller */
+  overflow-y: auto;
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+}
+
+/* Each history entry as a card */
+.history-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.history-item b {
+  font-size: 14px;
+  color: #ffd700; /* gold for title */
+}
+
+.history-item small {
+  font-size: 11px;
+  color: #bbb;
+}
+
+.history-item a {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #4da6ff;
+}
+
   </style>
 </head>
 
@@ -532,6 +571,13 @@
       <button id="share-btn" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
   <i class="fa-solid fa-share-nodes" style="color: black;"></i> Share
 </button>
+<button id="history-btn">
+  <i class="fa-solid fa-clock-rotate-left" style="color: black;"></i>
+  History
+</button>
+
+
+
 
 <div id="share-menu" style="
   display: none;
