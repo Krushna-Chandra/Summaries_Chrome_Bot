@@ -55,7 +55,7 @@ function attachEventListeners() {
   document.getElementById("summarize").addEventListener("click", onSummarizeClick);
   document.getElementById("speak-btn").addEventListener("click", onSpeakClick);
   document.getElementById("copy-btn").addEventListener("click", onCopyClick);
-
+  document.getElementById("history-btn").addEventListener("click", loadHistory);
   // existing auto-stop logic for speech
   ["options","summarize", "copy-btn", "share-btn", "summary-type"].forEach(id => {
     const el = document.getElementById(id);
@@ -146,11 +146,15 @@ async function onSummarizeClick() {
         }
 
         try {
-          const summary = await getGeminiSummary(res.text, summaryType, result.geminiApiKey, language);
-          resultDiv.innerText = summary;
-        } catch (error) {
-          resultDiv.innerText = `Error: ${error.message || "Failed to generate summary."}`;
-        }
+  const summary = await getGeminiSummary(res.text, summaryType, result.geminiApiKey, language);
+  resultDiv.innerText = summary;
+
+  // ✅ Save to history
+  saveSummaryToHistory(tab, summary, summaryType);
+} catch (error) {
+  resultDiv.innerText = `Error: ${error.message || "Failed to generate summary."}`;
+}
+
       });
     });
   });
@@ -176,6 +180,7 @@ async function getGeminiSummary(text, summaryType, apiKey, language) {
       basePrompt = `Summarize the following article:\n\n${truncatedText}`;
       break;
   }
+  
 
   // Language instruction: if "auto", we ask the model to keep same language as source.
   let languageInstruction = "";
@@ -214,6 +219,89 @@ async function getGeminiSummary(text, summaryType, apiKey, language) {
     throw new Error("Failed to generate summary. Please try again later.");
   }
 }
+
+// --------------- Save Summary to History ---------------
+async function saveSummaryToHistory(tab, summary, type) {
+  const entry = {
+    url: tab.url,
+    title: tab.title,
+    summary: summary,
+    type: type,
+    timestamp: new Date().toISOString()
+  };
+
+  chrome.storage.local.get(["summaryHistory"], (data) => {
+    const history = data.summaryHistory || [];
+    history.unshift(entry);
+    if (history.length > 20) history.pop();
+    chrome.storage.local.set({ summaryHistory: history });
+  });
+}
+
+
+// --------------- Load History ---------------
+let showingHistory = false; // 👈 track if history is being shown
+let lastSummaryContent = ""; // 👈 keep the last summary text
+function loadHistory() {
+  const resultDiv = document.getElementById("result");
+
+  if (showingHistory) {
+    // 👈 Already showing history → restore last summary or default message
+    resultDiv.innerHTML =
+      lastSummaryContent ||
+      "Select a summary type and click ' 👆🏻 Summarize This Page' to generate a summary.";
+    showingHistory = false;
+    return;
+  }
+
+  // 👇 Save current content before overwriting with history
+  lastSummaryContent = resultDiv.innerHTML;
+
+  chrome.storage.local.get(["summaryHistory"], (data) => {
+    const history = data.summaryHistory || [];
+    if (history.length === 0) {
+      resultDiv.innerHTML = "<p><i>No saved summaries yet.</i></p>";
+    } else {
+      resultDiv.innerHTML = `
+        <button id="clear-history-btn" style="
+          background:#b33a3a;
+          color:white;
+          padding:6px 10px;
+          border:none;
+          border-radius:6px;
+          font-size:12px;
+          margin-bottom:10px;
+          cursor:pointer;
+        ">🗑️ Clear History</button>
+        ${history.map(item => `
+          <div class="history-item" style="margin-bottom:10px; padding:10px; background:#2a2a2a; border-radius:8px; border:1px solid #444;">
+            <b style="color:#ffd700;">${item.title || "Untitled"}</b><br>
+            <small style="color:#bbb;">${new Date(item.timestamp).toLocaleString()}</small>
+            <div style="white-space:pre-wrap; font-size:13px; margin-top:6px;">
+              ${item.summary}
+            </div>
+            <a href="${item.url}" target="_blank" style="color:#4da6ff; font-size:12px;">🔗 Open Page</a>
+          </div>
+        `).join("")}
+      `;
+
+      // ✅ Attach listener to clear button
+      document.getElementById("clear-history-btn").addEventListener("click", () => {
+        chrome.storage.local.remove("summaryHistory", () => {
+          // Show cleared message
+          resultDiv.innerHTML = "<p><i>History cleared.</i></p>";
+
+          // 🚨 Reset lastSummaryContent to startup message
+          lastSummaryContent =
+            "Select a summary type and click ' 👆🏻 Summarize This Page' to generate a summary.";
+        });
+      });
+    }
+
+    showingHistory = true; // 👈 now in history mode
+  });
+}
+
 
 // --------------- Copy ---------------
 function onCopyClick() {
@@ -256,6 +344,7 @@ async function onSpeakClick() {
   if (!isSpeaking) {
     stopSpeaking(); // reset before speaking
     currentUtterance = new SpeechSynthesisUtterance(summaryText);
+    
 
     // set language
     currentUtterance.lang = langCode;
