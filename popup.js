@@ -8,6 +8,7 @@ const LANG_LABELS = {
   "auto": "Auto-detect",
   "en-US": "English (en-US)",
   "hi-IN": "हिन्दी / Hindi (hi-IN)",
+  "or-IN": "Odia",
   "es-ES": "Español (es-ES)",
   "fr-FR": "Français (fr-FR)",
   "de-DE": "Deutsch (de-DE)",
@@ -57,7 +58,7 @@ function attachEventListeners() {
   document.getElementById("copy-btn").addEventListener("click", onCopyClick);
   document.getElementById("history-btn").addEventListener("click", loadHistory);
   // existing auto-stop logic for speech
-  ["options","summarize", "copy-btn", "share-btn", "summary-type"].forEach(id => {
+  ["options","summarize", "copy-btn", "share-btn", "summary-type","history-btn"].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener("click", () => {
@@ -333,6 +334,31 @@ function stopSpeaking() {
   }
 }
 
+// 🔊 Helper: Chunked speech for Hindi (and long text)
+function speakText(text, lang = "hi-IN") {
+  if (!("speechSynthesis" in window)) {
+    alert("Sorry, your browser does not support Text-to-Speech.");
+    return;
+  }
+
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices();
+
+  // Pick a Hindi-supported voice (fallback to default if not found)
+  let voice = voices.find(v => v.lang === lang) || voices.find(v => v.lang.startsWith("hi")) || voices[0];
+
+  // Break text into smaller chunks for Hindi (avoid silent failure on long text)
+  const chunkSize = 250;
+  const chunks = text.match(new RegExp('.{1,' + chunkSize + '}(\\s|$)', 'g'));
+
+  chunks.forEach(chunk => {
+    const utter = new SpeechSynthesisUtterance(chunk);
+    utter.voice = voice;
+    utter.lang = lang;
+    synth.speak(utter);
+  });
+}
+
 async function onSpeakClick() {
   const voiceBtn = document.getElementById("speak-btn");
   const summaryText = document.getElementById("result").innerText;
@@ -340,13 +366,21 @@ async function onSpeakClick() {
 
   const selectedLang = document.getElementById("language-select")?.value || "auto";
   const langCode = (selectedLang === "auto") ? detectLanguageCodeFromText(summaryText) || LANG_DEFAULT : selectedLang;
+  const summaryType = document.getElementById("summary-type").value;
 
   if (!isSpeaking) {
     stopSpeaking(); // reset before speaking
-    currentUtterance = new SpeechSynthesisUtterance(summaryText);
-    
 
-    // set language
+    // ✅ Special case: Hindi + detailed summary → chunked speak
+    if (summaryType === "detailed" && langCode === "hi-IN") {
+      speakText(summaryText, "hi-IN");
+      isSpeaking = true;
+      voiceBtn.innerHTML = '<i class="fa-solid fa-stop" style="color: black;"></i> Stop';
+      return;
+    }
+
+    // ✅ Normal TTS for all other cases
+    currentUtterance = new SpeechSynthesisUtterance(summaryText);
     currentUtterance.lang = langCode;
 
     // pick a voice if available that matches the selected language (or detected)
