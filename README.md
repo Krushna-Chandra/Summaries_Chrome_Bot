@@ -116,7 +116,7 @@ cd Summaries_Chrome_Bot
       <a href="https://github.com/Bhababhanjan1">
         <img src="https://github.com/Bhababhanjan1.png" width="120" style="border-radius:50%; border: 4px solid #2c3e50; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" alt="Krushna"/>
         <br /><br />
-        <sub><b>Krushna Chandra Bindhani</b></sub>
+        <sub><b>Bhababhanjan Panda </b></sub>
       </a>
       <br />🛠️ <em>Contributor</em>
     </td>
