@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <title>AI Summary</title>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -135,8 +136,7 @@
       padding: 9px;
       border: 1px solid #ddd;
       border-radius: 32px;
-      min-height: 150px;
-      max-height: 166px;
+      height: 150px;
       overflow-y: auto;
       white-space: pre-wrap;
       line-height: 1.5;
@@ -415,6 +415,109 @@
     .dropdown button:hover {
       background: #19ca54;
     }
+    #history-container {
+  display: none;
+  margin-top: 10px;
+  max-height: 250px;       /* 🔹 Made taller */
+  overflow-y: auto;
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+}
+#history-btn {
+  background-color: #e75704; 
+  border: 2px solid black;
+  color: white;
+}
+
+/* Each history entry as a card */
+.history-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #444;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.history-item b {
+  font-size: 14px;
+  color: #ffd700; /* gold for title */
+}
+
+.history-item small {
+  font-size: 11px;
+  color: #bbb;
+}
+
+.history-item a {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #4da6ff;
+}
+#font-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+#font-controls button {
+  background: linear-gradient(135deg, #03f3f3, #1a1a1a); 
+  color: #ffd700;               
+  border: none;
+  border-radius: 8px;           
+  width: 38px;                  
+  height: 34px;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;      
+  line-height: 1;
+
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.5s ease, color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+#font-controls button i {
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Hover effect: gradient animation + constant glow */
+#font-controls button:hover {
+  background: linear-gradient(270deg, #ff6a00, #ff2e63, #ff6a00); /* warm gradient */
+  background-size: 200% 200%;
+  color: #fff; /* white icon */
+  animation: gradientMove 4s linear infinite; /* smoother */
+  box-shadow: 0 0 12px rgba(255, 118, 0, 0.8); /* steady glow */
+  transform: scale(1.1);
+}
+
+/* Click press effect */
+#font-controls button:active {
+  transform: scale(0.92);
+  box-shadow: 0 0 8px rgba(255, 118, 0, 0.6);
+}
+
+/* Keyframes for smooth animated gradient */
+@keyframes gradientMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+
   </style>
 </head>
 
@@ -533,6 +636,17 @@
       <button id="share-btn" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
   <i class="fa-solid fa-share-nodes" style="color: black;"></i> Share
 </button>
+<button id="history-btn">
+  <i class="fa-solid fa-clock-rotate-left" style="color: black;"></i>
+  History
+</button>
+<button id="voice-assistant">
+  <i class="fa-solid fa-microphone" style="color: rgb(154, 22, 22);"></i>
+  Voice Search
+</button>
+
+
+
 
 <div id="share-menu" style="
   display: none;
@@ -566,10 +680,20 @@
 
     </div>
 
-    <div id="result" style="color: white;">
+    <div id="result" style="color: white; position: relative;">
       Select a summary type and click ' 👆🏻 Summarize This Page' to generate a
       summary.
+      
     </div>
+    <!-- Floating font controls -->
+  <div id="font-controls">
+    <button id="increase-font" title="Increase text size">
+      <i class="fa-solid fa-magnifying-glass-plus"></i>
+    </button>
+    <button id="decrease-font" title="Decrease text size">
+      <i class="fa-solid fa-magnifying-glass-minus"></i>
+    </button>
+  </div>
     <div class="footer" style="display: flex;  margin-top: 15px;">
       <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
               border-radius: 25px; 
@@ -664,6 +788,8 @@
   <script src="lib/jspdf.umd.min.js"></script>
   <!-- Then load your extension logic -->
   <script src="popup.js"></script>
+  <script src="voice.js"></script>
+
 </body>
 
 </html>

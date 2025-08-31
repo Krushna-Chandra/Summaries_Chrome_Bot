@@ -8,6 +8,7 @@ const LANG_LABELS = {
   "auto": "Auto-detect",
   "en-US": "English (en-US)",
   "hi-IN": "हिन्दी / Hindi (hi-IN)",
+  "or-IN": "Odia",
   "es-ES": "Español (es-ES)",
   "fr-FR": "Français (fr-FR)",
   "de-DE": "Deutsch (de-DE)",
@@ -55,9 +56,9 @@ function attachEventListeners() {
   document.getElementById("summarize").addEventListener("click", onSummarizeClick);
   document.getElementById("speak-btn").addEventListener("click", onSpeakClick);
   document.getElementById("copy-btn").addEventListener("click", onCopyClick);
-
+  document.getElementById("history-btn").addEventListener("click", loadHistory);
   // existing auto-stop logic for speech
-  ["options","summarize", "copy-btn", "share-btn", "summary-type"].forEach(id => {
+  ["options","summarize", "copy-btn", "share-btn", "summary-type","history-btn"].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener("click", () => {
@@ -146,11 +147,15 @@ async function onSummarizeClick() {
         }
 
         try {
-          const summary = await getGeminiSummary(res.text, summaryType, result.geminiApiKey, language);
-          resultDiv.innerText = summary;
-        } catch (error) {
-          resultDiv.innerText = `Error: ${error.message || "Failed to generate summary."}`;
-        }
+  const summary = await getGeminiSummary(res.text, summaryType, result.geminiApiKey, language);
+  resultDiv.innerText = summary;
+
+  // ✅ Save to history
+  saveSummaryToHistory(tab, summary, summaryType);
+} catch (error) {
+  resultDiv.innerText = `Error: ${error.message || "Failed to generate summary."}`;
+}
+
       });
     });
   });
@@ -176,6 +181,7 @@ async function getGeminiSummary(text, summaryType, apiKey, language) {
       basePrompt = `Summarize the following article:\n\n${truncatedText}`;
       break;
   }
+  
 
   // Language instruction: if "auto", we ask the model to keep same language as source.
   let languageInstruction = "";
@@ -215,6 +221,89 @@ async function getGeminiSummary(text, summaryType, apiKey, language) {
   }
 }
 
+// --------------- Save Summary to History ---------------
+async function saveSummaryToHistory(tab, summary, type) {
+  const entry = {
+    url: tab.url,
+    title: tab.title,
+    summary: summary,
+    type: type,
+    timestamp: new Date().toISOString()
+  };
+
+  chrome.storage.local.get(["summaryHistory"], (data) => {
+    const history = data.summaryHistory || [];
+    history.unshift(entry);
+    if (history.length > 20) history.pop();
+    chrome.storage.local.set({ summaryHistory: history });
+  });
+}
+
+
+// --------------- Load History ---------------
+let showingHistory = false; // 👈 track if history is being shown
+let lastSummaryContent = ""; // 👈 keep the last summary text
+function loadHistory() {
+  const resultDiv = document.getElementById("result");
+
+  if (showingHistory) {
+    // 👈 Already showing history → restore last summary or default message
+    resultDiv.innerHTML =
+      lastSummaryContent ||
+      "Select a summary type and click ' 👆🏻 Summarize This Page' to generate a summary.";
+    showingHistory = false;
+    return;
+  }
+
+  // 👇 Save current content before overwriting with history
+  lastSummaryContent = resultDiv.innerHTML;
+
+  chrome.storage.local.get(["summaryHistory"], (data) => {
+    const history = data.summaryHistory || [];
+    if (history.length === 0) {
+      resultDiv.innerHTML = "<p><i>No saved summaries yet.</i></p>";
+    } else {
+      resultDiv.innerHTML = `
+        <button id="clear-history-btn" style="
+          background:#b33a3a;
+          color:white;
+          padding:6px 10px;
+          border:none;
+          border-radius:6px;
+          font-size:12px;
+          margin-bottom:10px;
+          cursor:pointer;
+        ">🗑️ Clear History</button>
+        ${history.map(item => `
+          <div class="history-item" style="margin-bottom:10px; padding:10px; background:#2a2a2a; border-radius:8px; border:1px solid #444;">
+            <b style="color:#ffd700;">${item.title || "Untitled"}</b><br>
+            <small style="color:#bbb;">${new Date(item.timestamp).toLocaleString()}</small>
+            <div style="white-space:pre-wrap;margin-top:6px;">
+              ${item.summary}
+            </div>
+            <a href="${item.url}" target="_blank" style="color:#4da6ff; font-size:12px;">🔗 Open Page</a>
+          </div>
+        `).join("")}
+      `;
+
+      // ✅ Attach listener to clear button
+      document.getElementById("clear-history-btn").addEventListener("click", () => {
+        chrome.storage.local.remove("summaryHistory", () => {
+          // Show cleared message
+          resultDiv.innerHTML = "<p><i>History cleared.</i></p>";
+
+          // 🚨 Reset lastSummaryContent to startup message
+          lastSummaryContent =
+            "Select a summary type and click ' 👆🏻 Summarize This Page' to generate a summary.";
+        });
+      });
+    }
+
+    showingHistory = true; // 👈 now in history mode
+  });
+}
+
+
 // --------------- Copy ---------------
 function onCopyClick() {
   const summaryText = document.getElementById("result").innerText;
@@ -245,6 +334,31 @@ function stopSpeaking() {
   }
 }
 
+// 🔊 Helper: Chunked speech for Hindi (and long text)
+function speakText(text, lang = "hi-IN") {
+  if (!("speechSynthesis" in window)) {
+    alert("Sorry, your browser does not support Text-to-Speech.");
+    return;
+  }
+
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices();
+
+  // Pick a Hindi-supported voice (fallback to default if not found)
+  let voice = voices.find(v => v.lang === lang) || voices.find(v => v.lang.startsWith("hi")) || voices[0];
+
+  // Break text into smaller chunks for Hindi (avoid silent failure on long text)
+  const chunkSize = 250;
+  const chunks = text.match(new RegExp('.{1,' + chunkSize + '}(\\s|$)', 'g'));
+
+  chunks.forEach(chunk => {
+    const utter = new SpeechSynthesisUtterance(chunk);
+    utter.voice = voice;
+    utter.lang = lang;
+    synth.speak(utter);
+  });
+}
+
 async function onSpeakClick() {
   const voiceBtn = document.getElementById("speak-btn");
   const summaryText = document.getElementById("result").innerText;
@@ -252,12 +366,21 @@ async function onSpeakClick() {
 
   const selectedLang = document.getElementById("language-select")?.value || "auto";
   const langCode = (selectedLang === "auto") ? detectLanguageCodeFromText(summaryText) || LANG_DEFAULT : selectedLang;
+  const summaryType = document.getElementById("summary-type").value;
 
   if (!isSpeaking) {
     stopSpeaking(); // reset before speaking
-    currentUtterance = new SpeechSynthesisUtterance(summaryText);
 
-    // set language
+    // ✅ Special case: Hindi + detailed summary → chunked speak
+    if (summaryType === "detailed" && langCode === "hi-IN") {
+      speakText(summaryText, "hi-IN");
+      isSpeaking = true;
+      voiceBtn.innerHTML = '<i class="fa-solid fa-stop" style="color: black;"></i> Stop';
+      return;
+    }
+
+    // ✅ Normal TTS for all other cases
+    currentUtterance = new SpeechSynthesisUtterance(summaryText);
     currentUtterance.lang = langCode;
 
     // pick a voice if available that matches the selected language (or detected)
@@ -391,5 +514,51 @@ document.getElementById("updates-btn").addEventListener("click", () => {
 });
 
 // dropdown buttons & other console-preserved code remain intact
+// ---------------- Font Size Controls ----------------
+let currentFontSize;
+
+function applyFontSize() {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    resultDiv.style.fontSize = currentFontSize + "px";
+
+    // Also apply to all child elements (history items, etc.)
+    resultDiv.querySelectorAll("*").forEach(el => {
+      el.style.fontSize = currentFontSize + "px";
+    });
+  }
+}
+
+// Grab the initial computed font size of #result when popup loads
+window.addEventListener("DOMContentLoaded", () => {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    const computedSize = window.getComputedStyle(resultDiv).fontSize;
+    currentFontSize = parseInt(computedSize, 10); // set as baseline
+  }
+
+  // Attach increase/decrease listeners here
+  const incBtn = document.getElementById("increase-font");
+  const decBtn = document.getElementById("decrease-font");
+
+  if (incBtn) {
+    incBtn.addEventListener("click", () => {
+      currentFontSize += 2;
+      applyFontSize();
+    });
+  }
+
+  if (decBtn) {
+    decBtn.addEventListener("click", () => {
+      if (currentFontSize > 8) {
+        currentFontSize -= 2;
+        applyFontSize();
+      }
+    });
+  }
+});
+
+
+// ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
