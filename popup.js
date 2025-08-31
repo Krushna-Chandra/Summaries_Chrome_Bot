@@ -517,6 +517,18 @@ document.getElementById("updates-btn").addEventListener("click", () => {
 // ---------------- Font Size Controls ----------------
 let currentFontSize;
 
+function applyFontSize() {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    resultDiv.style.fontSize = currentFontSize + "px";
+
+    // Also apply to all child elements (history items, etc.)
+    resultDiv.querySelectorAll("*").forEach(el => {
+      el.style.fontSize = currentFontSize + "px";
+    });
+  }
+}
+
 // Grab the initial computed font size of #result when popup loads
 window.addEventListener("DOMContentLoaded", () => {
   const resultDiv = document.getElementById("result");
@@ -532,7 +544,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (incBtn) {
     incBtn.addEventListener("click", () => {
       currentFontSize += 2;
-      resultDiv.style.fontSize = currentFontSize + "px";
+      applyFontSize();
     });
   }
 
@@ -540,11 +552,12 @@ window.addEventListener("DOMContentLoaded", () => {
     decBtn.addEventListener("click", () => {
       if (currentFontSize > 8) {
         currentFontSize -= 2;
-        resultDiv.style.fontSize = currentFontSize + "px";
+        applyFontSize();
       }
     });
   }
 });
+
 
 // ------------------------------------------------------------------------
 
