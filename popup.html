@@ -460,10 +460,14 @@
 }
 #font-controls {
   position: absolute;
-  bottom: 20px;
   right: 15px;
   display: flex;
   gap: 8px;
+}
+
+#voice-assistant{
+  background-color: rgb(94, 48, 199);
+  color: black;
 }
 
 #font-controls button {
@@ -641,8 +645,8 @@
   History
 </button>
 <button id="voice-assistant">
-  <i class="fa-solid fa-microphone" style="color: rgb(154, 22, 22);"></i>
-  Voice Search
+  <i class="fa-solid fa-microphone" style="  color: white "></i>
+  Voice Command
 </button>
 
 
@@ -686,14 +690,7 @@
       
     </div>
     <!-- Floating font controls -->
-  <div id="font-controls">
-    <button id="increase-font" title="Increase text size">
-      <i class="fa-solid fa-magnifying-glass-plus"></i>
-    </button>
-    <button id="decrease-font" title="Decrease text size">
-      <i class="fa-solid fa-magnifying-glass-minus"></i>
-    </button>
-  </div>
+  
     <div class="footer" style="display: flex;  margin-top: 15px;">
       <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
               border-radius: 25px; 
@@ -703,7 +700,7 @@
               color: black; 
               box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
               display: flex; 
-      
+              width: 300px;    
               gap: 2px;
               ">
 
@@ -731,6 +728,21 @@
         <a href="https://github.com/prakashjena938" target="_blank"
           style="display: flex; align-items: center; text-decoration: none; color: black;">
           <img src="https://github.com/prakashjena938.png" alt="Other Contributor"
+            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
+
+
+        </a>
+        <a href="https://github.com/Bhababhanjan1" target="_blank"
+          style="display: flex; align-items: center; text-decoration: none; color: black;">
+          <img src="https://github.com/Bhababhanjan1.png" alt="Other Contributor"
+            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
+
+
+        </a>
+
+         <a href="https://github.com/Rajibpanda01" target="_blank"
+          style="display: flex; align-items: center; text-decoration: none; color: black;">
+          <img src="https://github.com/Rajibpanda01.png" alt="Other Contributor"
             style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
 
 
@@ -772,9 +784,17 @@
 
       <!-- Add jsPDF -->
 
-
+       <div id="font-controls">
+    <button id="increase-font" title="Increase text size">
+      <i class="fa-solid fa-magnifying-glass-plus"></i>
+    </button>
+    <button id="decrease-font" title="Decrease text size">
+      <i class="fa-solid fa-magnifying-glass-minus"></i>
+    </button>
+  </div>
 
     </div>
+   
 
   </div>
 
