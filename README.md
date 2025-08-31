@@ -120,6 +120,14 @@ cd Summaries_Chrome_Bot
       </a>
       <br />🛠️ <em>Contributor</em>
     </td>
+     <td align="center" width="220">
+      <a href="https://github.com/Rajibpanda01">
+        <img src="https://github.com/Rajibpanda01.png" width="120" style="border-radius:50%; border: 4px solid #2c3e50; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" alt="Krushna"/>
+        <br /><br />
+        <sub><b> Rajib Panda </b></sub>
+      </a>
+      <br />🛠️ <em>Contributor</em>
+    </td>
   </tr>
 </table>  
 
