@@ -278,7 +278,7 @@ function loadHistory() {
           <div class="history-item" style="margin-bottom:10px; padding:10px; background:#2a2a2a; border-radius:8px; border:1px solid #444;">
             <b style="color:#ffd700;">${item.title || "Untitled"}</b><br>
             <small style="color:#bbb;">${new Date(item.timestamp).toLocaleString()}</small>
-            <div style="white-space:pre-wrap; font-size:13px; margin-top:6px;">
+            <div style="white-space:pre-wrap;margin-top:6px;">
               ${item.summary}
             </div>
             <a href="${item.url}" target="_blank" style="color:#4da6ff; font-size:12px;">🔗 Open Page</a>
@@ -514,5 +514,38 @@ document.getElementById("updates-btn").addEventListener("click", () => {
 });
 
 // dropdown buttons & other console-preserved code remain intact
+// ---------------- Font Size Controls ----------------
+let currentFontSize;
+
+// Grab the initial computed font size of #result when popup loads
+window.addEventListener("DOMContentLoaded", () => {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    const computedSize = window.getComputedStyle(resultDiv).fontSize;
+    currentFontSize = parseInt(computedSize, 10); // set as baseline
+  }
+
+  // Attach increase/decrease listeners here
+  const incBtn = document.getElementById("increase-font");
+  const decBtn = document.getElementById("decrease-font");
+
+  if (incBtn) {
+    incBtn.addEventListener("click", () => {
+      currentFontSize += 2;
+      resultDiv.style.fontSize = currentFontSize + "px";
+    });
+  }
+
+  if (decBtn) {
+    decBtn.addEventListener("click", () => {
+      if (currentFontSize > 8) {
+        currentFontSize -= 2;
+        resultDiv.style.fontSize = currentFontSize + "px";
+      }
+    });
+  }
+});
+
+// ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
