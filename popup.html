@@ -459,16 +459,11 @@
   color: #4da6ff;
 }
 #font-controls {
-  position: absolute;
-  right: 15px;
   display: flex;
   gap: 8px;
+  margin-left: auto; /* Pushes the controls to the right */
 }
 
-#voice-assistant{
-  background-color: rgb(94, 48, 199);
-  color: black;
-}
 
 #font-controls button {
   background: linear-gradient(135deg, #03f3f3, #1a1a1a); 
@@ -520,6 +515,19 @@
   100% { background-position: 0% 50%; }
 }
 
+/*Voice Button*/
+#voice-btn {
+  background: linear-gradient(135deg, #8e2de2, #ff0080); /* Purple to pink */
+  color: white;
+  border: 2px solid black;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+#voice-btn:hover {
+  background: linear-gradient(135deg, #ff0080, #8e2de2); /* Reverse gradient on hover */
+  transform: scale(1.05);
+}
 
 
   </style>
@@ -644,11 +652,11 @@
   <i class="fa-solid fa-clock-rotate-left" style="color: black;"></i>
   History
 </button>
-<button id="voice-assistant">
-  <i class="fa-solid fa-microphone" style="  color: white "></i>
-  Voice Command
-</button>
 
+<button id="voice-btn">
+  <i class="fa-solid fa-microphone" style="color: black;"></i>
+  <p>Voice</p>
+</button>
 
 
 
@@ -689,8 +697,7 @@
       summary.
       
     </div>
-    <!-- Floating font controls -->
-  
+    
     <div class="footer" style="display: flex;  margin-top: 15px;">
       <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
               border-radius: 25px; 
@@ -723,7 +730,7 @@
           <img src="https://github.com/Krushna-Chandra.png" alt="Other Contributor"
             style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
 
-
+        <!-- Contributor 3 -->
         </a>
         <a href="https://github.com/prakashjena938" target="_blank"
           style="display: flex; align-items: center; text-decoration: none; color: black;">
@@ -784,7 +791,7 @@
 
       <!-- Add jsPDF -->
 
-       <div id="font-controls">
+<div id="font-controls">
     <button id="increase-font" title="Increase text size">
       <i class="fa-solid fa-magnifying-glass-plus"></i>
     </button>
@@ -792,6 +799,8 @@
       <i class="fa-solid fa-magnifying-glass-minus"></i>
     </button>
   </div>
+
+    </div>
 
     </div>
    
