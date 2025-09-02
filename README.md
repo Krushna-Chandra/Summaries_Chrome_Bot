@@ -31,7 +31,7 @@
 
 ## 🎥 Demo  
 
-▶️ [Watch on YouTube](https://youtu.be/zC4idSoEVgw?si=HVAGfzKGC5cc9CKb)  
+▶️ [Watch on YouTube](https://youtu.be/2rhoSLOQq9Y?si=iaFktKpjRAcEL2UC)  
 
 ---
 
