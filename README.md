@@ -147,6 +147,9 @@ cd Summaries_Chrome_Bot
 ## 📄 License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+## Check the model
+<img alt="image" src="https://github.com/user-attachments/assets/e483ad11-8cb1-4915-8013-45879a2e773e" />
+
 
 ---
 
