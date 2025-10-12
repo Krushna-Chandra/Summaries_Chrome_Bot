@@ -557,6 +557,191 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+// ------------------------------------------------------------------------
+
+// ---------------- Voice Assistant ----------------
+
+function speakFeedback(message, lang = "en-US") {
+const utter = new SpeechSynthesisUtterance(message);
+utter.lang = lang;
+window.speechSynthesis.speak(utter);
+}
+let recognition;
+let listening = false;
+
+function initVoiceAssistant() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("❌ Speech Recognition is not supported in this browser.");
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    listening = true;
+    document.getElementById("voice-btn").innerHTML = "🎤 Listening...";
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    document.getElementById("voice-btn").innerHTML =
+      '<i class="fa-solid fa-microphone" style="color:black;"></i> Voice';
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+
+    if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+      alert("⚠️ Microphone access is blocked. Please allow mic access:\n\n1. Go to Chrome Settings → Privacy and security → Site Settings.\n2. Find your extension under 'View permissions and data stored'.\n3. Enable Microphone.");
+    } else {
+      alert("Speech recognition error: " + event.error);
+    }
+  };
+
+  recognition.onresult = (event) => {
+    const command = event.results[0][0].transcript.toLowerCase().trim();
+    console.log("🎤 Heard:", command);
+
+    // --- Summarize ---
+    if (
+      command.includes("summarize") || command.includes("summarise") ||
+      command.includes("summary") || command.includes("shorten") ||
+      command.includes("make summary") || command.includes("create summary")
+    ) {
+      document.getElementById("summarize")?.click();
+      setTimeout(() => speakFeedback("Summary generated."), 1200);
+
+    // --- Copy Summary ---
+    } else if (
+      command.includes("copy") || command.includes("clipboard") ||
+      command.includes("duplicate") || command.includes("save text")
+    ) {
+      document.getElementById("copy-btn")?.click();
+      setTimeout(() => speakFeedback("Summary copied to clipboard."), 500);
+
+    // --- Copy Link / Share Link ---
+    } else if (
+      command.includes("copy link") || command.includes("share link") ||
+      command.includes("link") || command.includes("copy url")
+    ) {
+      document.querySelector('[data-platform="copy"]')?.click();
+      setTimeout(() => speakFeedback("Link copied to clipboard."), 500);
+
+    // --- History ---
+    } else if (
+      command.includes("history") || command.includes("previous") ||
+      command.includes("old") || command.includes("past") ||
+      command.includes("last")
+    ) {
+      document.getElementById("history-btn")?.click();
+      setTimeout(() => speakFeedback("Here is your history."), 500);
+
+    // --- Speak / Read ---
+    } else if (
+      command.includes("speak") || command.includes("read") ||
+      command.includes("say") || command.includes("narrate") ||
+      command.includes("voice") || command.includes("read aloud")
+    ) {
+      document.getElementById("speak-btn")?.click();
+      setTimeout(() => speakFeedback("Reading summary aloud."), 500);
+
+    // --- Stop / Pause ---
+    } else if (
+      command.includes("stop") || command.includes("pause") ||
+      command.includes("quiet") || command.includes("silence") ||
+      command.includes("end reading")
+    ) {
+      document.getElementById("speak-btn")?.click();
+      setTimeout(() => speakFeedback("Stopped reading."), 500);
+
+    // --- Share Menu ---
+    } else if (
+      command.includes("share") || command.includes("send") ||
+      command.includes("forward") || command.includes("post") ||
+      command.includes("broadcast")
+    ) {
+      document.getElementById("share-btn")?.click();
+      setTimeout(() => speakFeedback("Share menu opened."), 500);
+
+    // --- Download PDF ---
+    } else if (
+      command.includes("download") || command.includes("pdf") ||
+      command.includes("save file") || command.includes("export")
+    ) {
+      document.getElementById("download-pdf")?.click();
+      setTimeout(() => speakFeedback("PDF downloaded successfully."), 1200);
+
+    // --- Increase Font ---
+    } else if (
+      command.includes("increase") || command.includes("bigger") ||
+      command.includes("zoom in") || command.includes("enlarge") ||
+      command.includes("grow text") || command.includes("make large")
+    ) {
+      document.getElementById("increase-font")?.click();
+      setTimeout(() => speakFeedback("Text size increased."), 500);
+
+    // --- Decrease Font ---
+    } else if (
+      command.includes("decrease") || command.includes("smaller") ||
+      command.includes("zoom out") || command.includes("shrink") ||
+      command.includes("reduce text") || command.includes("make small")
+    ) {
+      document.getElementById("decrease-font")?.click();
+      setTimeout(() => speakFeedback("Text size decreased."), 500);
+
+    // --- Change Language ---
+    } else if (command.includes("language")) {
+      const langSelect = document.getElementById("language-select");
+      if (langSelect) {
+        langSelect.click();
+        setTimeout(() => speakFeedback("Language menu opened. Please select a language."), 500);
+      }
+
+    // --- Change Summary Type ---
+    } else if (command.includes("brief")) {
+      document.getElementById("summary-type").value = "brief";
+      document.getElementById("summary-type").dispatchEvent(new Event("change"));
+      setTimeout(() => speakFeedback("Summary type set to brief."), 500);
+
+    } else if (command.includes("detailed") || command.includes("long")) {
+      document.getElementById("summary-type").value = "detailed";
+      document.getElementById("summary-type").dispatchEvent(new Event("change"));
+      setTimeout(() => speakFeedback("Summary type set to detailed."), 500);
+
+    } else if (command.includes("bullet") || command.includes("points")) {
+      document.getElementById("summary-type").value = "bullets";
+      document.getElementById("summary-type").dispatchEvent(new Event("change"));
+      setTimeout(() => speakFeedback("Summary type set to bullet points."), 500);
+
+    // --- Unknown ---
+    } else {
+      speakFeedback("Sorry, I didn’t understand that command.");
+    }
+  };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initVoiceAssistant();
+  const voiceBtn = document.getElementById("voice-btn");
+  if (voiceBtn && recognition) {
+    voiceBtn.addEventListener("click", () => {
+      if (listening) {
+        recognition.stop();
+      } else {
+        try {
+          recognition.start(); // will trigger mic prompt if not granted yet
+        } catch (err) {
+          console.error("Failed to start recognition:", err);
+          alert("⚠️ Could not start voice recognition. Please check microphone settings.");
+        }
+      }
+    });
+  }
+});
 
 
 // ------------------------------------------------------------------------

@@ -31,7 +31,7 @@
 
 ## 🎥 Demo  
 
-▶️ [Watch on YouTube](https://youtu.be/zC4idSoEVgw?si=HVAGfzKGC5cc9CKb)  
+▶️ [Watch on YouTube](https://youtu.be/2rhoSLOQq9Y?si=iaFktKpjRAcEL2UC)  
 
 ---
 
@@ -133,6 +133,17 @@ cd Summaries_Chrome_Bot
 
 ---
 
+
+## Star History
+
+<a href="https://www.star-history.com/#Sangram03/Summaries_Chrome_Bot&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Sangram03/Summaries_Chrome_Bot&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Sangram03/Summaries_Chrome_Bot&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Sangram03/Summaries_Chrome_Bot&type=Date" />
+ </picture>
+</a>
+
 ## 📄 License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
@@ -141,5 +152,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 
 ✨ *If you like this project, don’t forget to ⭐ star the repo!*
 
+
+Happy Coding 
 ```
 
