@@ -110,79 +110,22 @@
     </div>
 
 
-
-    <div class="options">
-      <select id="summary-type">
-        <option value="brief">✅Brief Summary</option>
-        <option value="detailed">📄Detailed Summary</option>
-        <option value="bullets">➤ Bullet Points</option>
-      </select>
-      <button id="summarize">
-        <span class="material-symbols-outlined">ads_click</span>
-        <span>Summarize</span>
-      </button>
-      <button id="speak-btn">
-        <i class="fa-solid fa-volume-high" style="color: black;"></i>
-        Speaker
-      </button>
-      <button id="copy-btn">
-        <i class="fa-solid fa-copy" style="color: black;"></i>
-        Copy
-      </button>
-      <button id="share-btn" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-  <i class="fa-solid fa-share-nodes" style="color: black;"></i> Share
-</button>
-<button id="history-btn">
-  <i class="fa-solid fa-clock-rotate-left" style="color: black;"></i>
-  History
-</button>
-
-<button id="voice-btn">
-  <i class="fa-solid fa-microphone" style="color: black;"></i>
-  <p>Voice</p>
-</button>
-
-
-
-<div id="share-menu" style="
-  display: none;
-  position: absolute;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 5px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  z-index: 999;
-      margin-top: -71px;
-    margin-left: 162px;
-    margin-right: -3px;
-">
-  <button class="share-btn" data-platform="whatsapp" style="background-color: #25D366; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-    <i class="fa-brands fa-whatsapp"></i>
+<!-- add 2 page here -->
+<div style="display: flex; margin-top: 20px; justify-content: center; gap: 60px; cursor: pointer;"> 
+  <button id="articleBtn" style="height: 200px; width: 200px; cursor: pointer;">
+    AI Article Summariser
   </button>
-  <button class="share-btn" data-platform="twitter" style="background-color: #1DA1F2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-    <i class="fa-brands fa-twitter"></i>
-  </button>
-  <button class="share-btn" data-platform="facebook" style="background-color: #1877F2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-    <i class="fa-brands fa-facebook"></i>
-  </button>
-  <button class="share-btn" data-platform="linkedin" style="background-color: #0A66C2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-    <i class="fa-brands fa-linkedin"></i>
-  </button>
-  <button class="share-btn" data-platform="copy" style="background-color: #333; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-    <i class="fa-solid fa-link"></i>
+
+  <button id="videoBtn" style="height: 200px; width: 200px; cursor: pointer;">
+    AI Video Summariser
   </button>
 </div>
 
-    </div>
 
-    <div id="result" style="color: white; position: relative;">
-      Select a summary type and click ' 👆🏻 Summarize This Page' to generate a
-      summary.
-      
-    </div>
+
     
-    <div class="footer" style="display: flex;  margin-top: 15px;">
+    <div class="footer" style="display: flex;      margin-top: 34px;
+    margin-left: 81px;">
       <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
               border-radius: 25px; 
               padding: px; 
@@ -244,45 +187,12 @@
 
      
 
-      <div style="position: relative; margin-left: 20px;">
-        <!-- Dropdown Button -->
-        <div style="padding: 7px;" id="dropdownBtn" class="dropdown-btn">
-          <i style="color: black;" class="fa-solid fa-download"></i>
-          <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
-        </div>
 
-        <!-- Dropdown Menu -->
-        <div id="dropdownMenu" class="dropdown hidden">
-          <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
-          <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
-        </div>
-
-      </div>
-       <!-- insert this inside the .options div next to #summary-type -->
-        <select style="border-radius: 10px; margin-left: 15px; " id="language-select" title="Select language">
-          <option value="auto">🌐 Auto-detect (Default)</option>
-          <option value="en-US">English (en-US)</option>
-          <option value="hi-IN">हिन्दी / Hindi (hi-IN)</option>
-          <option value="es-ES">Español / Spanish (es-ES)</option>
-          <option value="fr-FR">Français / French (fr-FR)</option>
-          <option value="de-DE">Deutsch / German (de-DE)</option>
-          <option value="pt-BR">Português (pt-BR)</option>
-          <option value="zh-CN">中文 / Chinese (zh-CN)</option>
-          <option value="ar-SA">العربية / Arabic (ar-SA)</option>
-          <option value="ru-RU">Русский / Russian (ru-RU)</option>
-          <!-- add more language codes as needed -->
-        </select>
+  
 
       <!-- Add jsPDF -->
 
-<div id="font-controls">
-    <button id="increase-font" title="Increase text size">
-      <i class="fa-solid fa-magnifying-glass-plus"></i>
-    </button>
-    <button id="decrease-font" title="Decrease text size">
-      <i class="fa-solid fa-magnifying-glass-minus"></i>
-    </button>
-  </div>
+
 
     </div>
 
@@ -301,7 +211,7 @@
   <script src="lib/jspdf.umd.min.js"></script>
   <!-- Then load your extension logic -->
   <script src="popup.js"></script>
-  <script src="voice.js"></script>
+
 
 </body>
 
