@@ -18,14 +18,23 @@
 </head>
 
 
-<body>
+<body id="summarizer-page">
+    <div class="container" style="max-height: 350px;">
 
-    <div>
+    <div class="new2">
+
         <div class="new">
             <i class="fa-brands fa-apple" style="color: #f7d204;"></i>
-            <div class="macicon">
-                <i class="fa-solid fa-circle " style="color: red; gap: 2px;"></i>
-                <i class="fa-solid fa-circle" style="color: yellow; margin-left: 2px;"><i
+            <div class="macicon" style="position: relative;">
+                 <i id="close-btn" class="fa-solid fa-circle" style="color: red; cursor: pointer;">
+                    
+            <i class="fa-solid fa-xmark" style="color: black;position: absolute; margin: -1.2px -11.2px;"></i>
+          </i>
+          <i id="back-btn" class="fa-solid fa-circle" style="color: yellow; position: relative;">
+                        <i class="fa-solid fa-arrow-left" style="color: black; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+                    </i>
+                
+                <i
                         style="color: black; position: absolute; left: 687px;" class="fa-solid fa-arrow-left"></i></i>
                 <i class="fa-solid fa-circle" style="color: green; margin-left: 2px;"></i>
             </div>
@@ -47,6 +56,7 @@
                 <div
                     style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; margin-left: 20px; position: relative;">
                     <i id="updates-btn" class="fa-solid fa-upload" style="cursor: pointer;"></i>
+                    
                     <!-- Red dot for updates -->
 
 
@@ -102,11 +112,8 @@
                 </span>
 
             </div>
-
-
-
+         </div>
         </div>
-    </div>
     <div class="options">
         <select id="summary-type">
             <option value="brief">✅Brief Summary</option>
@@ -284,7 +291,7 @@
                 <i class="fa-solid fa-magnifying-glass-minus"></i>
             </button>
         </div>
-
+        </div>
     </div>
     <!-- Then load your extension logic -->
 

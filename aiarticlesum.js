@@ -321,14 +321,6 @@ function onCopyClick() {
   }
 }
 
-// add new pages
-  document.getElementById("articleBtn").onclick = function() {
-    window.location.href = "aiarticlesum.html";
-  };
-
-  document.getElementById("videoBtn").onclick = function() {
-    window.location.href = "aivideosum.html";
-  };
 
 // --------------- Text-to-Speech ---------------
 let isSpeaking = false;
@@ -464,6 +456,9 @@ function copyLink() {
 
 // --------------- Background + restore stuff (kept) ---------------
 document.getElementById("close-btn").onclick = () => { window.close(); };
+document.getElementById("back-btn").addEventListener("click", () => {
+  window.history.back();
+});
 
 let currentBackground = "";
 const checkbox = document.getElementById("checkbox");
@@ -681,7 +676,7 @@ function initVoiceAssistant() {
       command.includes("download") || command.includes("pdf") ||
       command.includes("save file") || command.includes("export")
     ) {
-      document.getElementById("download-pdf")?.click();
+      document.getElementById("downloadPdfBtn")?.click();
       setTimeout(() => speakFeedback("PDF downloaded successfully."), 1200);
 
     // --- Increase Font ---
@@ -725,6 +720,21 @@ function initVoiceAssistant() {
       document.getElementById("summary-type").value = "bullets";
       document.getElementById("summary-type").dispatchEvent(new Event("change"));
       setTimeout(() => speakFeedback("Summary type set to bullet points."), 500);
+      // ✅ ADDED: Command to go back to the previous page
+    } else if (command.includes("back") || command.includes("go back") || command.includes("previous")) {
+      speakFeedback("Going back.");
+      // We add a small delay so the user can hear the feedback before the page changes
+      setTimeout(() => {
+        document.getElementById("back-btn")?.click();
+      }, 600);
+
+    // ✅ ADDED: Command to close the extension window
+    } else if (command.includes("close") || command.includes("exit")) {
+      speakFeedback("Closing.");
+      // Delay allows the feedback to be heard before the window disappears
+      setTimeout(() => {
+        document.getElementById("close-btn")?.click();
+      }, 500);
 
     // --- Unknown ---
     } else {
@@ -750,6 +760,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  document.body.classList.add('page-loaded'); 
 });
 
 

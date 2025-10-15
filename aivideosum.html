@@ -1,13 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>AI Video Summary</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Font Awesome & Material Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="videopopup.css" />
 </head>
+
 <body>
 
-    <h2>Padle Ladle</h2>
-    
+  <!-- HEADER BAR -->
+  <div class="new">
+    <i class="fa-brands fa-youtube" style="color: red; font-size: 22px;"></i>
+    <div class="macicon">
+      <i class="fa-solid fa-circle" style="color: red;"></i>
+      <i class="fa-solid fa-circle" style="color: yellow; margin-left: 2px;"></i>
+      <i class="fa-solid fa-circle" style="color: green; margin-left: 2px;"></i>
+    </div>
+  </div>
+
+  <!-- TITLE BAR -->
+  <div class="modification">
+    <div class="h2">
+      <span>🎞️ AI Video Summary</span>
+    </div>
+
+    <div class="icon-added">
+      <span class="checkbox" id="checkbox">
+        <i id="notch" class="fa-solid fa-circle-notch"></i>
+        <i id="check" class="fa-regular fa-circle-check"></i>
+      </span>
+
+      <!-- Theme Switchers -->
+      <div style="margin-left: 20px;">
+        <span id="dark-theme"><i class="fa-solid fa-circle" style="color: black;"></i></span>
+        <span id="light-theme"><i class="fa-solid fa-circle" style="color: white; border: 1px solid #ccc;"></i></span>
+        <span id="blue-theme"><i class="fa-solid fa-circle" style="color: dodgerblue;"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN OPTIONS -->
+  <div class="options">
+
+    <!-- Video Input -->
+    <input type="text" id="video-url" placeholder="🎥 Enter YouTube URL or upload below..." />
+    <input type="file" id="video-upload" accept="video/*" />
+
+    <!-- Summary Type -->
+    <select id="summary-type">
+      <option value="short">⚡ Short Summary</option>
+      <option value="detailed">🧠 Detailed Summary</option>
+      <option value="highlights">⭐ Key Highlights</option>
+      <option value="chapters">🎯 Chapters</option>
+    </select>
+
+    <!-- Action Buttons -->
+    <button id="analyze-btn">
+      <span class="material-symbols-outlined">play_circle</span>
+      <span>Summarize</span>
+    </button>
+
+    <button id="play-preview">
+      <i class="fa-solid fa-play"></i> Preview
+    </button>
+
+    <button id="download-transcript">
+      <i class="fa-solid fa-file-lines"></i> Transcript
+    </button>
+
+    <button id="copy-summary">
+      <i class="fa-solid fa-copy"></i> Copy
+    </button>
+
+    <button id="share-summary">
+      <i class="fa-solid fa-share-nodes"></i> Share
+    </button>
+
+    <button id="history">
+      <i class="fa-solid fa-clock-rotate-left"></i> History
+    </button>
+
+  </div>
+
+  <!-- RESULT AREA -->
+  <div id="result" class="result">
+    <p style="color: white;">Paste a video link and click "Summarize" to generate your AI-powered video summary 🎬</p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer" style="display: flex; margin-top: 15px;">
+    <div class="newdiv"
+      style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%); border-radius: 25px; padding: 5px; font-size: 13px; font-weight: 700; color: black; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; width: 300px; gap: 2px;">
+      <a href="https://github.com/Sangram03" target="_blank" style="display: flex; align-items: center; text-decoration: none; color: black; gap: 5px;">
+        <span>Develop by</span>
+        <img src="https://github.com/Sangram03.png" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
+      </a>
+      <a href="https://github.com/Bhababhanjan1" target="_blank" style="display: flex; align-items: center; text-decoration: none; color: black;">
+        <img src="https://github.com/Bhababhanjan1.png" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
+      </a>
+    </div>
+
+    <div style="margin-left: 20px;">
+      <button id="download-btn"><i class="fa-solid fa-download"></i> Download Summary</button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="aivideosum.js"></script>
 </body>
+
 </html>
