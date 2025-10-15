@@ -736,6 +736,7 @@ function initVoiceAssistant() {
         document.getElementById("close-btn")?.click();
       }, 500);
 
+      
     // --- Unknown ---
     } else {
       speakFeedback("Sorry, I didn’t understand that command.");
