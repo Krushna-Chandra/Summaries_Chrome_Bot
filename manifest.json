@@ -8,7 +8,9 @@
     "activeTab",
     "storage",
     "tabs",
-    "downloads"
+    "downloads",
+    "microphone",
+    "tts"
   ],
   "optional_permissions": ["microphone"],
   "action": {
