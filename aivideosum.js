@@ -19,3 +19,16 @@ document.getElementById("copy-summary").addEventListener("click", () => {
   navigator.clipboard.writeText(text);
   alert("Summary copied!");
 });
+// Add this code to your aivideosum.js file
+
+// Logic for the close button
+document.getElementById("close-btn").addEventListener("click", () => {
+  // This command closes the extension's popup window
+  window.close();
+});
+
+// Logic for the back button
+document.getElementById("back-btn").addEventListener("click", () => {
+  // This command navigates to the previous page in the browser's history
+  window.history.back();
+});
