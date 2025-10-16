@@ -582,3 +582,22 @@ i {
   color: #0ad5ff;
   font-size: 12px;
 }
+
+/* 1. Header Circles (Close, Back, Minimize) */
+.macicon > i:active {
+  transform: scale(1); /* Slightly smaller than hover for a 'pop' effect */
+  filter: brightness(0.85);
+}
+
+
+.options button:not(#increase-font):not(#decrease-font):active,
+.dropdown button:active,
+.share-btn:active,
+.dropdown-btn:active,
+#clear-history-btn:active {
+    transform: scale(0.92); /* Same effect as the font-size buttons */
+    filter: brightness(0.95);
+    transition: transform 0.1s ease-out; /* A quick, responsive press */
+}
+
+
