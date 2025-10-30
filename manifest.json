@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "AI Summary for Articles",
+  "name": "AI Summary & YouTube Auto Transcript",
   "version": "1.0",
-  "description": "Summarize and download articles as PDF or text.",
+  "description": "Summarize articles, download PDFs, and automatically open YouTube transcripts.",
   "permissions": [
     "scripting",
     "activeTab",
@@ -23,7 +23,13 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://www.youtube.com/watch*"],
+      "js": ["youtube-auto-transcript.js"],
+      "run_at": "document_idle"
     }
   ],
   "options_page": "options.html",

@@ -88,6 +88,9 @@ function attachEventListeners() {
   document.getElementById("copyLinkBtn")?.addEventListener("click",copyLink);
 }
 
+
+
+
 // -------------------- MAIN: YOUTUBE SUMMARIZATION --------------------
 async function onSummarizeClick() {
   const resultDiv=document.getElementById("result");
@@ -287,3 +290,82 @@ document.getElementById("updates-btn").addEventListener("click",()=>chrome.windo
 
 // -------------------- DEFAULT MESSAGE --------------------
 document.getElementById("result").innerHTML="🎥 Open a YouTube video and click 'Summarize' to get its AI summary.";
+
+
+
+
+// for Zoom in and zoom out option work correctly
+
+let currentFontSize = 16; // default or baseline
+
+function applyFontSize() {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    resultDiv.style.fontSize = currentFontSize + "px";
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    const computedSize = window.getComputedStyle(resultDiv).fontSize;
+    currentFontSize = parseInt(computedSize, 10); // set baseline
+  }
+
+  // Buttons
+  const incBtn = document.getElementById("increase-font");
+  const decBtn = document.getElementById("decrease-font");
+
+  if (incBtn) {
+    incBtn.addEventListener("click", () => {
+      currentFontSize += 2;
+      applyFontSize();
+    });
+  }
+
+  if (decBtn) {
+    decBtn.addEventListener("click", () => {
+      if (currentFontSize > 8) {
+        currentFontSize -= 2;
+        applyFontSize();
+      }
+    });
+  }
+});
+
+
+// Function to auto-detect and open the YouTube transcript
+document.getElementById("summarize").addEventListener("click", async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  if (tab && tab.url.includes("youtube.com/watch")) {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: openYouTubeTranscript
+    });
+  } else {
+    alert("Please open a YouTube video first!");
+  }
+});
+
+function openYouTubeTranscript() {
+  console.log("🟢 Trying to open transcript...");
+  const findButton = () => {
+    const button =
+      document.querySelector('tp-yt-paper-button[aria-label="Show transcript"]') ||
+      document.querySelector('ytd-button-renderer[aria-label="Show transcript"]') ||
+      document.querySelector('button[aria-label="Show transcript"]') ||
+      document.querySelector("#button-container button[aria-label='Show transcript']") ||
+      document.querySelector(".yt-spec-touch-feedback-shape__fill");
+
+    if (button) {
+      button.click();
+      console.log("✅ Transcript opened!");
+    } else {
+      console.log("❌ Transcript button not found, retrying...");
+      setTimeout(findButton, 1000);
+    }
+  };
+  findButton();
+}
+
