@@ -726,6 +726,7 @@ function initVoiceAssistant() {
       // We add a small delay so the user can hear the feedback before the page changes
       setTimeout(() => {
         document.getElementById("back-btn")?.click();
+        try{ window.history.back(); }catch(e){/*ignore*/}
       }, 600);
 
     // ✅ ADDED: Command to close the extension window
