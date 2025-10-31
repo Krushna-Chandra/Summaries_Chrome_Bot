@@ -27,9 +27,7 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://www.youtube.com/watch*"],
-      "js": ["youtube-auto-transcript.js"],
-      "run_at": "document_idle"
+      "matches": ["*://www.youtube.com/watch*"]
     }
   ],
   "options_page": "options.html",
