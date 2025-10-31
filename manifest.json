@@ -27,7 +27,9 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://www.youtube.com/watch*"]
+      "matches": ["*://www.youtube.com/watch*"],
+      "js": ["aivideosum.js"],
+      "run_at": "document_idle"
     }
   ],
   "options_page": "options.html",
