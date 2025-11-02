@@ -1,5 +1,6 @@
 // popup.js (updated) ---------------------------------------------------------
 
+
 // --- Helpers / Globals ---
 const LANG_DEFAULT = "en-US"; // fallback language for TTS & prompt usage
 
@@ -320,7 +321,90 @@ function onCopyClick() {
       });
   }
 }
+// Enhanced star generation with different sizes and animations
+const starsContainer = document.getElementById('stars');
 
+// Create variety of stars
+function createStars() {
+  const starCount = 80; // More stars for richer effect
+  
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    
+    // Random star types
+    const random = Math.random();
+    if (random < 0.5) {
+      star.className = 'star small';
+    } else if (random < 0.8) {
+      star.className = 'star medium';
+    } else {
+      star.className = 'star large';
+    }
+    
+    // Add pulse effect to some stars
+    if (Math.random() > 0.7) {
+      star.classList.add('pulse');
+    }
+    
+    // Random position
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    
+    // Random animation delay for organic feel
+    star.style.animationDelay = Math.random() * 5 + 's';
+    
+    // Random colors for some stars (purple/blue tints)
+    if (Math.random() > 0.85) {
+      const colors = [
+        'rgba(147, 112, 219, 0.9)', // Purple
+        'rgba(135, 206, 250, 0.9)', // Light blue
+        'rgba(255, 192, 203, 0.9)'  // Pink
+      ];
+      star.style.background = colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    starsContainer.appendChild(star);
+  }
+}
+
+// Create shooting stars effect
+function createShootingStar() {
+  const shootingStar = document.createElement('div');
+  shootingStar.style.position = 'absolute';
+  shootingStar.style.width = '100px';
+  shootingStar.style.height = '2px';
+  shootingStar.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)';
+  shootingStar.style.top = Math.random() * 50 + '%';
+  shootingStar.style.left = '-100px';
+  shootingStar.style.transform = 'rotate(-45deg)';
+  shootingStar.style.boxShadow = '0 0 10px rgba(255,255,255,0.8)';
+  shootingStar.style.pointerEvents = 'none';
+  shootingStar.style.zIndex = '1';
+  
+  starsContainer.appendChild(shootingStar);
+  
+  // Animate across screen
+  let pos = -100;
+  const animation = setInterval(() => {
+    pos += 8;
+    shootingStar.style.left = pos + 'px';
+    
+    if (pos > 500) {
+      clearInterval(animation);
+      shootingStar.remove();
+    }
+  }, 16);
+}
+
+// Initialize stars
+createStars();
+
+// Random shooting stars
+setInterval(() => {
+  if (Math.random() > 0.7) {
+    createShootingStar();
+  }
+}, 3000);
 // add new pages
   document.getElementById("articleBtn").onclick = function() {
     window.location.href = "aiarticlesum.html";
