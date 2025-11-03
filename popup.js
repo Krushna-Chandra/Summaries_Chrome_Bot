@@ -559,9 +559,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🧩 Elements
   const body = document.body;
   const bgGradient = document.querySelector(".bg-gradient");
-  const orb1 = document.querySelector(".orb1");
-  const orb2 = document.querySelector(".orb2");
-  const orb3 = document.querySelector(".orb3");
   const notch = document.getElementById("notch");
   const check = document.getElementById("check");
 
@@ -569,38 +566,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const themes = {
     "white-black": {
       bodyBg: "linear-gradient(-11deg, #121212, #1c1c1cf2 37%, #2c2c2eed 76%, #0a0a0a)",
-      gradientBg: "radial-gradient(circle at 50% 120%, #1c1c1c 0%, #0a0a0a 50%, #000 100%)",
-      orb1Color: "radial-gradient(circle, #999, #666, transparent)",
-      orb2Color: "radial-gradient(circle, #444, #222, transparent)",
-      orb3Color: "radial-gradient(circle, #222, #000, transparent)"
+      gradientBg: "radial-gradient(circle at 50% 120%, #1c1c1c 0%, #0a0a0a 50%, #000 100%)"
     },
     "black-blue": {
       bodyBg: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)",
-      gradientBg: "radial-gradient(circle at 50% 120%, #000022 0%, #000033 50%, #000044 100%)",
-      orb1Color: "radial-gradient(circle, #3b82f6, #2563eb, transparent)",
-      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
-      orb3Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)"
+      gradientBg: "radial-gradient(circle at 50% 120%, #000022 0%, #000033 50%, #000044 100%)"
     },
     "yellow-green": {
       bodyBg: "linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))",
-      gradientBg: "radial-gradient(circle at 50% 120%, #d4fc79 0%, #96e6a1 50%, #0a0a1f 100%)",
-      orb1Color: "radial-gradient(circle, #a3e635, #84cc16, transparent)",
-      orb2Color: "radial-gradient(circle, #65a30d, #4d7c0f, transparent)",
-      orb3Color: "radial-gradient(circle, #22c55e, #16a34a, transparent)"
+      gradientBg: "radial-gradient(circle at 50% 120%, #d4fc79 0%, #96e6a1 50%, #0a0a1f 100%)"
     },
     "red-pink": {
       bodyBg: "linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222))",
-      gradientBg: "radial-gradient(circle at 50% 120%, #ff758c 0%, #ff7eb3 50%, #0a0a1f 100%)",
-      orb1Color: "radial-gradient(circle, #ec4899, #f43f5e, transparent)",
-      orb2Color: "radial-gradient(circle, #f43f5e, #e11d48, transparent)",
-      orb3Color: "radial-gradient(circle, #be185d, #9d174d, transparent)"
+      gradientBg: "radial-gradient(circle at 50% 120%, #ff758c 0%, #ff7eb3 50%, #0a0a1f 100%)"
     },
     "black-red": {
       bodyBg: "linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)",
-      gradientBg: "radial-gradient(circle at 50% 120%, #2c0b0e 0%, #0a0a1f 50%, #000 100%)",
-      orb1Color: "radial-gradient(circle, #dc2626, #991b1b, transparent)",
-      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
-      orb3Color: "radial-gradient(circle, #ef4444, #f87171, transparent)"
+      gradientBg: "radial-gradient(circle at 50% 120%, #2c0b0e 0%, #0a0a1f 50%, #000 100%)"
     }
   };
 
@@ -609,17 +591,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const theme = themes[themeKey];
     if (!theme) return;
     body.style.background = theme.bodyBg;
-    bgGradient.style.background = theme.gradientBg;
-    orb1.style.background = theme.orb1Color;
-    orb2.style.background = theme.orb2Color;
-    orb3.style.background = theme.orb3Color;
+    if (bgGradient) bgGradient.style.background = theme.gradientBg;
     currentBackground = themeKey;
   }
 
   // 🔄 Update icons
   function updateIcons(showNotch, showCheck) {
-    notch.style.display = showNotch ? "block" : "none";
-    check.style.opacity = showCheck ? "1" : "0";
+    if (notch) notch.style.display = showNotch ? "block" : "none";
+    if (check) check.style.opacity = showCheck ? "1" : "0";
   }
 
   // 💾 Save theme
@@ -664,16 +643,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ✅ Click on check → Save the current background
-  check.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (currentBackground && currentBackground !== savedBackground) {
-      saveTheme(currentBackground);
-    }
-  });
+  if (check) {
+    check.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (currentBackground && currentBackground !== savedBackground) {
+        saveTheme(currentBackground);
+      }
+    });
+  }
 
   // 🚀 Initialize
   restoreThemeOnLoad();
 });
+
 
 
 
