@@ -19,8 +19,6 @@ body {
 /* Dynamic Animated Background */
 .background {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -297,7 +295,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-left: 10px;
+  margin-left: 200px;
 }
 
 .checkbox {
@@ -310,6 +308,7 @@ body {
 #notch {
   color: #fcd34d;
   transition: opacity 0.3s ease;
+  font-size: 16px;
 }
 
 #check {
@@ -319,6 +318,7 @@ body {
   left: 0;
   opacity: 0;
   transition: opacity 0.3s ease;
+  font-size: 16px;
 }
 
 .updates-wrapper {

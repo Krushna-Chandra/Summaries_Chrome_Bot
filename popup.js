@@ -641,57 +641,98 @@ function copyLink() {
 // --------------- Background + restore stuff (kept) ---------------
 document.getElementById("close-btn").onclick = () => { window.close(); };
 
-let currentBackground = "";
-const checkbox = document.getElementById("checkbox");
-const notchIcon = document.getElementById("notch");
-const checkIcon = document.getElementById("check");
-const checkButton = document.getElementById("check");
 
-function applyBackground(bg, height) {
-  document.body.style.background = bg;
-  document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.height = '350px';
-  document.body.style.minHeight = '350px';
-  if (notchIcon) notchIcon.style.display = "block";
-  if (checkIcon) checkIcon.style.opacity = "0";
-}
 
-const whiteblack = document.getElementById("white-black");
-if (whiteblack) whiteblack.onclick = () => { currentBackground = 'linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%)'; applyBackground(currentBackground,'350px'); };
-const blackblue = document.getElementById("black-blue");
-if (blackblue) blackblue.onclick = () => { currentBackground = 'linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)'; applyBackground(currentBackground,'350px'); };
-const redpink = document.getElementById("red-pink");
-if (redpink) redpink.onclick = () => { currentBackground = 'linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)'; applyBackground(currentBackground,'350px'); };
-const blackred = document.getElementById("black-red");
-if (blackred) blackred.onclick = () => { currentBackground = 'linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)'; applyBackground(currentBackground,'350px'); };
-const yellowgreen = document.getElementById("yellow-green");
-if (yellowgreen) yellowgreen.onclick = () => { currentBackground = 'linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))'; applyBackground(currentBackground,'350px'); };
+document.addEventListener("DOMContentLoaded", () => {
+  let currentBackground = "";
 
-if (checkButton) {
-  checkButton.onclick = (e) => {
-    e.preventDefault();
-    if (currentBackground) {
-      localStorage.setItem('customBackground', currentBackground);
-      if (notchIcon) notchIcon.style.display = "none";
-      if (checkIcon) checkIcon.style.opacity = "1";
-    }
-  };
-}
+  // Elements
+  const checkbox = document.getElementById("checkbox");
+  const notchIcon = document.getElementById("notch");
+  const checkIcon = document.getElementById("check");
+  const checkButton = document.getElementById("check");
 
-function restoreBackgroundOnLoad() {
-  const savedBg = localStorage.getItem('customBackground');
-  if (savedBg) {
-    currentBackground = savedBg;
-    applyBackground(savedBg, '350px');
+  // 🎨 Function to apply selected background
+  function applyBackground(bg, height = "350px") {
+    document.body.style.background = bg;
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.height = height;
+    document.body.style.minHeight = height;
   }
-}
 
-if (checkbox) {
-  checkbox.addEventListener("click", () => {
-    if (notchIcon) notchIcon.style.display = "none";
-    if (checkIcon) checkIcon.style.opacity = "1";
+  // 🔄 Function to show/hide icons
+  function updateIcons(showNotch, showCheck) {
+    if (notchIcon) notchIcon.style.display = showNotch ? "block" : "none";
+    if (checkIcon) checkIcon.style.opacity = showCheck ? "1" : "0";
+  }
+
+  // 🎨 Background gradient options
+  const backgrounds = {
+    "white-black": "linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%)",
+    "black-blue": "linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)",
+    "red-pink": "linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)",
+    "black-red": "linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)",
+    "yellow-green": "linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))",
+  };
+
+  // 🖱️ Attach click listeners to background buttons
+  Object.keys(backgrounds).forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.onclick = () => {
+        currentBackground = backgrounds[id];
+        applyBackground(currentBackground);
+        updateIcons(true, false);
+      };
+    }
   });
-}
+
+  // 💾 Save background to Chrome storage
+  if (checkButton) {
+    checkButton.onclick = (e) => {
+      e.preventDefault();
+      if (currentBackground) {
+        chrome.storage.local.set({ customBackground: currentBackground }, () => {
+          console.log("✅ Background saved:", currentBackground);
+          updateIcons(false, true);
+        });
+      }
+    };
+  }
+
+  // 🔁 Restore saved background on popup open
+  function restoreBackgroundOnLoad() {
+    chrome.storage.local.get("customBackground", (result) => {
+      const savedBg = result.customBackground;
+      if (savedBg) {
+        currentBackground = savedBg;
+        applyBackground(savedBg);
+        updateIcons(false, true);
+        console.log("✅ Restored background:", savedBg);
+      } else {
+        console.log("ℹ️ No saved background found.");
+        updateIcons(true, false);
+      }
+    });
+  }
+
+  // ☑️ Checkbox click event (optional visual toggle)
+  if (checkbox) {
+    checkbox.addEventListener("click", () => {
+      updateIcons(false, true);
+    });
+  }
+
+  // 🚀 Run restore on load
+  restoreBackgroundOnLoad();
+});
+
+
+
+
+
+
+
 
 // updates popup
 document.getElementById("updates-btn").addEventListener("click", () => {
