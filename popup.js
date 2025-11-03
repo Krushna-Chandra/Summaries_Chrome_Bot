@@ -1,5 +1,6 @@
 // popup.js (updated) ---------------------------------------------------------
 
+
 // --- Helpers / Globals ---
 const LANG_DEFAULT = "en-US"; // fallback language for TTS & prompt usage
 
@@ -39,6 +40,98 @@ function initVoiceSystem() {
     loadVoices();
   };
 }
+
+// Backround Change
+document.addEventListener("DOMContentLoaded", () => {
+  const body = document.body;
+  const bgGradient = document.querySelector(".bg-gradient");
+  const orb1 = document.querySelector(".orb1");
+  const orb2 = document.querySelector(".orb2");
+  const orb3 = document.querySelector(".orb3");
+  const checkbox = document.getElementById("checkbox");
+  const notch = document.getElementById("notch");
+  const check = document.getElementById("check");
+
+  let isChecked = false;
+
+  // Theme definitions
+  const themes = {
+    "white-black": {
+      bodyBg: "linear-gradient(-11deg, #121212, #1c1c1cf2 37%, #2c2c2eed 76%, #0a0a0a)",
+      gradientBg: "radial-gradient(circle at 50% 120%, #1c1c1c 0%, #0a0a0a 50%, #000 100%)",
+      orb1Color: "radial-gradient(circle, #999, #666, transparent)",
+      orb2Color: "radial-gradient(circle, #444, #222, transparent)",
+      orb3Color: "radial-gradient(circle, #222, #000, transparent)"
+    },
+    "black-blue": {
+      bodyBg: "linear-gradient(to right, black, blue)",
+      gradientBg: "radial-gradient(circle at 50% 120%, #000022 0%, #000033 50%, #000044 100%)",
+      orb1Color: "radial-gradient(circle, #3b82f6, #2563eb, transparent)",
+      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
+      orb3Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)"
+    },
+    "yellow-green": {
+      bodyBg: "linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))",
+      gradientBg: "radial-gradient(circle at 50% 120%, #d4fc79 0%, #96e6a1 50%, #0a0a1f 100%)",
+      orb1Color: "radial-gradient(circle, #a3e635, #84cc16, transparent)",
+      orb2Color: "radial-gradient(circle, #65a30d, #4d7c0f, transparent)",
+      orb3Color: "radial-gradient(circle, #22c55e, #16a34a, transparent)"
+    },
+    "red-pink": {
+      bodyBg: "linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222))",
+      gradientBg: "radial-gradient(circle at 50% 120%, #ff758c 0%, #ff7eb3 50%, #0a0a1f 100%)",
+      orb1Color: "radial-gradient(circle, #ec4899, #f43f5e, transparent)",
+      orb2Color: "radial-gradient(circle, #f43f5e, #e11d48, transparent)",
+      orb3Color: "radial-gradient(circle, #be185d, #9d174d, transparent)"
+    },
+    "black-red": {
+      bodyBg: "linear-gradient(to right, rgb(208, 16, 16), blue)",
+      gradientBg: "radial-gradient(circle at 50% 120%, #2c0b0e 0%, #0a0a1f 50%, #000 100%)",
+      orb1Color: "radial-gradient(circle, #dc2626, #991b1b, transparent)",
+      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
+      orb3Color: "radial-gradient(circle, #ef4444, #f87171, transparent)"
+    }
+  };
+
+  function applyTheme(themeKey) {
+    const theme = themes[themeKey];
+    if (!theme) return;
+
+    body.style.background = theme.bodyBg;
+    bgGradient.style.background = theme.gradientBg;
+    orb1.style.background = theme.orb1Color;
+    orb2.style.background = theme.orb2Color;
+    orb3.style.background = theme.orb3Color;
+
+    // Save theme if checkbox is checked
+    if (isChecked) {
+      localStorage.setItem("savedTheme", themeKey);
+    }
+  }
+
+  // Load saved theme on page load
+  const savedTheme = localStorage.getItem("savedTheme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  }
+
+  // Checkbox toggle
+  checkbox.addEventListener("click", () => {
+    isChecked = !isChecked;
+    check.style.opacity = isChecked ? "1" : "0";
+    notch.style.opacity = isChecked ? "0" : "1";
+  });
+
+  // Theme button listeners
+  Object.keys(themes).forEach(themeKey => {
+    const btn = document.getElementById(themeKey);
+    if (btn) {
+      btn.addEventListener("click", () => applyTheme(themeKey));
+    }
+  });
+});
+
+
 
 // pick a voice best matching the langCode (e.g. "hi-IN" or "hi")
 function pickVoiceForLang(langCode) {
@@ -320,7 +413,90 @@ function onCopyClick() {
       });
   }
 }
+// Enhanced star generation with different sizes and animations
+const starsContainer = document.getElementById('stars');
 
+// Create variety of stars
+function createStars() {
+  const starCount = 80; // More stars for richer effect
+  
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    
+    // Random star types
+    const random = Math.random();
+    if (random < 0.5) {
+      star.className = 'star small';
+    } else if (random < 0.8) {
+      star.className = 'star medium';
+    } else {
+      star.className = 'star large';
+    }
+    
+    // Add pulse effect to some stars
+    if (Math.random() > 0.7) {
+      star.classList.add('pulse');
+    }
+    
+    // Random position
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    
+    // Random animation delay for organic feel
+    star.style.animationDelay = Math.random() * 5 + 's';
+    
+    // Random colors for some stars (purple/blue tints)
+    if (Math.random() > 0.85) {
+      const colors = [
+        'rgba(147, 112, 219, 0.9)', // Purple
+        'rgba(135, 206, 250, 0.9)', // Light blue
+        'rgba(255, 192, 203, 0.9)'  // Pink
+      ];
+      star.style.background = colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    starsContainer.appendChild(star);
+  }
+}
+
+// Create shooting stars effect
+function createShootingStar() {
+  const shootingStar = document.createElement('div');
+  shootingStar.style.position = 'absolute';
+  shootingStar.style.width = '100px';
+  shootingStar.style.height = '2px';
+  shootingStar.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)';
+  shootingStar.style.top = Math.random() * 50 + '%';
+  shootingStar.style.left = '-100px';
+  shootingStar.style.transform = 'rotate(-45deg)';
+  shootingStar.style.boxShadow = '0 0 10px rgba(255,255,255,0.8)';
+  shootingStar.style.pointerEvents = 'none';
+  shootingStar.style.zIndex = '1';
+  
+  starsContainer.appendChild(shootingStar);
+  
+  // Animate across screen
+  let pos = -100;
+  const animation = setInterval(() => {
+    pos += 8;
+    shootingStar.style.left = pos + 'px';
+    
+    if (pos > 500) {
+      clearInterval(animation);
+      shootingStar.remove();
+    }
+  }, 16);
+}
+
+// Initialize stars
+createStars();
+
+// Random shooting stars
+setInterval(() => {
+  if (Math.random() > 0.7) {
+    createShootingStar();
+  }
+}, 3000);
 // add new pages
   document.getElementById("articleBtn").onclick = function() {
     window.location.href = "aiarticlesum.html";

@@ -1,217 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Summary</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=ads_click" />
   <link rel="stylesheet" href="popup.css" />
 </head>
-
 <body>
+  <!-- Dynamic Background -->
+  <div class="background">
+    <div class="bg-gradient"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="stars" id="stars"></div>
+  </div>
 
-  <div class="container" style="max-height: 350px;">
-
-    <div class="new2">
-      <div class="new">
-        <i class="fa-brands fa-apple" style="color: white"></i>
-        <div class="macicon" style="position: relative;">
-          <i id="close-btn" class="fa-solid fa-circle" style="color: red; ">
-            <i class="fa-solid fa-xmark" style="color: black;position: absolute; margin: -1.2px -11.2px;"></i>
-          </i>
-          <i class="fa-solid fa-circle" style="color: yellow ;"></i>
-          <i class="fa-solid fa-circle" style="color: green"></i>
-        </div>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <i class="fa-brands fa-apple"></i>
+        <div class="title">AI Summary</div>
       </div>
-
-      <div class="modification">
-        <div class="h2" style="position: relative;">
-          <span>AI Summary</span>
-        </div>
-        <div class="icon-added" style="margin-top: 0px; position: relative;">
-
-  <!-- Checkbox + Updates -->
-  <span class="checkbox" id="checkbox" style="position: absolute; margin-left: 0px;">
+      <div class="controls">
+       <i id="close-btn" class="fa-solid fa-circle-xmark control-btn" style="color: #ff5f56; font-size: 12px;"></i>
+        <i class="fa-solid fa-circle control-btn" style="color: #ffbd2e; font-size: 12px;"></i>
+        <i class="fa-solid fa-circle control-btn" style="color: #27c93f; font-size: 12px;"></i>
+      </div>
+    </div>
+    <!-- Checkbox + Updates -->
+<div class="checkbox-updates">
+  <span class="checkbox" id="checkbox">
     <i id="notch" class="fa-solid fa-circle-notch"></i>
     <i id="check" class="fa-regular fa-circle-check"></i>
   </span>
 
-  <!-- Updates button + container -->
- <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; margin-left: 20px; position: relative;">
-  <i id="updates-btn" class="fa-solid fa-upload" style="cursor: pointer;"></i>
-  <!-- Red dot for updates -->
-
-
-  <div id="updates-container"></div>
-</div>
-
-
+  <div class="updates-wrapper">
+    <i id="updates-btn" class="fa-solid fa-upload"></i>
+    <div id="updates-container"></div>
+  </div>
   <!-- Color theme buttons -->
-  <span id="white-black">
-    <i class="fa-solid fa-circle" style="
+                <span id="white-black">
+                    <i class="fa-solid fa-circle" style="
       background-image: linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;">
-    </i>
-  </span>
+                    </i>
+                </span>
 
-  <span id="black-blue">
-    <i class="fa-solid fa-circle" style="
+                <span id="black-blue">
+                    <i class="fa-solid fa-circle" style="
       background: linear-gradient(to right, black, blue);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;">
-    </i>
-  </span>
+                    </i>
+                </span>
 
-  <span id="yellow-green">
-    <i class="fa-solid fa-circle" style="
+                <span id="yellow-green">
+                    <i class="fa-solid fa-circle" style="
       background: linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;">
-    </i>
-  </span>
+                    </i>
+                </span>
 
-  <span id="red-pink">
-    <i class="fa-solid fa-circle" style="
+                <span id="red-pink">
+                    <i class="fa-solid fa-circle" style="
     
     background: linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;">
-    </i>
-  </span>
+                    </i>
+                </span>
 
-  <span id="black-red">
-    <i class="fa-solid fa-circle" style="
+                <span id="black-red">
+                    <i class="fa-solid fa-circle" style="
       background: linear-gradient(to right, rgb(208, 16, 16), blue);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;">
-    </i>
-  </span>
-
+                    </i>
+                </span>
 </div>
 
 
+    <!-- Feature Cards -->
+    <div class="features">
+      <div class="feature-card article-card" id="articleBtn">
+        <div class="card-glow"></div>
+        <div class="card-particles">
+          <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
+          <div class="particle" style="left: 50%; animation-delay: 0.5s;"></div>
+          <div class="particle" style="left: 80%; animation-delay: 1s;"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-icon-wrapper">
+            <i class="fas fa-newspaper card-icon"></i>
+          </div>
+          <div class="card-title">AI Article<br>Summarizer</div>
+        </div>
+      </div>
 
+      <div class="feature-card video-card" id="videoBtn">
+        <div class="card-glow"></div>
+        <div class="card-particles">
+          <div class="particle" style="left: 30%; animation-delay: 0.2s;"></div>
+          <div class="particle" style="left: 60%; animation-delay: 0.7s;"></div>
+          <div class="particle" style="left: 90%; animation-delay: 1.2s;"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-icon-wrapper">
+            <i class="fas fa-video card-icon"></i>
+          </div>
+          <div class="card-title">AI Video<br>Summarizer</div>
+        </div>
       </div>
     </div>
 
-
-<!-- add 2 page here -->
-<div style="display: flex; margin-top: 20px; justify-content: center; gap: 60px; cursor: pointer;"> 
-  <button id="articleBtn" style="height: 200px; width: 200px; cursor: pointer;">
-    AI Article Summariser
-  </button>
-
-  <button id="videoBtn" style="height: 200px; width: 200px; cursor: pointer;">
-    AI Video Summariser
-  </button>
-</div>
-
-
-
-    
-    <div class="footer" style="display: flex;      margin-top: 34px;
-    margin-left: 81px;">
-      <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
-              border-radius: 25px; 
-              padding: px; 
-              font-size: 13px; 
-              font-weight: 700; 
-              color: black; 
-              box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
-              display: flex; 
-              width: 300px;    
-              gap: 2px;
-              ">
-
-
-
-        <!-- Contributor 1 -->
-        <a href="https://github.com/Sangram03" target="_blank"
-          style="display: flex; align-items: center; text-decoration: none; color: black; gap: 5px;">
+    <!-- Footer -->
+    <div class="footer">
+      <div class="contributors">
+        <a href="https://github.com/Sangram03" target="_blank">
           <span>Develop by</span>
-          <img href="https://github.com/Sangram03" target="_blank" src="https://github.com/Sangram03.png"
-            alt="Sangram Das" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
+          <img src="https://github.com/Sangram03.png" alt="Sangram Das" class="contributor-img">
         </a>
 
-        <!-- Contributor 2 -->
-        <a href="https://github.com/Krushna-Chandra" target="_blank"
-          style="display: flex; align-items: center; text-decoration: none; color: black;">
+        <a href="https://github.com/Krushna-Chandra" target="_blank">
           <span>Contributor</span>
-          <img src="https://github.com/Krushna-Chandra.png" alt="Other Contributor"
-            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-        <!-- Contributor 3 -->
-        </a>
-        <a href="https://github.com/prakashjena938" target="_blank"
-          style="display: flex; align-items: center; text-decoration: none; color: black;">
-          <img src="https://github.com/prakashjena938.png" alt="Other Contributor"
-            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
-        </a>
-        <a href="https://github.com/Bhababhanjan1" target="_blank"
-          style="display: flex; align-items: center; text-decoration: none; color: black;">
-          <img src="https://github.com/Bhababhanjan1.png" alt="Other Contributor"
-            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
+          <img src="https://github.com/Krushna-Chandra.png" alt="Contributor" class="contributor-img">
         </a>
 
-         <a href="https://github.com/Rajibpanda01" target="_blank"
-          style="display: flex; align-items: center; text-decoration: none; color: black;">
-          <img src="https://github.com/Rajibpanda01.png" alt="Other Contributor"
-            style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
+        <a href="https://github.com/prakashjena938" target="_blank">
+          <img src="https://github.com/prakashjena938.png" alt="Contributor" class="contributor-img">
         </a>
 
+        <a href="https://github.com/Bhababhanjan1" target="_blank">
+          <img src="https://github.com/Bhababhanjan1.png" alt="Contributor" class="contributor-img">
+        </a>
+
+        <a href="https://github.com/Rajibpanda01" target="_blank">
+          <img src="https://github.com/Rajibpanda01.png" alt="Contributor" class="contributor-img">
+        </a>
       </div>
-
-
-     
-
-
-  
-
-      <!-- Add jsPDF -->
-
-
-
     </div>
-
-    </div>
-   
-
   </div>
 
-
-  </div>
-
-  </div>
-
-
-  <!-- Load local jsPDF first -->
-  <script src="lib/jspdf.umd.min.js"></script>
-  <!-- Then load your extension logic -->
   <script src="popup.js"></script>
-
-
 </body>
-
 </html>
