@@ -291,6 +291,62 @@ body {
   will-change: transform, opacity;
 }
 
+.checkbox-updates {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 10px;
+}
+
+.checkbox {
+  cursor: pointer;
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+#notch {
+  color: #fcd34d;
+  transition: opacity 0.3s ease;
+}
+
+#check {
+  color: #0ad5ff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.updates-wrapper {
+  position: relative;
+}
+
+#updates-btn {
+  color: #60a5fa;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#updates-container::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+  display: none;
+}
+
+#updates-container.show::before {
+  display: block;
+}
+
+
 @keyframes breathe {
   0%, 100% {
     transform: scale(1);
@@ -384,6 +440,8 @@ body {
 .feature-card:hover::before {
   opacity: 1;
 }
+
+
 
 .article-card {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.18) 0%, rgba(147, 51, 234, 0.12) 100%);
