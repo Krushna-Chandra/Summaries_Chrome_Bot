@@ -20,10 +20,10 @@ const LANG_LABELS = {
 };
 
 // Wait for DOM
-window.addEventListener("DOMContentLoaded", () => {
-  initVoiceSystem();
-  restoreBackgroundOnLoad();
-  attachEventListeners();
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof initVoiceSystem === "function") initVoiceSystem();
+  if (typeof restoreBackgroundOnLoad === "function") restoreBackgroundOnLoad();
+  if (typeof attachEventListeners === "function") attachEventListeners();
 });
 
 // --------------- Language + Voice selection ---------------
@@ -40,96 +40,6 @@ function initVoiceSystem() {
     loadVoices();
   };
 }
-
-// Backround Change
-document.addEventListener("DOMContentLoaded", () => {
-  const body = document.body;
-  const bgGradient = document.querySelector(".bg-gradient");
-  const orb1 = document.querySelector(".orb1");
-  const orb2 = document.querySelector(".orb2");
-  const orb3 = document.querySelector(".orb3");
-  const checkbox = document.getElementById("checkbox");
-  const notch = document.getElementById("notch");
-  const check = document.getElementById("check");
-
-  let isChecked = false;
-
-  // Theme definitions
-  const themes = {
-    "white-black": {
-      bodyBg: "linear-gradient(-11deg, #121212, #1c1c1cf2 37%, #2c2c2eed 76%, #0a0a0a)",
-      gradientBg: "radial-gradient(circle at 50% 120%, #1c1c1c 0%, #0a0a0a 50%, #000 100%)",
-      orb1Color: "radial-gradient(circle, #999, #666, transparent)",
-      orb2Color: "radial-gradient(circle, #444, #222, transparent)",
-      orb3Color: "radial-gradient(circle, #222, #000, transparent)"
-    },
-    "black-blue": {
-      bodyBg: "linear-gradient(to right, black, blue)",
-      gradientBg: "radial-gradient(circle at 50% 120%, #000022 0%, #000033 50%, #000044 100%)",
-      orb1Color: "radial-gradient(circle, #3b82f6, #2563eb, transparent)",
-      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
-      orb3Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)"
-    },
-    "yellow-green": {
-      bodyBg: "linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))",
-      gradientBg: "radial-gradient(circle at 50% 120%, #d4fc79 0%, #96e6a1 50%, #0a0a1f 100%)",
-      orb1Color: "radial-gradient(circle, #a3e635, #84cc16, transparent)",
-      orb2Color: "radial-gradient(circle, #65a30d, #4d7c0f, transparent)",
-      orb3Color: "radial-gradient(circle, #22c55e, #16a34a, transparent)"
-    },
-    "red-pink": {
-      bodyBg: "linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222))",
-      gradientBg: "radial-gradient(circle at 50% 120%, #ff758c 0%, #ff7eb3 50%, #0a0a1f 100%)",
-      orb1Color: "radial-gradient(circle, #ec4899, #f43f5e, transparent)",
-      orb2Color: "radial-gradient(circle, #f43f5e, #e11d48, transparent)",
-      orb3Color: "radial-gradient(circle, #be185d, #9d174d, transparent)"
-    },
-    "black-red": {
-      bodyBg: "linear-gradient(to right, rgb(208, 16, 16), blue)",
-      gradientBg: "radial-gradient(circle at 50% 120%, #2c0b0e 0%, #0a0a1f 50%, #000 100%)",
-      orb1Color: "radial-gradient(circle, #dc2626, #991b1b, transparent)",
-      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
-      orb3Color: "radial-gradient(circle, #ef4444, #f87171, transparent)"
-    }
-  };
-
-  function applyTheme(themeKey) {
-    const theme = themes[themeKey];
-    if (!theme) return;
-
-    body.style.background = theme.bodyBg;
-    bgGradient.style.background = theme.gradientBg;
-    orb1.style.background = theme.orb1Color;
-    orb2.style.background = theme.orb2Color;
-    orb3.style.background = theme.orb3Color;
-
-    // Save theme if checkbox is checked
-    if (isChecked) {
-      localStorage.setItem("savedTheme", themeKey);
-    }
-  }
-
-  // Load saved theme on page load
-  const savedTheme = localStorage.getItem("savedTheme");
-  if (savedTheme) {
-    applyTheme(savedTheme);
-  }
-
-  // Checkbox toggle
-  checkbox.addEventListener("click", () => {
-    isChecked = !isChecked;
-    check.style.opacity = isChecked ? "1" : "0";
-    notch.style.opacity = isChecked ? "0" : "1";
-  });
-
-  // Theme button listeners
-  Object.keys(themes).forEach(themeKey => {
-    const btn = document.getElementById(themeKey);
-    if (btn) {
-      btn.addEventListener("click", () => applyTheme(themeKey));
-    }
-  });
-});
 
 
 
@@ -642,90 +552,131 @@ function copyLink() {
 document.getElementById("close-btn").onclick = () => { window.close(); };
 
 
-
 document.addEventListener("DOMContentLoaded", () => {
   let currentBackground = "";
+  let savedBackground = "";
 
-  // Elements
-  const checkbox = document.getElementById("checkbox");
-  const notchIcon = document.getElementById("notch");
-  const checkIcon = document.getElementById("check");
-  const checkButton = document.getElementById("check");
+  // 🧩 Elements
+  const body = document.body;
+  const bgGradient = document.querySelector(".bg-gradient");
+  const orb1 = document.querySelector(".orb1");
+  const orb2 = document.querySelector(".orb2");
+  const orb3 = document.querySelector(".orb3");
+  const notch = document.getElementById("notch");
+  const check = document.getElementById("check");
 
-  // 🎨 Function to apply selected background
-  function applyBackground(bg, height = "350px") {
-    document.body.style.background = bg;
-    document.body.style.backgroundRepeat = "no-repeat";
-    document.body.style.height = height;
-    document.body.style.minHeight = height;
-  }
-
-  // 🔄 Function to show/hide icons
-  function updateIcons(showNotch, showCheck) {
-    if (notchIcon) notchIcon.style.display = showNotch ? "block" : "none";
-    if (checkIcon) checkIcon.style.opacity = showCheck ? "1" : "0";
-  }
-
-  // 🎨 Background gradient options
-  const backgrounds = {
-    "white-black": "linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%)",
-    "black-blue": "linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)",
-    "red-pink": "linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%)",
-    "black-red": "linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)",
-    "yellow-green": "linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))",
+  // 🎨 Theme definitions
+  const themes = {
+    "white-black": {
+      bodyBg: "linear-gradient(-11deg, #121212, #1c1c1cf2 37%, #2c2c2eed 76%, #0a0a0a)",
+      gradientBg: "radial-gradient(circle at 50% 120%, #1c1c1c 0%, #0a0a0a 50%, #000 100%)",
+      orb1Color: "radial-gradient(circle, #999, #666, transparent)",
+      orb2Color: "radial-gradient(circle, #444, #222, transparent)",
+      orb3Color: "radial-gradient(circle, #222, #000, transparent)"
+    },
+    "black-blue": {
+      bodyBg: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)",
+      gradientBg: "radial-gradient(circle at 50% 120%, #000022 0%, #000033 50%, #000044 100%)",
+      orb1Color: "radial-gradient(circle, #3b82f6, #2563eb, transparent)",
+      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
+      orb3Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)"
+    },
+    "yellow-green": {
+      bodyBg: "linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5))",
+      gradientBg: "radial-gradient(circle at 50% 120%, #d4fc79 0%, #96e6a1 50%, #0a0a1f 100%)",
+      orb1Color: "radial-gradient(circle, #a3e635, #84cc16, transparent)",
+      orb2Color: "radial-gradient(circle, #65a30d, #4d7c0f, transparent)",
+      orb3Color: "radial-gradient(circle, #22c55e, #16a34a, transparent)"
+    },
+    "red-pink": {
+      bodyBg: "linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222))",
+      gradientBg: "radial-gradient(circle at 50% 120%, #ff758c 0%, #ff7eb3 50%, #0a0a1f 100%)",
+      orb1Color: "radial-gradient(circle, #ec4899, #f43f5e, transparent)",
+      orb2Color: "radial-gradient(circle, #f43f5e, #e11d48, transparent)",
+      orb3Color: "radial-gradient(circle, #be185d, #9d174d, transparent)"
+    },
+    "black-red": {
+      bodyBg: "linear-gradient(-11deg, #9a0f0ff2 40%, #121213ed 62%)",
+      gradientBg: "radial-gradient(circle at 50% 120%, #2c0b0e 0%, #0a0a1f 50%, #000 100%)",
+      orb1Color: "radial-gradient(circle, #dc2626, #991b1b, transparent)",
+      orb2Color: "radial-gradient(circle, #1e3a8a, #1e40af, transparent)",
+      orb3Color: "radial-gradient(circle, #ef4444, #f87171, transparent)"
+    }
   };
 
-  // 🖱️ Attach click listeners to background buttons
-  Object.keys(backgrounds).forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.onclick = () => {
-        currentBackground = backgrounds[id];
-        applyBackground(currentBackground);
-        updateIcons(true, false);
-      };
-    }
-  });
-
-  // 💾 Save background to Chrome storage
-  if (checkButton) {
-    checkButton.onclick = (e) => {
-      e.preventDefault();
-      if (currentBackground) {
-        chrome.storage.local.set({ customBackground: currentBackground }, () => {
-          console.log("✅ Background saved:", currentBackground);
-          updateIcons(false, true);
-        });
-      }
-    };
+  // 🌈 Apply theme
+  function applyTheme(themeKey) {
+    const theme = themes[themeKey];
+    if (!theme) return;
+    body.style.background = theme.bodyBg;
+    bgGradient.style.background = theme.gradientBg;
+    orb1.style.background = theme.orb1Color;
+    orb2.style.background = theme.orb2Color;
+    orb3.style.background = theme.orb3Color;
+    currentBackground = themeKey;
   }
 
-  // 🔁 Restore saved background on popup open
-  function restoreBackgroundOnLoad() {
-    chrome.storage.local.get("customBackground", (result) => {
-      const savedBg = result.customBackground;
-      if (savedBg) {
-        currentBackground = savedBg;
-        applyBackground(savedBg);
-        updateIcons(false, true);
-        console.log("✅ Restored background:", savedBg);
-      } else {
-        console.log("ℹ️ No saved background found.");
-        updateIcons(true, false);
-      }
-    });
+  // 🔄 Update icons
+  function updateIcons(showNotch, showCheck) {
+    notch.style.display = showNotch ? "block" : "none";
+    check.style.opacity = showCheck ? "1" : "0";
   }
 
-  // ☑️ Checkbox click event (optional visual toggle)
-  if (checkbox) {
-    checkbox.addEventListener("click", () => {
+  // 💾 Save theme
+  function saveTheme(themeKey) {
+    chrome.storage.local.set({ customBackground: themeKey }, () => {
+      if (chrome.runtime.lastError) {
+        console.error("Storage error:", chrome.runtime.lastError);
+        return;
+      }
+      savedBackground = themeKey;
       updateIcons(false, true);
     });
   }
 
-  // 🚀 Run restore on load
-  restoreBackgroundOnLoad();
+  // 🔁 Restore saved theme
+  function restoreThemeOnLoad() {
+    chrome.storage.local.get("customBackground", (result) => {
+      const savedKey = result.customBackground;
+      if (savedKey && themes[savedKey]) {
+        applyTheme(savedKey);
+        savedBackground = savedKey;
+        updateIcons(false, true);
+      } else {
+        const defaultKey = "white-black";
+        applyTheme(defaultKey);
+        saveTheme(defaultKey);
+        savedBackground = defaultKey;
+        updateIcons(false, true);
+      }
+    });
+  }
+
+  // 🎨 When theme button is clicked → Apply it, show notch (unsaved)
+  Object.keys(themes).forEach(themeKey => {
+    const btn = document.getElementById(themeKey);
+    if (btn) {
+      btn.addEventListener("click", () => {
+        applyTheme(themeKey);
+        updateIcons(true, false);
+      });
+    }
+  });
+
+  // ✅ Click on check → Save the current background
+  check.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentBackground && currentBackground !== savedBackground) {
+      saveTheme(currentBackground);
+    }
+  });
+
+  // 🚀 Initialize
+  restoreThemeOnLoad();
 });
+
+
+
 
 
 

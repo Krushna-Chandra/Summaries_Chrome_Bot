@@ -689,7 +689,8 @@ function applyBackground(bg){document.body.style.background=bg;document.body.sty
     currentBackground=bg;applyBackground(bg);
   };
 });
-check.onclick=(e)=>{e.preventDefault();if(currentBackground){localStorage.setItem('customBackground',currentBackground);notch.style.display="none";check.style.opacity="1";}};
+check.onclick=(e)=>{e.preventDefault();if(currentBackground){localStorage.setItem('customBackground',currentBackground);
+  notch.style.display="none";check.style.opacity="1";}};
 function restoreBackgroundOnLoad(){
   const saved=localStorage.getItem('customBackground');
   if(saved){currentBackground=saved;applyBackground(saved);}
