@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   try {
     // -------- Download PDF --------
     if (message.action === "downloadPDF" && message.url) {
-      console.log("📥 PDF download requested:", message.url);
+      
 
       chrome.downloads.download(
         {
@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     // -------- Download QR --------
     if (message.action === "downloadQR" && message.url) {
-      console.log("📥 QR download requested:", message.filename || "ResultQRCode.png");
+      
 
       chrome.downloads.download(
         {
@@ -51,7 +51,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         },
         (downloadId) => {
           if (chrome.runtime.lastError) {
-            console.error("❌ QR Download Error:", chrome.runtime.lastError.message);
+           
             safeResponse(sendResponse, { status: "error", message: chrome.runtime.lastError.message });
           } else {
             console.log("✅ QR Download Started, ID:", downloadId);
@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return true; // Keep channel open for async callback
     }
   } catch (err) {
-    console.error("🚨 Unexpected error in message handler:", err);
+    
     safeResponse(sendResponse, { status: "error", message: err.message });
   }
 

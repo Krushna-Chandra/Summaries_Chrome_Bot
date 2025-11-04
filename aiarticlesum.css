@@ -657,6 +657,7 @@ i {
       flex-direction: column;
       gap: 15px;
       transition: right 0.5s ease;
+      z-index: 9;
       
     }
 
@@ -738,11 +739,12 @@ i {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.font-tabs .tab {
+.font-tabs .font-tab {
   flex: 1;
   background: transparent;
   border: none;
-  padding: 8px;
+  padding: 3px;
+  gap:1px;
   cursor: pointer;
   color: #aaa;
   transition: color 0.3s;
