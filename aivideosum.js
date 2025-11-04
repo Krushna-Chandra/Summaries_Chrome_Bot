@@ -406,7 +406,9 @@ function attachEventListeners() {
     const el=document.getElementById(id);
     if(el){el.addEventListener("click",()=>{if(isSpeaking)stopSpeaking();});}
   });
+  
   // Voice button: toggle speech recognition and also stop speaking on other UI clicks
+
   const voiceBtn = document.getElementById("voice-btn");
   if(voiceBtn){
     voiceBtn.addEventListener('click', (e)=>{
@@ -417,6 +419,7 @@ function attachEventListeners() {
   }
 
   // share / dropdown / download buttons remain unchanged
+
   const shareBtn=document.getElementById("share-btn");
   const shareMenu=document.getElementById("share-menu");
   shareBtn.addEventListener("click",(e)=>{
@@ -461,9 +464,11 @@ function attachEventListeners() {
   document.getElementById("copyLinkBtn")?.addEventListener("click",copyLink);
 
   // Language select: when changed, update CURRENT_LANG, recognition lang, and UI labels
+
   const langSel = document.getElementById('language-select');
   if(langSel){
     // initialize CURRENT_LANG from the control
+
     CURRENT_LANG = (langSel.value && langSel.value !== 'auto') ? langSel.value : LANG_DEFAULT;
     langSel.addEventListener('change', onLanguageChange);
   }
@@ -499,6 +504,7 @@ function onLanguageChange(e){
 
 
 // -------------------- MAIN: YOUTUBE SUMMARIZATION --------------------
+
 async function onSummarizeClick() {
   const resultDiv=document.getElementById("result");
   resultDiv.innerHTML='<div class="loading"><div class="loader"></div></div>';
@@ -618,6 +624,7 @@ function loadHistory(){
 }
 
 // -------------------- COPY / SPEAK / PDF --------------------
+
 function onCopyClick(){
   const text=document.getElementById("result").innerText.trim();
   if(!text)return;
@@ -675,6 +682,7 @@ function copyLink(){
 }
 
 // -------------------- THEME & BACKGROUND --------------------
+
 document.getElementById("close-btn").onclick=()=>window.close();
 document.getElementById("back-btn").onclick=()=>window.history.back();
 let currentBackground="";
@@ -698,6 +706,7 @@ function restoreBackgroundOnLoad(){
 document.getElementById("updates-btn").addEventListener("click",()=>chrome.windows.create({url:"updates.html",type:"popup",width:420,height:320}));
 
 // -------------------- DEFAULT MESSAGE --------------------
+
 
 document.getElementById("result").innerHTML="🎥 Open a YouTube video and click 'Summarize' to get its AI summary.";
 
@@ -744,6 +753,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 // Function to auto-detect and open the YouTube transcript
+
 document.getElementById("summarize").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 

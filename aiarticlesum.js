@@ -262,6 +262,7 @@ async function saveSummaryToHistory(tab, summary, type) {
 
 
 // --------------- Load History ---------------
+
 let showingHistory = false; // 👈 track if history is being shown
 let lastSummaryContent = ""; // 👈 keep the last summary text
 function loadHistory() {
@@ -326,6 +327,7 @@ function loadHistory() {
 
 
 // --------------- Copy ---------------
+
 function onCopyClick() {
   const summaryText = document.getElementById("result").innerText;
   if (summaryText && summaryText.trim() !== "") {
@@ -344,6 +346,7 @@ function onCopyClick() {
 
 
 // --------------- Text-to-Speech ---------------
+
 let isSpeaking = false;
 let currentUtterance = null;
 
@@ -357,6 +360,7 @@ function stopSpeaking() {
 }
 
 // 🔊 Helper: Chunked speech for Hindi (and long text)
+
 function speakText(text, lang = "hi-IN") {
   if (!("speechSynthesis" in window)) {
     alert("Sorry, your browser does not support Text-to-Speech.");
@@ -426,6 +430,7 @@ async function onSpeakClick() {
 }
 
 // VERY simple language detection fallback (not perfect) — just checks for Devanagari letters for Hindi
+
 function detectLanguageCodeFromText(text) {
   if (!text || text.length < 10) return null;
   // Quick heuristics:
@@ -438,6 +443,7 @@ function detectLanguageCodeFromText(text) {
 }
 
 // --------------- PDF / save (kept the same) ---------------
+
 async function saveFile(type) {
   const resultDiv = document.getElementById("result");
   if (!resultDiv || !resultDiv.innerText.trim()) {
@@ -847,6 +853,7 @@ let open = false;
 
 
 // Hover to show temporarily
+
 toggleBtn.addEventListener('mouseenter', () => {
   panel.classList.add('active');
 });
@@ -866,6 +873,7 @@ toggleBtn.addEventListener('mouseleave', () => {
 // Click to toggle persistently
 
 // TAB SWITCHING
+
 document.querySelectorAll(".font-tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".font-tab").forEach(t => t.classList.remove("active"));
@@ -910,6 +918,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // font-builder.js - Robust single file (drop-in replacement)
 // Assumes popup context (chrome.runtime.getURL available). Adjust paths if used outside an extension.
+
 (function () {
   console.log("[font-builder] init");
 
@@ -973,8 +982,11 @@ window.addEventListener("DOMContentLoaded", () => {
     // skip generic families
     const skip = ["monospace", "serif", "sans-serif", "Monospace", "Serif", "Sans Serif"];
     if (skip.includes(name)) { injected.add(name); return; }
+
     const familyParam = encodeURIComponent(name.replace(/\s+/g, "+"));
+
     const href = `https://fonts.googleapis.com/css2?family=${familyParam}&display=swap`;
+
     // avoid duplicates
     if ([...document.head.querySelectorAll("link[rel='stylesheet']")].some(l => l.href && l.href.includes(familyParam))) {
       injected.add(name); return;
@@ -1222,6 +1234,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 // ---------------- Favorites Management ----------------
+
 function getFavorites(){
   try { return JSON.parse(localStorage.getItem("favoriteFonts")) || []; }
   catch { return []; }
