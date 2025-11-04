@@ -600,4 +600,87 @@ i {
     transition: transform 0.1s ease-out; /* A quick, responsive press */
 }
 
+.left-icon {
+  position: fixed;
+  top: 50%;
+  right: 1px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  height: 120px;
+  width: 12px;
+  background: linear-gradient(180deg, #00eaff, #0066ff);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  margin-top: 35px;
+  margin-right: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px 0 0 4px;
+  transition: all 0.3s ease;
+}
+.left-icon:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+  transform: scale(1.1) translateY(-50%);
+}
 
+    .left-icon i {
+      font-size: 14px;
+      color: cyan;
+      transition: transform 0.4s ease, color 0.3s ease;
+      right: 0;
+    }
+
+    .left-icon:hover i {
+      color: #00ffff;
+      transform: scale(1.3);
+    }
+
+    /* Panel (Initially Hidden) */
+    .panel {
+      position: fixed;
+      top: 0;
+      right: -300px; /* Hidden off-screen */
+      width: 250px;
+      height: 100vh;
+      background: rgba(20, 20, 20, 0.95);
+      border-left: 2px solid rgba(0, 255, 255, 0.3);
+      box-shadow: -4px 0 25px rgba(0, 255, 255, 0.15);
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: right 0.5s ease;
+    }
+
+    /* Show Panel on Hover */
+    .panel.active {
+      right: 0;
+    }
+
+    /* Option Buttons */
+    .option {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    /* Option animation when panel appears */
+    .panel.active .option {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.2s;
+    }
+
+    /* Hover effect on options */
+    .option:hover {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      transform: translateX(-5px);
+    }

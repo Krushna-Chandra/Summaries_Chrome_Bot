@@ -769,3 +769,26 @@ document.addEventListener("DOMContentLoaded", () => {
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
+
+const toggleBtn = document.getElementById('toggleBtn');
+const panel = document.getElementById('sidePanel');
+let open = false;
+
+
+// Hover to show temporarily
+toggleBtn.addEventListener('mouseenter', () => {
+  panel.classList.add('active');
+});
+
+panel.addEventListener('mouseenter', () => {
+  panel.classList.add('active');
+});
+
+panel.addEventListener('mouseleave', () => {
+  if (!open) panel.classList.remove('active');
+});
+
+toggleBtn.addEventListener('mouseleave', () => {
+  if (!open) panel.classList.remove('active');
+});
+
