@@ -863,7 +863,396 @@ toggleBtn.addEventListener('mouseleave', () => {
   if (!open) panel.classList.remove('active');
 });
 
+// Click to toggle persistently
+
+// TAB SWITCHING
+document.querySelectorAll(".font-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".font-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    document.querySelectorAll(".font-list").forEach(list => list.classList.remove("show"));
+    document.getElementById(tab.dataset.tab).classList.add("show");
+  });
+});
+
+// APPLY FONT
+function applyFont(font) {
+  const box = document.getElementById("result");
+  box.style.fontFamily = font;
+  localStorage.setItem("summaryFont", font);
+}
+
+// HIGHLIGHT
+function highlight(card) {
+  document.querySelectorAll(".font-card").forEach(c => c.classList.remove("active"));
+  card.classList.add("active");
+}
+
+document.querySelectorAll(".font-card").forEach(card => {
+  card.addEventListener("click", () => {
+    applyFont(card.style.fontFamily);
+    highlight(card);
+  });
+});
+
+// RESTORE SAVED
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem("summaryFont");
+  if (saved) {
+    applyFont(saved);
+    document.querySelectorAll(".font-card").forEach(c => {
+      if (c.style.fontFamily === saved) c.classList.add("active");
+    });
+  }
+});
+
+
+// font-builder.js - Robust single file (drop-in replacement)
+// Assumes popup context (chrome.runtime.getURL available). Adjust paths if used outside an extension.
+(function () {
+  console.log("[font-builder] init");
+
+  const PREVIEW = "Hello"; // preview text
+  const localJson = chrome?.runtime ? chrome.runtime.getURL("fonts/fonts_local.json") : "fonts_local.json";
+  const systemJson = chrome?.runtime ? chrome.runtime.getURL("fonts/fonts_system.json") : "fonts_system.json";
+  const customJson = chrome?.runtime ? chrome.runtime.getURL("fonts/fonts_custom.json") : "fonts_custom.json";
+
+  // DOM refs
+  const searchInput = document.getElementById("fontSearch");
+  const localList = document.getElementById("localFonts");
+  const sysList = document.getElementById("systemFonts");
+  const customList = document.getElementById("customFonts");
+  const favList = document.getElementById("favoriteFonts");
+  const activeName = document.getElementById("activeFontName");
+  const resultBox = document.getElementById("result");
+
+  if (!searchInput || !localList || !sysList || !customList || !favList || !activeName || !resultBox) {
+    console.error("[font-builder] Missing required DOM elements. Make sure these IDs exist:", {
+      fontSearch: !!searchInput, localFonts: !!localList, systemFonts: !!sysList,
+      customFonts: !!customList, favoriteFonts: !!favList, activeFontName: !!activeName, result: !!resultBox
+    });
+    return;
+  }
+
+  // utility: fetch JSON
+  async function fetchJson(url) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return await r.json();
+    } catch (e) {
+      console.warn("[font-builder] fetchJson failed for", url, e);
+      return [];
+    }
+  }
+
+  // favorites storage helpers
+  function getFavorites() {
+    try { return JSON.parse(localStorage.getItem("favoriteFonts")) || []; } catch { return []; }
+  }
+  function isFavorite(name) {
+    return getFavorites().some(f => f.toLowerCase() === (name || "").toLowerCase());
+  }
+  function setFavorites(arr) {
+    try { localStorage.setItem("favoriteFonts", JSON.stringify(arr)); } catch (e) { console.warn(e); }
+  }
+  function toggleFavorite(name) {
+    const cur = getFavorites();
+    const idx = cur.findIndex(f => f.toLowerCase() === name.toLowerCase());
+    if (idx >= 0) cur.splice(idx, 1);
+    else cur.push(name);
+    setFavorites(cur);
+    return cur;
+  }
+
+  // inject google font link (idempotent)
+  const injected = new Set();
+  function ensureFontLoaded(name) {
+    if (!name || injected.has(name)) return;
+    // skip generic families
+    const skip = ["monospace", "serif", "sans-serif", "Monospace", "Serif", "Sans Serif"];
+    if (skip.includes(name)) { injected.add(name); return; }
+    const familyParam = encodeURIComponent(name.replace(/\s+/g, "+"));
+    const href = `https://fonts.googleapis.com/css2?family=${familyParam}&display=swap`;
+    // avoid duplicates
+    if ([...document.head.querySelectorAll("link[rel='stylesheet']")].some(l => l.href && l.href.includes(familyParam))) {
+      injected.add(name); return;
+    }
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    link.onload = () => { console.log("[font-builder] font loaded:", name); };
+    link.onerror = () => { console.warn("[font-builder] font load failed:", name); };
+    document.head.appendChild(link);
+    injected.add(name);
+  }
+
+  // create card (single source of truth)
+  function createCard(name, type = "Local") {
+    const card = document.createElement("div");
+    card.className = "font-card";
+    card.dataset.font = name;
+    card.dataset.type = type;
+
+    // Title
+    const title = document.createElement("div");
+    title.className = "font-title";
+    title.innerText = name;
+    card.appendChild(title);
+
+    // Badge (system/custom)
+    if (type !== "Local" && type !== "Favorite") {
+      const badge = document.createElement("div");
+      badge.className = "font-badge " + (type === "System" ? "system" : "custom");
+      badge.innerText = type;
+      card.appendChild(badge);
+    }
+
+    // Preview
+    const preview = document.createElement("div");
+    preview.className = "font-preview";
+    preview.innerText = PREVIEW;
+    card.appendChild(preview);
+
+    // Favorite star (bottom-right)
+    const star = document.createElement("button");
+    star.className = "font-fav";
+    star.type = "button";
+    star.setAttribute("aria-label", "Toggle favorite");
+    star.innerText = isFavorite(name) ? "⭐" : "☆";
+    card.appendChild(star);
+
+    // Default font-family set (system vs google)
+    // System families: keep generic fallback mapping
+    if (type === "System") {
+      const map = {
+        "Segoe UI": "Segoe UI, system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial",
+        "Arial": "Arial, sans-serif",
+        "Times New Roman": "'Times New Roman', Times, serif",
+        "Courier New": "'Courier New', Courier, monospace",
+        "Georgia": "Georgia, serif"
+      };
+      card.style.fontFamily = map[name] || `${name}, sans-serif`;
+    } else {
+      card.style.fontFamily = `${name}, sans-serif`;
+    }
+
+    // Attach listeners
+    // Card click -> apply font
+    card.addEventListener("click", (ev) => {
+      // prevent when clicking star (handled below)
+      if (ev.target === star) return;
+      applyFont(name);
+      highlightCard(card);
+      ensureFontLoaded(name);
+    });
+
+    // keyboard support
+    card.tabIndex = 0;
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); card.click(); }
+    });
+
+    // Star click -> toggle fav
+    star.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const updated = toggleFavorite(name);
+      // update star visuals everywhere (all cards with same font)
+      document.querySelectorAll(`.font-card[data-font]`).forEach(c => {
+        if ((c.dataset.font || "").toLowerCase() === name.toLowerCase()) {
+          const s = c.querySelector(".font-fav");
+          if (s) s.innerText = updated.some(f => f.toLowerCase() === name.toLowerCase()) ? "⭐" : "☆";
+        }
+      });
+      refreshFavoritesList(); // immediate refresh
+    });
+
+    return card;
+  }
+
+  // highlight selected card
+  function highlightCard(card) {
+    document.querySelectorAll(".font-card").forEach(c => c.classList.remove("active"));
+    if (card) card.classList.add("active");
+  }
+
+  // apply font to result box and persist
+  function applyFont(name) {
+    if (!name) return;
+    // for safety, add fallback
+    const family = (name === "monospace" || name.toLowerCase() === "monospace") ? "monospace" : `${name}, sans-serif`;
+    resultBox.style.fontFamily = family;
+    try { localStorage.setItem("summaryFont", name); } catch (e) { console.warn(e); }
+    activeName.innerText = name;
+  }
+
+  // Refresh favorites list (clear and rebuild)
+  function refreshFavoritesList() {
+    const favs = getFavorites();
+    favList.innerHTML = "";
+    if (!favs.length) {
+      favList.innerHTML = `<div style="padding:12px;color:#99aab0">No favorites yet — click ⭐ on a font to add it.</div>`;
+      return;
+    }
+    favs.forEach(name => {
+      const card = createCard(name, "Favorite");
+      favList.appendChild(card);
+      ensureFontLoaded(name);
+    });
+  }
+
+  // Build lists
+  async function populateLists() {
+    localList.innerHTML = "<div style='padding:10px;color:#9aa;'>Loading fonts…</div>";
+    sysList.innerHTML = "<div style='padding:10px;color:#9aa;'>Loading fonts…</div>";
+    customList.innerHTML = "<div style='padding:10px;color:#9aa;'>Loading fonts…</div>";
+
+    const [locals, systems, customs] = await Promise.all([
+      fetchJson(localJson), fetchJson(systemJson), fetchJson(customJson)
+    ]);
+
+    // Clear then populate
+    localList.innerHTML = "";
+    locals.forEach(name => {
+      const c = createCard(name, "Local");
+      localList.appendChild(c);
+      // observe for lazy load
+      io.observe(c);
+    });
+
+    sysList.innerHTML = "";
+    systems.forEach(name => {
+      const c = createCard(name, "System");
+      sysList.appendChild(c);
+      io.observe(c);
+    });
+
+    customList.innerHTML = "";
+    customs.forEach(name => {
+      const c = createCard(name, "Custom");
+      customList.appendChild(c);
+      io.observe(c);
+    });
+
+    // restore saved font selection
+    const saved = localStorage.getItem("summaryFont");
+    if (saved) {
+      applyFont(saved);
+      // highlight a matching card if present
+      const match = document.querySelector(`.font-card[data-font][data-font="${saved}"], .font-card[data-font]`);
+      if (match) {
+        const exact = Array.from(document.querySelectorAll(`.font-card`)).find(c => (c.dataset.font||"").toLowerCase() === saved.toLowerCase());
+        if (exact) highlightCard(exact);
+      }
+    }
+
+    // initial favorites list
+    refreshFavoritesList();
+
+    // preload first n fonts for instant preview
+    Array.from(localList.children).slice(0, 12).forEach(c => {
+      const f = c.dataset.font;
+      if (f) ensureFontLoaded(f);
+    });
+
+    console.log("[font-builder] populated:", {
+      localCount: locals.length, systemCount: systems.length, customCount: customs.length
+    });
+  }
+
+  // debounced search
+  function debounce(fn, ms = 140) {
+    let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+  }
+  const doFilter = debounce(() => {
+    const q = (searchInput.value || "").trim().toLowerCase();
+    document.querySelectorAll(".font-card").forEach(card => {
+      const name = (card.dataset.font || "").toLowerCase();
+      card.style.display = name.includes(q) ? "block" : "none";
+    });
+  }, 100);
+
+  searchInput.addEventListener("input", doFilter);
+
+  // IntersectionObserver for lazy-loading
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(ent => {
+      if (!ent.isIntersecting) return;
+      const c = ent.target;
+      const name = c.dataset.font;
+      if (name) ensureFontLoaded(name);
+    });
+  }, { root: localList, rootMargin: "600px", threshold: 0.01 });
+
+  // Tab switching (ensure favorite tab id exists)
+  document.querySelectorAll(".font-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".font-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      document.querySelectorAll(".font-list").forEach(l => l.classList.remove("show"));
+      const id = tab.dataset.tab;
+      const target = document.getElementById(id);
+      if (target) target.classList.add("show");
+      // always refresh favorites when the tab is selected
+      if (id === "favoriteFonts") refreshFavoritesList();
+    });
+  });
+
+  // ensure favorites update when other contexts toggle them (defensive)
+  window.addEventListener("storage", (e) => {
+    if (e.key === "favoriteFonts") {
+      console.log("[font-builder] storage event detected: favoriteFonts changed");
+      refreshFavoritesList();
+      // also update all star icons
+      const favs = getFavorites();
+      document.querySelectorAll(".font-card").forEach(c => {
+        const s = c.querySelector(".font-fav");
+        if (s) s.innerText = favs.some(f => f.toLowerCase() === (c.dataset.font||"").toLowerCase()) ? "⭐" : "☆";
+      });
+    }
+  });
+
+  // initialize
+  populateLists().catch(err => console.error("[font-builder] populateLists failed:", err));
+
+})();
 
 
 
 
+// ---------------- Favorites Management ----------------
+function getFavorites(){
+  try { return JSON.parse(localStorage.getItem("favoriteFonts")) || []; }
+  catch { return []; }
+}
+
+function isFavorite(name){
+  return getFavorites().includes(name);
+}
+
+function toggleFavorite(name){
+  let favs = getFavorites();
+  if (favs.includes(name)) {
+    favs = favs.filter(f => f !== name);
+  } else {
+    favs.push(name);
+  }
+  localStorage.setItem("favoriteFonts", JSON.stringify(favs));
+}
+
+function refreshFavoritesList(){
+  const favList = document.getElementById("favoriteFonts");
+  if(!favList) return;
+
+  favList.innerHTML = "";
+
+  getFavorites().forEach(name => {
+    const card = createCard(name, "Favorite");
+    favList.appendChild(card);
+    ensureFontLoaded(name);
+  });
+}
+refreshFavoritesList();
+
+// Re-create card function for favorites
