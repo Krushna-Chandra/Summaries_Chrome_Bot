@@ -780,3 +780,60 @@ function openYouTubeTranscript() {
 
 document.getElementById("result").innerHTML = t('default_result_message');
 
+
+
+// add qr code options 
+
+const copyLinkBtn = document.getElementById("copyLinkBtn");
+const qrcodeContainer = document.getElementById("qrcodeContainer");
+const downloadBtn = document.getElementById("downloadQRBtn");
+
+if (copyLinkBtn) {
+  copyLinkBtn.addEventListener("click", generateQR);
+}
+
+async function generateQR() {
+  const resultDiv = document.getElementById("result");
+
+  if (!resultDiv || !resultDiv.innerText.trim()) {
+    alert("No result found to generate QR!");
+    return;
+  }
+
+  let text = resultDiv.innerText.trim();
+  const maxLength = 800 || 1200;
+
+  if (text.length > maxLength) {
+    console.warn(`⚠️ Text too long (${text.length}), trimming to ${maxLength}.`);
+    text = text.slice(0, maxLength) + "...";
+  }
+
+  // Show container
+  qrcodeContainer.style.display = "block";
+  qrcodeContainer.innerHTML = "";
+
+  // Create <canvas> for QRious
+  const qr = new QRious({
+    element: document.createElement("canvas"),
+    value: text,
+    size: 220,
+    background: "white",
+    foreground: "black",
+    level: "L"
+  });
+
+  // Add to DOM
+  qrcodeContainer.appendChild(qr.element);
+
+  // Show download button
+  downloadBtn.style.display = "inline-block";
+  downloadBtn.textContent = "Download QR Code";
+
+  // Download on click
+  downloadBtn.onclick = () => {
+    const link = document.createElement("a");
+    link.download = "ResultQRCode.png";
+    link.href = qr.element.toDataURL("image/png");
+    link.click();
+  };
+}

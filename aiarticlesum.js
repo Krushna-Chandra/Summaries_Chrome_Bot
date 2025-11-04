@@ -470,92 +470,60 @@ async function saveFile(type) {
   }
 }
 
+
 const copyLinkBtn = document.getElementById("copyLinkBtn");
+const qrcodeContainer = document.getElementById("qrcodeContainer");
+const downloadBtn = document.getElementById("downloadQRBtn");
 
 if (copyLinkBtn) {
-  copyLinkBtn.addEventListener("click", generateAndDownloadQR);
+  copyLinkBtn.addEventListener("click", generateQR);
 }
 
-async function generateAndDownloadQR() {
+async function generateQR() {
   const resultDiv = document.getElementById("result");
 
-  // ✅ Validate input
   if (!resultDiv || !resultDiv.innerText.trim()) {
     alert("No result found to generate QR!");
     return;
   }
 
-  let textToEncode = resultDiv.innerText.trim();
+  let text = resultDiv.innerText.trim();
+  const maxLength = 800;
 
-  // ✅ Limit text length to prevent overflow
-  const maxLength = 600; // safe limit for most QR levels
-  if (textToEncode.length > maxLength) {
-    console.warn(`QR text too long (${textToEncode.length}). Trimming...`);
-    textToEncode = textToEncode.slice(0, maxLength) + "...";
+  if (text.length > maxLength) {
+    console.warn(`⚠️ Text too long (${text.length}), trimming to ${maxLength}.`);
+    text = text.slice(0, maxLength) + "...";
   }
 
-  // 🧱 Create a hidden temporary container
-  const tempDiv = document.createElement("div");
-  tempDiv.style.position = "fixed";
-  tempDiv.style.top = "-9999px";
-  document.body.appendChild(tempDiv);
+  // Show container
+  qrcodeContainer.style.display = "block";
+  qrcodeContainer.innerHTML = "";
 
-  try {
-    // 🌀 Generate QR
-    new QRCode(tempDiv, {
-      text: textToEncode,
-      width: 200,
-      height: 200,
-      colorDark: "#000000",
-      colorLight: "#ffffff", // solid white for better contrast
-      correctLevel: QRCode.CorrectLevel.L, // lower correction = higher capacity
-    });
-  } catch (err) {
-    console.error("QR generation failed:", err);
-    alert("Failed to generate QR code. Try shortening the text.");
-    tempDiv.remove();
-    return;
-  }
+  // Create <canvas> for QRious
+  const qr = new QRious({
+    element: document.createElement("canvas"),
+    value: text,
+    size: 220,
+    background: "white",
+    foreground: "black",
+    level: "L"
+  });
 
-  // Wait for QR to finish rendering
-  await new Promise((res) => setTimeout(res, 500));
+  // Add to DOM
+  qrcodeContainer.appendChild(qr.element);
 
-  const canvas = tempDiv.querySelector("canvas");
-  if (!canvas) {
-    console.error("❌ QR canvas not found!");
-    tempDiv.remove();
-    return;
-  }
+  // Show download button
+  downloadBtn.style.display = "inline-block";
+  downloadBtn.textContent = "Download QR Code";
 
-  // 🎨 Convert QR to blob
-  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-  if (!blob) {
-    console.error("Failed to create QR Blob");
-    tempDiv.remove();
-    return;
-  }
-
-  const qrUrl = URL.createObjectURL(blob);
-
-  // 🧾 Ask background script to auto-download
-  chrome.runtime.sendMessage(
-    { action: "downloadQR", url: qrUrl, filename: "ResultQRCode.png" },
-    (response) => {
-      if (chrome.runtime.lastError) {
-        console.error("⚠️ Message error:", chrome.runtime.lastError.message);
-      } else if (response?.status === "ok") {
-        console.log("✅ QR code downloaded automatically!");
-      } else {
-        console.error("❌ QR download failed:", response);
-      }
-
-      // 🧹 Cleanup
-      URL.revokeObjectURL(qrUrl);
-      tempDiv.remove();
-    }
-  );
+  // Download on click
+  downloadBtn.onclick = () => {
+    const link = document.createElement("a");
+    link.download = "ResultQRCode.png";
+    link.href = qr.element.toDataURL("image/png");
+    link.click();
+  };
 }
-
 
 // --------------- Background + restore stuff (kept) ---------------
 document.getElementById("close-btn").onclick = () => { window.close(); };
@@ -871,7 +839,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------
+// ------------------  Mouse events ------------------------------------------------------
 
 const toggleBtn = document.getElementById('toggleBtn');
 const panel = document.getElementById('sidePanel');
@@ -894,6 +862,8 @@ panel.addEventListener('mouseleave', () => {
 toggleBtn.addEventListener('mouseleave', () => {
   if (!open) panel.classList.remove('active');
 });
+
+
 
 
 

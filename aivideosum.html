@@ -262,7 +262,16 @@
             <!-- Dropdown Menu -->
             <div id="dropdownMenu" class="dropdown hidden">
                 <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
-                <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+                <button id="copyLinkBtn" class="qr-btn">
+                        <i class="fa-solid fa-qrcode"></i> Create QR Code
+                    </button>
+
+                    <!-- QR Code container -->
+                    <div id="qrcodeContainer" style="margin-top: 20px; display: none; text-align: center;"></div>
+                    <!-- Download button -->
+                    <button id="downloadQRBtn" style="margin-top: 10px; display: none;">
+                        Download QR Code
+                    </button>
             </div>
 
         </div>
@@ -302,7 +311,7 @@
 
 
 
-
+    <script src="lib/qrious.min.js"></script>
     <script src="lib/jspdf.umd.min.js"></script>
     <script src="aivideosum.js"></script>
 </body>
