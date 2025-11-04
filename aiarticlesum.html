@@ -237,7 +237,7 @@
                                     Arial <span class="tag system">System</span>
                                 </div>
                                 <div class="font-preview">Poppints</div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -316,11 +316,19 @@
                     <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
                 </div>
 
-                <!-- Dropdown Menu -->
                 <div id="dropdownMenu" class="dropdown hidden">
-                    <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
-                    <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+                    <button id="downloadPdfBtn">
+                        <i class="fa-regular fa-file-pdf"></i> Download PDF
+                    </button>
+
+                    <button id="copyLinkBtn" class="qr-btn">
+                        <i class="fa-solid fa-qrcode"></i> Create QR Code
+                    </button>
+
+                    <!-- QR Code container -->
+                    <div id="qrcodeContainer" style="margin-top: 20px; display: none; text-align: center;"></div>
                 </div>
+
 
             </div>
             <!-- insert this inside the .options div next to #summary-type -->
@@ -358,7 +366,7 @@
 
 
 
-
+    <script src="lib/qrcode.min.js"></script>
     <script src="lib/jspdf.umd.min.js"></script>
     <script src="aiarticlesum.js"></script>
 </body>

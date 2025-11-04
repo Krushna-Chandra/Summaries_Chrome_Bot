@@ -28,6 +28,42 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "downloadQR" && message.url) {
+    console.log("📥 Received download request:", message.filename);
+
+    // Perform the download
+    chrome.downloads.download(
+      {
+        url: message.url,
+        filename: message.filename || "ResultQRCode.png",
+        saveAs: false,
+      },
+      (downloadId) => {
+        if (chrome.runtime.lastError) {
+          console.error("❌ Download error:", chrome.runtime.lastError.message);
+          // Respond safely inside try/catch — avoids port-closing issue
+          try {
+            sendResponse({ status: "error", error: chrome.runtime.lastError.message });
+          } catch (e) {
+            console.warn("Response channel already closed.");
+          }
+        } else {
+          console.log("✅ Download started successfully, ID:", downloadId);
+          try {
+            sendResponse({ status: "ok", id: downloadId });
+          } catch (e) {
+            console.warn("Response channel already closed.");
+          }
+        }
+      }
+    );
+
+    // 🚨 Crucial for Manifest V3: keep the channel open for async callback
+    return true;
+  }
+});
+
 
 
 
