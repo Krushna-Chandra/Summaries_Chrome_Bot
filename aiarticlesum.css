@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Pacifico&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Adlam+Display&family=Imperial+Script&family=Doto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Adlam+Display&family=Imperial+Script&family=Doto:wght@700&display=swap');
 
 * {
   margin: 0;
@@ -640,7 +642,7 @@ i {
     /* Panel (Initially Hidden) */
     .panel {
       position: fixed;
-      top: 0;
+      top: 0px;
       right: -300px; /* Hidden off-screen */
       width: 250px;
       height: 100vh;
@@ -652,6 +654,7 @@ i {
       flex-direction: column;
       gap: 15px;
       transition: right 0.5s ease;
+      
     }
 
     /* Show Panel on Hover */
@@ -684,3 +687,121 @@ i {
       box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
       transform: translateX(-5px);
     }
+
+
+/* Font Panel */
+.font-panel {
+  background: rgba(15, 15, 15, 0.95);
+  color: white;
+  border-radius: 12px;
+  height: 177px;
+  padding: 16px;
+  font-family: 'Poppins', sans-serif;
+  margin-top: -46px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Header */
+.font-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.font-icon {
+  background: rgba(0, 255, 255, 0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.arrow {
+  color: #00ffff;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when expanded */
+.font-header.active .arrow {
+  transform: rotate(180deg);
+}
+
+/* Tabs */
+.font-tabs {
+  display: flex;
+  margin-top: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.font-tabs .tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s;
+}
+
+.font-tabs .tab.active {
+  color: #00ffff;
+  border-bottom: 2px solid #00ffff;
+}
+
+/* Font Cards */
+.font-section {
+  margin-top: 15px;
+}
+
+.font-section h4 {
+  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 10px;
+}
+
+.font-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.font-card {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.font-card:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.font-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.tag {
+  background: #6c00ff;
+  border-radius: 12px;
+  font-size: 11px;
+  padding: 2px 6px;
+  margin-left: 5px;
+}
+
+.font-preview {
+  font-size: 15px;
+  margin-top: 4px;
+  color: #ddd;
+}
