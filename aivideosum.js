@@ -406,7 +406,9 @@ function attachEventListeners() {
     const el=document.getElementById(id);
     if(el){el.addEventListener("click",()=>{if(isSpeaking)stopSpeaking();});}
   });
+  
   // Voice button: toggle speech recognition and also stop speaking on other UI clicks
+
   const voiceBtn = document.getElementById("voice-btn");
   if(voiceBtn){
     voiceBtn.addEventListener('click', (e)=>{
@@ -417,6 +419,7 @@ function attachEventListeners() {
   }
 
   // share / dropdown / download buttons remain unchanged
+
   const shareBtn=document.getElementById("share-btn");
   const shareMenu=document.getElementById("share-menu");
   shareBtn.addEventListener("click",(e)=>{
@@ -461,9 +464,11 @@ function attachEventListeners() {
   document.getElementById("copyLinkBtn")?.addEventListener("click",copyLink);
 
   // Language select: when changed, update CURRENT_LANG, recognition lang, and UI labels
+
   const langSel = document.getElementById('language-select');
   if(langSel){
     // initialize CURRENT_LANG from the control
+
     CURRENT_LANG = (langSel.value && langSel.value !== 'auto') ? langSel.value : LANG_DEFAULT;
     langSel.addEventListener('change', onLanguageChange);
   }
@@ -519,6 +524,7 @@ function onLanguageChange(e){
 
 
 // -------------------- MAIN: YOUTUBE SUMMARIZATION --------------------
+
 async function onSummarizeClick() {
   const resultDiv=document.getElementById("result");
   resultDiv.innerHTML='<div class="loading"><div class="loader"></div></div>';
@@ -638,6 +644,7 @@ function loadHistory(){
 }
 
 // -------------------- COPY / SPEAK / PDF --------------------
+
 function onCopyClick(){
   const text=document.getElementById("result").innerText.trim();
   if(!text)return;
@@ -695,6 +702,7 @@ function copyLink(){
 }
 
 // -------------------- THEME & BACKGROUND --------------------
+
 document.getElementById("close-btn").onclick = () => window.close();
 document.getElementById("back-btn").onclick = () => window.history.back();
 
@@ -761,6 +769,21 @@ function applyBackground(bg){
     const bg = icon ? window.getComputedStyle(icon).backgroundImage : "";
     currentBackground = bg;
     applyBackground(bg);
+
+
+document.getElementById("close-btn").onclick=()=>window.close();
+document.getElementById("back-btn").onclick=()=>window.history.back();
+let currentBackground="";
+const notch=document.getElementById("notch"),check=document.getElementById("check");
+
+function applyBackground(bg){document.body.style.background=bg;document.body.style.height='350px';}
+["white-black","black-blue","yellow-green","red-pink","black-red"].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.onclick=()=>{
+    const bg=window.getComputedStyle(el.querySelector("i")).backgroundImage;
+    currentBackground=bg;applyBackground(bg);
+
   };
 });
 
@@ -778,6 +801,7 @@ document.getElementById("updates-btn")?.addEventListener("click", () => {
 
 
 // -------------------- DEFAULT MESSAGE --------------------
+
 
 document.getElementById("result").innerHTML="🎥 Open a YouTube video and click 'Summarize' to get its AI summary.";
 
@@ -824,6 +848,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 // Function to auto-detect and open the YouTube transcript
+
 document.getElementById("summarize").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -860,3 +885,60 @@ function openYouTubeTranscript() {
 
 document.getElementById("result").innerHTML = t('default_result_message');
 
+
+
+// add qr code options 
+
+const copyLinkBtn = document.getElementById("copyLinkBtn");
+const qrcodeContainer = document.getElementById("qrcodeContainer");
+const downloadBtn = document.getElementById("downloadQRBtn");
+
+if (copyLinkBtn) {
+  copyLinkBtn.addEventListener("click", generateQR);
+}
+
+async function generateQR() {
+  const resultDiv = document.getElementById("result");
+
+  if (!resultDiv || !resultDiv.innerText.trim()) {
+    alert("No result found to generate QR!");
+    return;
+  }
+
+  let text = resultDiv.innerText.trim();
+  const maxLength = 800 || 1200;
+
+  if (text.length > maxLength) {
+    console.warn(`⚠️ Text too long (${text.length}), trimming to ${maxLength}.`);
+    text = text.slice(0, maxLength) + "...";
+  }
+
+  // Show container
+  qrcodeContainer.style.display = "block";
+  qrcodeContainer.innerHTML = "";
+
+  // Create <canvas> for QRious
+  const qr = new QRious({
+    element: document.createElement("canvas"),
+    value: text,
+    size: 220,
+    background: "white",
+    foreground: "black",
+    level: "L"
+  });
+
+  // Add to DOM
+  qrcodeContainer.appendChild(qr.element);
+
+  // Show download button
+  downloadBtn.style.display = "inline-block";
+  downloadBtn.textContent = "Download QR Code";
+
+  // Download on click
+  downloadBtn.onclick = () => {
+    const link = document.createElement("a");
+    link.download = "ResultQRCode.png";
+    link.href = qr.element.toDataURL("image/png");
+    link.click();
+  };
+}
