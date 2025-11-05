@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Pacifico&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Adlam+Display&family=Imperial+Script&family=Doto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Adlam+Display&family=Imperial+Script&family=Doto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&family=Outfit:wght@300;400;600&family=Sora:wght@300;400;600&family=Roboto:wght@300;400;700&family=Nunito:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Ubuntu:wght@300;400;700&family=JetBrains+Mono:wght@300;400;700&family=Kablammo&family=Imperial+Script&family=UnifrakturMaguntia&display=swap');
+
+
 
 * {
   margin: 0;
@@ -600,4 +605,383 @@ i {
     transition: transform 0.1s ease-out; /* A quick, responsive press */
 }
 
+.left-icon {
+  position: fixed;
+  top: 50%;
+  right: 1px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  height: 120px;
+  width: 12px;
+  background: linear-gradient(180deg, #00eaff, #0066ff);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  margin-top: 35px;
+  margin-right: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px 0 0 4px;
+  transition: all 0.3s ease;
+}
+.left-icon:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+  transform: scale(1.1) translateY(-50%);
+}
 
+    .left-icon i {
+      font-size: 14px;
+      color: cyan;
+      transition: transform 0.4s ease, color 0.3s ease;
+      right: 0;
+    }
+
+    .left-icon:hover i {
+      color: #00ffff;
+      transform: scale(1.3);
+    }
+
+    /* Panel (Initially Hidden) */
+    .panel {
+      position: fixed;
+      top: 0px;
+      right: -300px; /* Hidden off-screen */
+      width: 250px;
+      height: 100vh;
+      background: rgba(20, 20, 20, 0.95);
+      border-left: 2px solid rgba(0, 255, 255, 0.3);
+      box-shadow: -4px 0 25px rgba(0, 255, 255, 0.15);
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: right 0.5s ease;
+      z-index: 9;
+      
+    }
+
+    /* Show Panel on Hover */
+    .panel.active {
+      right: 0;
+    }
+
+    /* Option Buttons */
+    .option {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    /* Option animation when panel appears */
+    .panel.active .option {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.2s;
+    }
+
+    /* Hover effect on options */
+    .option:hover {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      transform: translateX(-5px);
+    }
+
+
+/* Font Panel */
+.font-panel {
+  background: rgba(15, 15, 15, 0.95);
+  color: white;
+  border-radius: 12px;
+  height: 177px;
+  padding: 16px;
+  font-family: 'Poppins', sans-serif;
+  margin-top: -46px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Header */
+.font-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.font-icon {
+  background: rgba(0, 255, 255, 0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.arrow {
+  color: #00ffff;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when expanded */
+.font-header.active .arrow {
+  transform: rotate(180deg);
+}
+
+/* Tabs */
+.font-tabs {
+  display: flex;
+  margin-top: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.font-tabs .font-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 3px;
+  gap:1px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s;
+}
+
+.font-tabs .tab.active {
+  color: #00ffff;
+  border-bottom: 2px solid #00ffff;
+}
+
+/* Font Cards */
+.font-section {
+  margin-top: 15px;
+}
+
+.font-section h4 {
+  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 10px;
+}
+
+.font-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.font-card {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.font-card:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.font-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.tag {
+  background: #6c00ff;
+  border-radius: 12px;
+  font-size: 11px;
+  padding: 2px 6px;
+  margin-left: 5px;
+}
+
+.font-preview {
+  font-size: 15px;
+  margin-top: 4px;
+  color: #ddd;
+}
+
+
+
+
+
+/* Font picker styling */
+
+/* Font Picker core */
+.font-panel-content { padding: 12px; display:flex; flex-direction:column; gap:10px; width:100%; box-sizing:border-box; }
+.font-top { display:flex; justify-content:space-between; align-items:center; }
+.font-toggle-btn { background:#0d0d0d; border:1px solid #222; color:#fff; padding:8px 10px; border-radius:8px; font-weight:700; }
+.font-title-display { color:#dfe8eb; font-size:14px; margin-left:6px; }
+
+/* Search */
+.font-search { width:100%; padding:10px 12px; border-radius:10px; border:1px solid #1f1f1f; background:#080808; color:#eaeaea; outline:none; box-shadow:none; transition:all .18s ease; }
+.font-search:focus { border-color:#00f2ff66; box-shadow:0 0 12px #00f2ff33; }
+
+/* Tabs */
+.font-tabs { display:flex; gap:6px; margin-top:4px; }
+.font-tab { flex:1; padding:8px; background:transparent; border-radius:8px; border:1px solid rgba(255,255,255,0.03); color:#9aa6ad; cursor:pointer; text-align:center; font-size:13px; }
+.font-tab.active { background:linear-gradient(180deg,#0b0b0b,#111111); color:#e6fbff; border-color:#00f2ff33; box-shadow:0 6px 18px rgba(0,242,255,0.04) inset; }
+
+/* Font lists */
+.font-list { display:none; max-height:320px; overflow-y:auto; padding-right:6px; }
+.font-list.show { display:block; }
+
+/* scrollbar */
+.font-list::-webkit-scrollbar { width:8px; }
+.font-list::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#00f2ff33,#00aaff22); border-radius:8px; }
+
+/* card */
+.font-card { position:relative; display:block; background:linear-gradient(180deg,#0f0f10,#0a0a0a); border-radius:12px; border:1px solid rgba(255,255,255,0.04); padding:14px; margin-bottom:10px; transition:all .22s ease; cursor:pointer; color:#e5f7fb; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.font-card:hover { transform: translateY(-3px); border-color: rgba(0,242,255,0.14); box-shadow: 0 6px 20px rgba(0,242,255,0.06); }
+
+/* title / badge / preview */
+.font-card .font-title { font-size:16px; font-weight:600; margin-bottom:6px; color:#dff7fb; }
+.font-card .font-badge { position:absolute; right:12px; top:12px; padding:6px 8px; border-radius:999px; background:rgba(120,78,255,0.12); color:#d6caff; font-size:12px; }
+.font-card .font-preview { font-size:14px; opacity:0.85; color:#cfeff3; margin-top:4px; }
+
+/* active selected look */
+.font-card.active { background: linear-gradient(180deg,#00f2ff,#00c5ff); color:#041018; border:1px solid #ffffff88; box-shadow:0 8px 28px rgba(0,200,255,0.25); }
+.font-card.active .font-preview { color:#051321; opacity:0.95; }
+
+/* responsiveness */
+@media (max-width:480px){
+  .font-card { padding:12px; }
+  .font-card .font-title { font-size:14px; }
+  .font-card .font-preview { font-size:13px; }
+}
+
+
+
+
+/* ui change little bit */
+
+/* --- JUSTIFIED & CLEAN FONT CARD LAYOUT --- */
+
+.font-card {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start; /* main alignment */
+  align-items:flex-start;     /* left align everything evenly */
+  gap:4px; /* consistent spacing */
+}
+
+/* Titles look cleaner & aligned */
+.font-card .font-title {
+  width:100%;
+  text-align:left;
+  letter-spacing:0.2px;
+  font-weight:600;
+  font-size:15px;
+  margin-bottom:2px;
+}
+
+/* Preview text aligned and spaced properly */
+.font-card .font-preview {
+  width:100%;
+  text-align:left;
+  line-height:1.32;
+  letter-spacing:0.15px;
+  color:#cfeff3;
+  opacity:0.90;
+}
+
+/* Badges aligned neatly without overlapping text */
+.font-badge {
+  right:10px;
+  top:10px;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:10px;
+  opacity:0.88;
+}
+
+/* Active card spacing consistent */
+.font-card.active .font-title,
+.font-card.active .font-preview {
+  text-align:left;
+}
+
+/* Slight top pull for overall content alignment */
+.font-panel-content {
+  margin-top: -12px; /* moves EVERYTHING up a bit more */
+}
+
+
+/* Favorite button style  */
+.font-fav {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  background: transparent;
+  border: none;
+  color: #ffd76e;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease;
+}
+.font-fav:hover { transform: scale(1.2); opacity: 1; }
+#favoriteFonts .font-card { border-color:#ffd76e33; box-shadow:0 4px 12px rgba(255,215,110,0.12); }
+.font-list.show { display:block !important; } /* ensure visible when toggled */
+
+
+
+
+
+
+
+
+/* Font bar name style */
+
+.left-icon {
+  position: fixed;
+  right: 4px;          /* almost edge */
+  bottom: 130px;
+  width: 14px;         /* 🔥 super thin */
+  padding: 6px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+
+  cursor: pointer;
+  user-select: none;
+
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(0, 255, 255, 0.35);
+  border-radius: 6px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.3);
+
+  color: #00faff;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0px;
+
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.left-icon span {
+  line-height: 9px;
+  font-family: "Inter", sans-serif;
+}
+
+/* Hover glow */
+.left-icon:hover {
+  box-shadow: 0 0 22px rgba(0,255,255,0.6);
+}
+
+.left-icon.hide {
+  transform: translateY(-40px);
+  opacity: 0.3;
+}
