@@ -473,27 +473,47 @@ function attachEventListeners() {
 }
 
 // Update prominent UI labels to match selected language
-function updateTextLabels(){
+// ✅ Keep Voice and Speaker buttons always in English
+function updateTextLabels() {
   const voiceBtn = document.getElementById('voice-btn');
-  if(voiceBtn) voiceBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color:black;"></i> ' + t('voice');
+  if (voiceBtn)
+    voiceBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color:black;"></i> Voice';
+  
   const speakBtn = document.getElementById('speak-btn');
-  if(speakBtn) speakBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color:black;"></i> ' + t('speaker');
-  // keep copy button label as-is, but ensure future localized messages are used for transient feedback
+  if (speakBtn)
+    speakBtn.innerHTML = '<i class="fa-solid fa-volume-high" style="color:black;"></i> Speaker';
 }
 
+
+// --------------------
+// PATCHED (Silent language change)
+// --------------------
 function onLanguageChange(e){
   try{
     const val = e.target.value || 'auto';
     CURRENT_LANG = (val === 'auto') ? LANG_DEFAULT : val;
-    if(recognition) try{ recognition.lang = CURRENT_LANG; }catch(_){ }
-    // Stop any speaking and update visible labels
+
+    // Update recognition language (if available)
+    if(recognition) {
+      try { recognition.lang = CURRENT_LANG; } catch(_) { }
+    }
+
+    // Stop any speaking (keep this part — ensures ongoing speech stops cleanly)
     if(isSpeaking) stopSpeaking();
+
+    // ✅ Removed voice feedback — now silent on manual change
+    // const selText = e.target.selectedOptions && e.target.selectedOptions[0]
+    //   ? e.target.selectedOptions[0].text : val;
+    // speakFeedback(t('language_set_to') + ' ' + selText, CURRENT_LANG);
+
+    // Optional: update only result area helper text if it shows the default message
     updateTextLabels();
-    // Speak a short confirmation in the newly selected language
-    const selText = e.target.selectedOptions && e.target.selectedOptions[0] ? e.target.selectedOptions[0].text : val;
-    speakFeedback(t('language_set_to') + ' ' + selText, CURRENT_LANG);
-  }catch(err){ console.warn('language change handler failed', err); }
+
+  } catch(err){
+    console.warn('language change handler failed', err);
+  }
 }
+
 
 
 
@@ -675,27 +695,87 @@ function copyLink(){
 }
 
 // -------------------- THEME & BACKGROUND --------------------
-document.getElementById("close-btn").onclick=()=>window.close();
-document.getElementById("back-btn").onclick=()=>window.history.back();
-let currentBackground="";
-const notch=document.getElementById("notch"),check=document.getElementById("check");
+document.getElementById("close-btn").onclick = () => window.close();
+document.getElementById("back-btn").onclick = () => window.history.back();
 
-function applyBackground(bg){document.body.style.background=bg;document.body.style.height='350px';}
-["white-black","black-blue","yellow-green","red-pink","black-red"].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.onclick=()=>{
-    const bg=window.getComputedStyle(el.querySelector("i")).backgroundImage;
-    currentBackground=bg;applyBackground(bg);
+let currentBackground = "";
+
+// --- Header Checkbox Toggle ---
+const checkboxEl = document.getElementById("checkbox");
+const notch = document.getElementById("notch");
+const check = document.getElementById("check");
+
+// Restore checkbox state from localStorage
+(function initHeaderCheckbox(){
+  const saved = localStorage.getItem('headerCheckboxChecked') === '1';
+  if (saved) {
+    checkboxEl?.classList.add('is-checked');
+    checkboxEl?.setAttribute('aria-checked', 'true');
+  } else {
+    checkboxEl?.classList.remove('is-checked');
+    checkboxEl?.setAttribute('aria-checked', 'false');
+  }
+})();
+
+// Toggle helper
+function toggleHeaderCheckbox(){
+  if(!checkboxEl) return;
+  const nowChecked = !checkboxEl.classList.contains('is-checked');
+  checkboxEl.classList.toggle('is-checked', nowChecked);
+  checkboxEl.setAttribute('aria-checked', nowChecked ? 'true' : 'false');
+  localStorage.setItem('headerCheckboxChecked', nowChecked ? '1' : '0');
+
+  // Optional: if you want this to trigger saving background/theme
+  if (nowChecked && typeof currentBackground !== "undefined" && currentBackground) {
+    localStorage.setItem('customBackground', currentBackground);
+  }
+}
+
+// Click + keyboard toggle
+if(checkboxEl){
+  checkboxEl.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleHeaderCheckbox();
+  });
+
+  checkboxEl.addEventListener('keydown', (e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      toggleHeaderCheckbox();
+    }
+  });
+}
+
+// Background swatches - assign handlers
+function applyBackground(bg){
+  document.body.style.background = bg;
+  // keep height behavior as your original code used
+  document.body.style.height = '350px';
+}
+
+["white-black","black-blue","yellow-green","red-pink","black-red"].forEach(id => {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.onclick = () => {
+    const icon = el.querySelector("i");
+    const bg = icon ? window.getComputedStyle(icon).backgroundImage : "";
+    currentBackground = bg;
+    applyBackground(bg);
   };
 });
-check.onclick=(e)=>{e.preventDefault();if(currentBackground){localStorage.setItem('customBackground',currentBackground);
-  notch.style.display="none";check.style.opacity="1";}};
+
+// Restore custom background saved earlier
 function restoreBackgroundOnLoad(){
-  const saved=localStorage.getItem('customBackground');
-  if(saved){currentBackground=saved;applyBackground(saved);}
+  const saved = localStorage.getItem('customBackground');
+  if(saved){ currentBackground = saved; applyBackground(saved); }
 }
-document.getElementById("updates-btn").addEventListener("click",()=>chrome.windows.create({url:"updates.html",type:"popup",width:420,height:320}));
+restoreBackgroundOnLoad();
+
+// open updates popup
+document.getElementById("updates-btn")?.addEventListener("click", () => {
+  chrome.windows.create({ url: "updates.html", type: "popup", width: 420, height: 320 });
+});
+
 
 // -------------------- DEFAULT MESSAGE --------------------
 

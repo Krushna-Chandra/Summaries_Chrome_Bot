@@ -1,310 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-     <title>AI Video Summary</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=ads_click" />
-  
-  <link rel="stylesheet" href="aivideosum.css" />
+    <title>AI Video Summary</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=ads_click" />
+    <link rel="stylesheet" href="aivideosum.css" />
 </head>
 
+<div class="container">
+  <header class="header">
+    <div class="window-controls">
+      <!-- Close (red) -->
+      <i id="close-btn" class="fa-solid fa-xmark btn-close" title="Close" aria-label="Close"></i>
 
-<body id="summarizer-page">
-    <div class="container" style="max-height: 350px;">
+      <!-- Back (green) -->
+      <i id="back-btn" class="fa-solid fa-arrow-left btn-back" title="Back" aria-label="Back"></i>
 
-    <div class="new2">
+      <!-- Minimize (yellow) -->
+      <i class="fa-solid fa-minus btn-min" title="Minimize" aria-label="Minimize"></i>
+    </div>
 
-        <div class="new">
-            <i class="fa-brands fa-apple" style="color: #f7d204;"></i>
-            <div class="macicon" style="position: relative;">
-                 <i id="close-btn" class="fa-solid fa-circle" style="color: red; cursor: pointer;">
-                    
-            <i class="fa-solid fa-xmark" style="color: black;position: absolute; margin: -1.2px -11.2px;"></i>
-          </i>
-          <i id="back-btn" class="fa-solid fa-circle" style="color: yellow; position: relative;">
-                        <i class="fa-solid fa-arrow-left" style="color: black; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
-                    </i>
-                
-                <i
-                        style="color: black; position: absolute; left: 687px;" class="fa-solid fa-arrow-left"></i></i>
-                <i class="fa-solid fa-circle" style="color: green; margin-left: 2px;"></i>
-            </div>
-        </div>
+            <h1 class="title">
+  <i class="fa-brands fa-apple"></i> AI Video Summarizer
+</h1>
 
-        <div class="modification">
-            <div class="h2" style="position: relative;">
-                <span>AI Video Summary</span>
-            </div>
-            <div class="icon-added" style="margin-top: 0px; position: relative;">
 
-                <!-- Checkbox + Updates -->
-                <span class="checkbox" id="checkbox" style="position: absolute; margin-left: 0px;">
+            <div class="theme-picker">
+                <span class="checkbox" id="checkbox" role="checkbox" aria-checked="false" tabindex="0">
                     <i id="notch" class="fa-solid fa-circle-notch"></i>
                     <i id="check" class="fa-regular fa-circle-check"></i>
                 </span>
+                <i id="updates-btn" class="fa-solid fa-upload"></i>
+                <span id="white-black"><i class="fa-solid fa-circle" style="background-image: linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%);"></i></span>
+                <span id="black-blue"><i class="fa-solid fa-circle" style="background: linear-gradient(to right, black, blue);"></i></span>
+                <span id="yellow-green"><i class="fa-solid fa-circle" style="background: linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5));"></i></span>
+                <span id="red-pink"><i class="fa-solid fa-circle" style="background: linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222));"></i></span>
+                <span id="black-red"><i class="fa-solid fa-circle" style="background: linear-gradient(to right, rgb(208, 16, 16), blue);"></i></span>
+            </div>
+        </header>
 
-                <!-- Updates button + container -->
-                <div
-                    style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; margin-left: 20px; position: relative;">
-                    <i id="updates-btn" class="fa-solid fa-upload" style="cursor: pointer;"></i>
-                    
-                    <!-- Red dot for updates -->
+        <div class="main-content">
+            
+            <div class="left-panel">
+                
+                <div class="control-group">
+                    <select id="summary-type" title="Select summary type">
+    <option value="brief" selected>✅ Brief Summary</option>
+    <option value="detailed">📑 Detailed Summary</option>
+    <option value="bullets">➤ Bullet Points</option>
+</select>
 
 
-                    <div id="updates-container"></div>
+                    <select id="language-select" title="Select language">
+                        <option value="auto">🌐 Auto-detect</option>
+                        <option value="en-US">English (en-US)</option>
+                        <option value="hi-IN">हिन्दी / Hindi (hi-IN)</option>
+                        <option value="es-ES">Español / Spanish (es-ES)</option>
+                        <option value="fr-FR">Français / French (fr-FR)</option>
+                        <option value="de-DE">Deutsch / German (de-DE)</option>
+                        <option value="pt-BR">Português (pt-BR)</option>
+                        <option value="zh-CN">中文 / Chinese (zh-CN)</option>
+                        <option value="ar-SA">العربية / Arabic (ar-SA)</option>
+                        <option value="ru-RU">Русский / Russian (ru-RU)</option>
+
+                    </select>
                 </div>
 
+                <div class="control-group">
+                    <button id="summarize">
+                        <span class="material-symbols-outlined">ads_click</span>
+                        <span>Summarize</span>
+                    </button>
+                </div>
 
-                <!-- Color theme buttons -->
-                <span id="white-black">
-                    <i class="fa-solid fa-circle" style="
-      background-image: linear-gradient(-11deg, #1c1c1cf2 37%, #2c2c2eed 76%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;">
-                    </i>
-                </span>
+                <div class="control-group result-actions">
+                    <button id="speak-btn">
+                        <i class="fa-solid fa-volume-high"></i>
+                        Speaker
+                    </button>
+                    <button id="copy-btn">
+                        <i class="fa-solid fa-copy"></i>
+                        Copy
+                    </button>
+                    <button id="voice-btn">
+                        <i class="fa-solid fa-microphone"></i>
+                        Voice
+                    </button>
+                    <button id="history-btn">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        History
+                    </button>
+                    
+                    <button id="share-btn">
+                        <i class="fa-solid fa-share-nodes"></i> Share
+                    </button>
+                    <div id="share-menu">
+                        <button class="share-btn" data-platform="whatsapp"><i class="fa-brands fa-whatsapp"></i></button>
+                        <button class="share-btn" data-platform="twitter"><i class="fa-brands fa-twitter"></i></button>
+                        <button class="share-btn" data-platform="facebook"><i class="fa-brands fa-facebook"></i></button>
+                        <button class="share-btn" data-platform="linkedin"><i class="fa-brands fa-linkedin"></i></button>
+                        <button class="share-btn" data-platform="copy"><i class="fa-solid fa-link"></i></button>
+                    </div>
+                </div>
+                
+                <div class="control-group footer-controls">
+                    <div id="font-controls">
+                        <button id="decrease-font" title="Decrease text size">
+                            <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        </button>
+                        <button id="increase-font" title="Increase text size">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </button>
+                    </div>
+        
+                    <div class="download-container">
+                        <button id="dropdownBtn" class="dropdown-btn" title="Download options">
+                            <i class="fa-solid fa-download"></i>
+                            <i id="angleIcon" class="fa-solid fa-angle-down"></i>
+                        </button>
+                        <div id="dropdownMenu" class="dropdown">
+                            <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
+                            <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+                        </div>
+                    </div>
+                </div>
 
-                <span id="black-blue">
-                    <i class="fa-solid fa-circle" style="
-      background: linear-gradient(to right, black, blue);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;">
-                    </i>
-                </span>
-
-                <span id="yellow-green">
-                    <i class="fa-solid fa-circle" style="
-      background: linear-gradient(to left, rgb(16, 193, 16), rgb(214, 228, 5));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;">
-                    </i>
-                </span>
-
-                <span id="red-pink">
-                    <i class="fa-solid fa-circle" style="
+            </div> <div class="right-panel">
+                <div id="result">
+                    Select a summary type and click 'Summarize' to generate a summary.
+                </div>
+            </div> </div> </div> 
     
-    background: linear-gradient(to right, rgb(227, 58, 11), rgb(225, 10, 222));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;">
-                    </i>
-                </span>
-
-                <span id="black-red">
-                    <i class="fa-solid fa-circle" style="
-      background: linear-gradient(to right, rgb(208, 16, 16), blue);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;">
-                    </i>
-                </span>
-
-            </div>
-         </div>
-        </div>
-    <div class="options">
-        <select id="summary-type">
-            <option value="brief">✅Brief Summary</option>
-            <option value="detailed">📄Detailed Summary</option>
-            <option value="bullets">➤ Bullet Points</option>
-        </select>
-        <button id="summarize">
-            <span class="material-symbols-outlined">ads_click</span>
-            <span>Summarize</span>
-        </button>
-        <button id="speak-btn">
-            <i class="fa-solid fa-volume-high" style="color: black;"></i>
-            Speaker
-        </button>
-        <button id="copy-btn">
-            <i class="fa-solid fa-copy" style="color: black;"></i>
-            Copy
-        </button>
-        <button id="share-btn" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-            <i class="fa-solid fa-share-nodes" style="color: black;"></i> Share
-        </button>
-        <button id="history-btn">
-            <i class="fa-solid fa-clock-rotate-left" style="color: black;"></i>
-            History
-        </button>
-
-        <button id="voice-btn">
-            <i class="fa-solid fa-microphone" style="color: black;"></i>
-            <p>Voice</p>
-        </button>
-
-
-
-        <div id="share-menu" style="
-  display: none;
-  position: absolute;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 5px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  z-index: 999;
-      margin-top: -71px;
-    margin-left: 162px;
-    margin-right: -3px;
-">
-            <button class="share-btn" data-platform="whatsapp"
-                style="background-color: #25D366; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-                <i class="fa-brands fa-whatsapp"></i>
-            </button>
-            <button class="share-btn" data-platform="twitter"
-                style="background-color: #1DA1F2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-                <i class="fa-brands fa-twitter"></i>
-            </button>
-            <button class="share-btn" data-platform="facebook"
-                style="background-color: #1877F2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-                <i class="fa-brands fa-facebook"></i>
-            </button>
-            <button class="share-btn" data-platform="linkedin"
-                style="background-color: #0A66C2; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-                <i class="fa-brands fa-linkedin"></i>
-            </button>
-            <button class="share-btn" data-platform="copy"
-                style="background-color: #333; color: #fff; margin: 3px; padding: 8px; border: none; border-radius: 4px;">
-                <i class="fa-solid fa-link"></i>
-            </button>
-        </div>
-
-    </div>
-
-    <div id="result" style="color: white; position: relative;">
-        Select a summary type and click ' 👆🏻 Summarize This Page' to generate a
-        summary.
-
-    </div>
-
-    <div class="footer" style="display: flex;  margin-top: 15px;">
-        <div class="newdiv" style="background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
-              border-radius: 25px; 
-              padding: px; 
-              font-size: 13px; 
-              font-weight: 700; 
-              color: black; 
-              box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
-              display: flex; 
-              width: 300px;    
-              gap: 2px;
-              ">
-
-
-
-            <!-- Contributor 1 -->
-            <a href="https://github.com/Sangram03" target="_blank"
-                style="display: flex; align-items: center; text-decoration: none; color: black; gap: 5px;">
-                <span>Develop by</span>
-                <img href="https://github.com/Sangram03" target="_blank" src="https://github.com/Sangram03.png"
-                    alt="Sangram Das" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
-            </a>
-
-            <!-- Contributor 2 -->
-            <a href="https://github.com/Krushna-Chandra" target="_blank"
-                style="display: flex; align-items: center; text-decoration: none; color: black;">
-                <span>Contributor</span>
-                <img src="https://github.com/Krushna-Chandra.png" alt="Other Contributor"
-                    style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-                <!-- Contributor 3 -->
-            </a>
-            <a href="https://github.com/prakashjena938" target="_blank"
-                style="display: flex; align-items: center; text-decoration: none; color: black;">
-                <img src="https://github.com/prakashjena938.png" alt="Other Contributor"
-                    style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
-            </a>
-            <a href="https://github.com/Bhababhanjan1" target="_blank"
-                style="display: flex; align-items: center; text-decoration: none; color: black;">
-                <img src="https://github.com/Bhababhanjan1.png" alt="Other Contributor"
-                    style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
-            </a>
-
-            <a href="https://github.com/Rajibpanda01" target="_blank"
-                style="display: flex; align-items: center; text-decoration: none; color: black;">
-                <img src="https://github.com/Rajibpanda01.png" alt="Other Contributor"
-                    style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid white;">
-
-
-            </a>
-
-        </div>
-
-
-
-
-        <div style="position: relative; margin-left: 20px;">
-            <!-- Dropdown Button -->
-            <div style="padding: 7px;" id="dropdownBtn" class="dropdown-btn">
-                <i style="color: black;" class="fa-solid fa-download"></i>
-                <i id="angleIcon" style="color: black;" class="fa-solid fa-angle-down"></i>
-            </div>
-
-            <!-- Dropdown Menu -->
-            <div id="dropdownMenu" class="dropdown hidden">
-                <button id="downloadPdfBtn"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
-                <button id="copyLinkBtn"><i class="fa-solid fa-link"></i> Copy Share Link</button>
-            </div>
-
-        </div>
-        <!-- insert this inside the .options div next to #summary-type -->
-        <select style="border-radius: 10px; margin-left: 15px; " id="language-select" title="Select language">
-            <option value="auto">🌐 Auto-detect (Default)</option>
-            <option value="en-US">English (en-US)</option>
-            <option value="hi-IN">हिन्दी / Hindi (hi-IN)</option>
-            <option value="es-ES">Español / Spanish (es-ES)</option>
-            <option value="fr-FR">Français / French (fr-FR)</option>
-            <option value="de-DE">Deutsch / German (de-DE)</option>
-            <option value="pt-BR">Português (pt-BR)</option>
-            <option value="zh-CN">中文 / Chinese (zh-CN)</option>
-            <option value="ar-SA">العربية / Arabic (ar-SA)</option>
-            <option value="ru-RU">Русский / Russian (ru-RU)</option>
-            <!-- add more language codes as needed -->
-        </select>
-
-
-
-
-        <!-- Add jsPDF -->
-
-        <div id="font-controls">
-            <button id="increase-font" title="Increase text size">
-                <i class="fa-solid fa-magnifying-glass-plus"></i>
-            </button>
-            <button id="decrease-font" title="Decrease text size">
-                <i class="fa-solid fa-magnifying-glass-minus"></i>
-            </button>
-        </div>
-        </div>
-    </div>
-    <!-- Then load your extension logic -->
-
-
-
-
-
-
     <script src="lib/jspdf.umd.min.js"></script>
     <script src="aivideosum.js"></script>
 </body>
-
 </html>
