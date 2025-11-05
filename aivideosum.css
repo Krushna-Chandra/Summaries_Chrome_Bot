@@ -1,603 +1,991 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Pacifico&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 * {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* --- Header Circle Hover Effects --- */
-
-/* This targets the three circles in the header */
-.macicon > i {
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+/* --- Base & Theme --- */
+html, body {
+  height: 100%;
 }
-
-/* This makes the circles smoothly enlarge and brighten on hover */
-.macicon > i:hover {
-    transform: scale(1.15);
-    filter: brightness(1.2);
-}
-
-/* --- Staggered Entry Animation System --- */
-
-/* 1. Define all the animations we will use */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes popIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 2. Set the initial state of elements to be invisible ONLY on the summarizer page */
-#summarizer-page .new2,
-#summarizer-page .options,
-#summarizer-page #result,
-#summarizer-page .footer {
-  opacity: 0;
-}
-
-/* 3. Trigger animations ONLY on the summarizer page when it is loaded */
-#summarizer-page.page-loaded .new2 {
-  animation: slideDown 0.6s ease-out forwards;
-}
-
-#summarizer-page.page-loaded .options {
-  animation: popIn 0.7s 0.2s ease-out forwards;
-}
-
-#summarizer-page.page-loaded #result {
-  animation: fadeUp 0.7s 0.4s ease-out forwards;
-}
-
-#summarizer-page.page-loaded .footer {
-  animation: fadeUp 0.8s 0.6s ease-out forwards;
-}
-
-
 
 body {
   font-family: "Outfit", sans-serif;
-  min-width: 350px;
-  max-height: 350px;
-  min-height: 350px;
-  padding: 15px;
-  background-image: linear-gradient(-11deg, #121212, #1c1c1cf2 37%, #2c2c2eed 76%, #0a0a0a);
-  background-repeat: no-repeat;
-  background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
-  color: #f5f5f5;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  min-width: 580px; 
+  min-height: 461px;
+  max-height: 360px; /* Original shorter window — keep this if you want a fixed height */
+  padding: 16px;
+  color: #f0f0f0;
+  background: radial-gradient(ellipse at top, #2a2a45, #12121c);
+  overflow: hidden; 
 }
 
 
 
-.fa-brands.fa-apple {
-  font-size: 22px; /* adjust size if needed */
-  color: #fff; 
-  text-shadow: 
-    0 0 5px #00f,   /* small blue glow */
-    0 0 10px #00f,  /* medium glow */
-    0 0 15px #0ff,  /* cyan glow */
-    0 0 20px #0ff, 
-    0 0 25px #0ff, 
-    0 0 30px #0ff;
-  transition: all 0.3s ease;
-}
-
-
-
-
-
-.h2 {
-  color: #0ad5ff;
-  margin-top: 5px;
-  font-size: 20px;
-  font-weight: bold;
-  text-shadow: 0 2px 6px rgba(10, 213, 255, 0.6);
-}
-
-.options {
+.container {
+  width: 95%;
+  max-width: 950px;
+  min-width: 650px;
+  min-height: 400px;
+  max-height: 600px;             /* original responsive height range */
+  border-radius: 18px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 18px 50px rgba(2,6,12,0.6);
+  backdrop-filter: blur(14px);
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  flex-direction: column;
+  overflow: visible;
+  margin: 0 auto;
 }
 
-button {
-  padding: 8px 15px;
-  background: linear-gradient(135deg, #4285f4, #34a853);
-  border: 2px solid transparent;
-  color: white;
-  border-radius: 10px;
+/* ---------------- Smooth: Blur Float (recommended) ---------------- */
+:root { --entry-duration: 880ms; --entry-easing: cubic-bezier(0.22,1,0.36,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  body.page-loaded .container { animation: none !important; opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes blurFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.986) rotateX(3deg);
+    filter: blur(14px) saturate(0.94);
+  }
+  50% {
+    opacity: 0.96;
+    transform: translateY(6px) scale(1.006) rotateX(1deg);
+    filter: blur(6px) saturate(1.02);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.002) rotateX(0.4deg);
+    filter: blur(2px) saturate(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+    filter: blur(0) saturate(1.06);
+  }
+}
+
+body.page-loaded .container {
+  animation: blurFloat var(--entry-duration) var(--entry-easing) both;
+  transform-origin: center;
+  will-change: transform, filter, opacity;
+}
+
+
+
+
+
+/* --- Staggered Entry Animation --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animate the main layout blocks */
+.header, .left-panel, .right-panel {
+  opacity: 0; 
+}
+body.page-loaded .header { animation: fadeInUp 0.5s 0.1s ease-out forwards; }
+body.page-loaded .left-panel { animation: fadeInUp 0.5s 0.2s ease-out forwards; }
+body.page-loaded .right-panel { animation: fadeInUp 0.5s 0.3s ease-out forwards; }
+
+
+
+/* --- Header --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-bottom: 12px;
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.window-controls {
+  display: flex;
+  gap: 6px;
+}
+.window-controls > i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0;
+  padding: 0;
+  font-size: 7px;
+  color: #000000; /* ✅ show icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window-controls > i:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+.btn-close { background-color: #ff5f57; }
+.btn-back { background-color: #febb2e; } 
+.btn-min { background-color: #28c840; }
+
+.btn-min::before {
+  content: ""; /* remove any icon content */
+}
+
+.btn-min {
+  color: transparent !important; /* hide FontAwesome icon inside */
+}
+
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #d0c0ff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* ---------- PATCH: Simple gradient swatches (no overlapping circle glyph) ---------- */
+/* Apply specifically to the swatches in your .theme-picker so other .fa-circle uses stay intact */
+.theme-picker > span > i.fa-circle {
+  /* make the element a simple block-level circular swatch */
+  display: inline-block !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  border-radius: 50% !important;
+  line-height: 18px;
+  vertical-align: middle;
+  /* inline styles on the element already set background/gradient - keep it */
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+
+  /* hide the FontAwesome glyph itself (we only want the background) */
+  color: transparent !important;
+  text-indent: -9999px !important;
+  font-size: 0 !important; /* avoid glyph spacing */
+  box-shadow: none !important; /* remove any pre-existing shadow that caused overlap */
+  border: 1px solid rgba(0,0,0,0.06); /* subtle border so swatch reads on dark/light */
+  margin: 0 4px; /* spacing between swatches */
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  opacity: 0.95;
+}
+
+/* hover / focus: gentle scale and glow */
+.theme-picker > span > i.fa-circle:hover,
+.theme-picker > span:hover > i.fa-circle {
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  opacity: 1;
+}
+
+/* ensure the span wrapper doesn't impose extra layout or overlap */
+.theme-picker > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+/* if any other rules added absolute positioning earlier, neutralize for the swatches */
+.theme-picker > span > i.fa-circle[style] {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* optional: make the active/selected swatch clearly visible */
+/* Add .is-active to the <span> via JS when user selects a background */
+.theme-picker > span.is-active > i.fa-circle {
+  outline: 2px solid rgba(255,255,255,0.14);
+  outline-offset: 2px;
+  transform: scale(1.12);
+}
+
+
+.theme-picker {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.theme-picker > span > i {
+  font-size: 10px; 
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+.theme-picker > span > i:hover {
+  opacity: 1;
+}
+.theme-picker   #updates-btn {
+  font-size: 14px;
+  color: #ffffff;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.theme-picker #checkbox {
+  margin-top: 3px;
+  font-size: 14px;
+  
+  accent-color: #7f5af0; /* custom color for modern browsers */
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+
+
+.theme-picker .theme-picker #updates-btn:hover {
+  color: #fff;
+}
+/* .fa-circle-notch, .fa-circle-check {
   font-size: 12px;
+  transition: opacity 0.3s ease;
+  position: absolute;
+}
+.fa-circle-notch { color: #888; }
+.fa-circle-check { color: #7f5af0; opacity: 0; } */
+/* --- Header Checkbox Toggle --- */
+.checkbox {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.checkbox i {
+  position: absolute;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+/* initial: show hollow circle (notch), hide check */
+#notch { opacity: 1; color: #888; }
+#check { opacity: 0; color: #22c55e; } /* green when shown */
+
+/* toggled state: hide notch, show green tick */
+.checkbox.is-checked #notch { opacity: 0; transform: scale(0.6); }
+.checkbox.is-checked #check  { opacity: 1; transform: scale(1); }
+
+/* optional hover nudge */
+.checkbox:hover { transform: scale(1.05); }
+
+
+
+/* --- NEW 2-COLUMN LAYOUT --- */
+.main-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;                  /* KEY: allow children to shrink/scroll */
+  gap: 16px;
+  overflow: hidden;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  width: 230px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;      /* ✅ allow internal scroll */
+  overflow: hidden;
+  max-height: 350px;  /* ✅ this replaces the container’s fixed height */
+}
+
+
+
+
+/* NEW: Grouping for buttons in the left panel */
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  position: relative; /* For share menu */
+}
+
+
+/* --- Options Bar (Dropdowns) --- */
+/* (Was .options-bar, now just styling the selects directly) */
+/* --- Modern Dual-Style Dropdowns --- */
+
+/* 🌈 Summary Type Dropdown — Purple Gradient */
+/* --- Premium Glassy Dropdown (Summary Type) --- */
+#summary-type {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(20, 20, 30, 0.8); /* dark glass layer */
+  color: #f5f5f5;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  backdrop-filter: blur(10px);
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.03),
+              0 3px 10px rgba(0, 0, 0, 0.4);
+  background-image: linear-gradient(to bottom right, rgba(255,255,255,0.05), rgba(0,0,0,0.2));
+  position: relative;
+}
+
+/* --- On Hover --- */
+#summary-type:hover {
+  background: rgba(35, 35, 55, 0.9);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 10px rgba(255,255,255,0.1),
+              0 0 20px rgba(180, 180, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* --- On Focus --- */
+#summary-type:focus {
+  outline: none;
+  border-color: rgba(180,180,255,0.5);
+  box-shadow: 0 0 12px rgba(160,160,255,0.3),
+              inset 0 0 6px rgba(255,255,255,0.05);
+  background: rgba(40, 40, 70, 0.95);
+}
+
+/* --- Dropdown Options --- */
+#summary-type option {
+  background: #1e1e2f; /* solid background for visibility */
+  color: #f0f0f0;
+  border: none;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* --- Placeholder option (dim) --- */
+#summary-type option[value=""] {
+  color: #999;
+  font-style: italic;
+}
+
+/* --- Custom Arrow Icon --- */
+#summary-type::after {
+  content: "▾";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+}
+
+
+/* 🟢 Language Dropdown — Teal Gradient */
+/* --- Premium Glassy Dropdown (Language Selector) --- */
+#language-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 15, 25, 0.8); /* slightly darker tone */
+  color: #f5f5f5;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  backdrop-filter: blur(10px);
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.03),
+              0 3px 10px rgba(0, 0, 0, 0.4);
+  background-image: linear-gradient(to bottom right, rgba(255,255,255,0.05), rgba(0,0,0,0.25));
+  position: relative;
+}
+
+/* --- On Hover --- */
+#language-select:hover {
+  background: rgba(30, 30, 50, 0.9);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 10px rgba(255,255,255,0.1),
+              0 0 20px rgba(120, 180, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* --- On Focus --- */
+#language-select:focus {
+  outline: none;
+  border-color: rgba(120,180,255,0.5);
+  box-shadow: 0 0 12px rgba(120,180,255,0.3),
+              inset 0 0 6px rgba(255,255,255,0.05);
+  background: rgba(40, 50, 80, 0.95);
+}
+
+/* --- Dropdown Options --- */
+#language-select option {
+  background: #1e1e2f; /* solid, dark background for contrast */
+  color: #f0f0f0;
+  border: none;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* --- Placeholder / Auto Option --- */
+#language-select option[value="auto"] {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* --- Custom Arrow Icon --- */
+#language-select::after {
+  content: "▾";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+}
+
+
+/* Dropdown menu (option) styling */
+#summary-type option,
+#language-select option {
+  background: #1a1a2a;
+  color: #f0f0f0;
+  border: none;
+  font-size: 14px;
+  padding: 8px;
+}
+
+/* Improve dropdown readability and placeholder look */
+#summary-type {
+  font-size: 14px;
+  color: #f0f0f0;
+}
+
+#summary-type option[value=""] {
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+/* Make sure arrow behaves normally */
+#summary-type {
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+option {
+  background: #1e1e30;
+  color: #f0f0f0;
+}
+
+/* --- Main Summarize Button --- */
+#summarize {
+  width: 100%;
+  padding: 10px 15px;
+  background: linear-gradient(90deg, #8E2DE2, #4A00E0);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
   font-family: "Outfit", sans-serif;
   font-weight: 600;
   transition: all 0.3s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
-
 #summarize:hover {
-  background: linear-gradient(135deg, #ff4d4d, #ff9900);
-  border: 2px dashed #0ad5ff;
-  transform: scale(1.05);
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(142, 45, 226, 0.6);
+}
+#summarize:active {
+  transform: scale(0.99);
+  opacity: 0.9;
+}
+#summarize .material-symbols-outlined {
+  font-size: 20px;
 }
 
-#copy-btn {
-  background: linear-gradient(135deg, #34a853, #0f9d58);
-  border: 2px solid transparent;
-  border-radius: 12px;
-}
 
-#copy-btn:hover {
-  background: linear-gradient(135deg, #07b7f7, #0066ff);
-  border: 2px dotted yellow;
-  transform: scale(1.05);
-}
-
-#summary-type {
-  padding: 8px;
-  border-radius: 10px;
-  border: 2px solid black;
-  background: #1f1f1f;
-  color: #fff;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-#summary-type:focus {
-  border-color: #0ad5ff;
-  box-shadow: 0 0 10px #0ad5ff;
-  outline: none;
-}
-
+/* --- Result Text Area --- */
+/* --- Two-way Scrollable Text Area --- */
+/* --- Auto Scroll (Appears Only When Needed) --- */
+/* --- Elegant Auto-Fade Scrollbars --- */
 #result {
-  margin-top: 5px;
-  padding: 9px;
-  border: 1px solid #444;
-  border-radius: 32px;
-  height: 150px;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: auto;
   white-space: pre-wrap;
-  line-height: 1.5;
-  background: rgba(20, 20, 20, 0.85);
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.4);
+  line-height: 1.6;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  color: #e0e0e0;
+  transition: font-size 0.25s ease;
+  word-wrap: normal;
+  word-break: normal;
+  scrollbar-width: thin; /* for Firefox */
+  scrollbar-color: rgba(127, 90, 240, 0.3) transparent;
+  position: relative;
 }
 
-i {
-  padding: 1px;
-  margin-right: 8px;
-  color: yellow;
+/* --- WebKit (Chrome, Edge) Scrollbars --- */
+#result::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  opacity: 0; /* start invisible */
+  transition: opacity 0.4s ease;
 }
 
-#result ul {
-  padding-left: 10px;
+#result::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
 }
 
-#result li {
-  margin-bottom: 8px;
+#result::-webkit-scrollbar-thumb {
+  background: rgba(127, 90, 240, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
 }
 
+#result::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.8);
+}
+
+/* --- Fade-in on hover or scroll --- */
+#result:hover::-webkit-scrollbar,
+#result:active::-webkit-scrollbar,
+#result:focus::-webkit-scrollbar {
+  opacity: 1;
+}
+
+/* --- For Firefox fade trick (semi-static) --- */
+#result:hover {
+  scrollbar-color: rgba(127, 90, 240, 0.6) transparent;
+}
+
+
+#result ul { padding-left: 20px; }
+#result li { margin-bottom: 8px; }
+#result strong { color: #a78bfa; font-weight: 600; }
+
+/* Loading spinner */
 .loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 150px;
+  height: 100%;
 }
-
 .loader {
-  width: 50px;
+  width: 40px;
   aspect-ratio: 1;
   display: grid;
   border: 4px solid #0000;
   border-radius: 50%;
-  border-color: #ccc #0000;
+  border-color: #555 #0000;
   animation: spin 1s infinite linear;
 }
-
-.loader::before,
-.loader::after {
+.loader::before, .loader::after {
   content: "";
   grid-area: 1/1;
   margin: 2px;
   border: inherit;
   border-radius: 50%;
 }
-
 .loader::before {
-  border-color: #0ad5ff #0000;
+  border-color: #7f5af0 #0000;
   animation: spin 0.6s infinite linear reverse;
 }
-
 .loader::after {
   margin: 8px;
 }
-
 @keyframes spin {
   100% { transform: rotate(1turn); }
 }
 
-.fa-brain {
-  font-size: 20px;
-  cursor: pointer;
+
+/* --- Result Action Buttons --- */
+.result-actions {
+  display: grid; /* Use grid for a clean 2-column layout */
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
-.new {
-  display: flex;
-  justify-content: space-between;
-}
-
-.fa-circle {
-  cursor: pointer;
-}
-
-#summarize {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-#share-btn {
-  background: linear-gradient(135deg, #888, #444);
-  color: black;
-  border: 1px solid black;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-#share-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.modification {
-  display: flex;
-  justify-content: space-between;
-}
-
-.checkbox {
-  cursor: pointer;
-  position: relative;
-}
-
-.fa-circle-notch,
-.fa-circle-check {
-  font-size: 16px;
-  transition: opacity 0.3s ease;
-  position: absolute;
-}
-
-.fa-circle-notch {
-  color: rgb(239, 207, 176);
-}
-
-.fa-circle-check {
-  color: #0ad5ff;
-  opacity: 0;
-}
-
-.newdiv {
-  position: relative;
-  width: 250px;
-  height: 35px;
-  background: #222;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 50px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-}
-
-.newdiv::before {
-  content: "";
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  background: conic-gradient(#111111, #ff2e2e, #ff0099, #ffcc00, #ff2e2e, #ddd4d4);
-  border-radius: 30px;
-  z-index: 0;
-  animation: rotateBorder 3s linear infinite;
-  filter: blur(2px);
-  box-shadow: 0 0 12px rgba(201, 197, 197, 0.8);
-}
-
-.newdiv::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  right: 3px;
-  bottom: 3px;
-  background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(173, 164, 137, 1) 0%, rgba(166, 145, 76, 1) 47%, rgba(191, 189, 172, 1) 100%);
-  border-radius: 30px;
-  z-index: 1;
-}
-
-@keyframes rotateBorder {
-  0% { transform: rotateZ(0deg); }
-  100% { transform: rotateZ(360deg); }
-}
-
-.newdiv a {
-  text-decoration: none;
-  color: #0ad5ff;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-family: "Pacifico", cursive;
-  font-weight: 400;
-}
-
-#speak-btn {
-  background: linear-gradient(135deg, #8e2de2, #ff0080);
-}
-
-#speak-btn:hover {
-  background: linear-gradient(135deg, #ff0080, #8e2de2);
-}
-
-.dropdown-btn {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border: 1px solid #ccc;
+.result-actions > button {
+  width: 100%;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.08); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #d0d0d0;
   border-radius: 6px;
-  background: #f5f5c1;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.result-actions > button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
   color: #fff;
 }
+.result-actions > button:active {
+  transform: scale(0.95);
+}
+.result-actions > button i {
+  margin: 0;
+  padding: 0;
+  color: inherit; 
+  font-size: 12px;
+}
+#speak-btn i { color: #f08a5d; }
+#copy-btn i { color: #5df0a1; }
+#voice-btn i { color: #f05d8c; }
+#history-btn i { color: #f0e05d; }
+#share-btn i { color: #5daaf0; }
 
+
+/* --- Share Menu (Unchanged logic, new style) --- */
+#share-menu {
+  display: none;
+  position: absolute;
+  background: #2a2a45;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  z-index: 999;
+  bottom: 110%; /* Show above the button */
+  right: 0;
+  display: none;
+  gap: 5px;
+}
+#share-btn:focus + #share-menu, #share-menu:hover {
+  display: flex;
+}
+.share-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin: 0;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+.share-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.share-btn[data-platform="whatsapp"]:hover { background-color: #25D366; }
+.share-btn[data-platform="twitter"]:hover { background-color: #1DA1F2; }
+.share-btn[data-platform="facebook"]:hover { background-color: #1877F2; }
+.share-btn[data-platform="linkedin"]:hover { background-color: #0A66C2; }
+
+
+/* --- Footer Bar --- */
+/* (Was .footer-bar, now .footer-controls) */
+.footer-controls {
+  margin-top: auto; /* Pushes to the bottom of the left panel */
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0; /* Override .control-group margin */
+}
+
+#font-controls, .download-container {
+  display: flex;
+  gap: 8px;
+  position: relative; /* For dropdown */
+}
+
+#font-controls button, .dropdown-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #d0d0d0;
+  border-radius: 50%; 
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+#font-controls button:hover, .dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+#font-controls button:active, .dropdown-btn:active {
+  transform: scale(0.9);
+}
+#font-controls button i, .dropdown-btn i {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+.dropdown-btn {
+  gap: 4px;
+  width: auto;
+  padding: 0 10px;
+  border-radius: 20px;
+}
+#angleIcon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+.dropdown-btn:focus + .dropdown.show #angleIcon,
+.dropdown.show #angleIcon {
+  transform: rotate(180deg);
+}
+
+/* Download Dropdown */
 .dropdown {
   display: none;
   position: absolute;
-  bottom: 100%;
-  left: 0;
-  margin-top: 5px;
-  background: #1a0606;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  min-width: 160px;
-  z-index: 999;
+  bottom: 120%; 
+  right: 0;
+  background: #2a2a45;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  min-width: 170px;
+  z-index: 998;
+  overflow: hidden;
 }
-
 .dropdown.show {
   display: block;
 }
-
 .dropdown button {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border: none;
   background: transparent;
-  color: #fff;
+  color: #f0f0f0;
   cursor: pointer;
   text-align: left;
-}
-
-.dropdown button:hover {
-  background: #19ca54;
-}
-
-#history-container {
-  display: none;
-  margin-top: 10px;
-  max-height: 250px;
-  overflow-y: auto;
-  color: white;
-  padding: 8px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.5);
   font-size: 13px;
+  font-family: "Outfit", sans-serif;
 }
-
-#history-btn {
-  background: linear-gradient(135deg, #ff6a00, #e75704);
-  border: 2px solid black;
-  color: white;
-}
-#history-btn:hover {
-  background: linear-gradient(135deg, #ff9900, #ff4500);
+.dropdown button:hover {
+  background: #7f5af0;
   color: #fff;
-  transform: scale(1.08);
-  box-shadow: 0 0 12px rgba(255, 118, 0, 0.8);
-  border: 2px solid #ffd700;
+}
+.dropdown button i {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
 }
 
+/* --- History View (from your old CSS) --- */
 .history-item {
   margin-bottom: 10px;
   padding: 10px;
-  background: #2a2a2a;
+  background: rgba(0,0,0,0.2);
   border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid rgba(255,255,255,0.1);
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: transform 0.2s ease;
 }
-
 .history-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+  border-color: #7f5af0;
 }
-
 .history-item b {
   font-size: 14px;
-  color: #ffd700;
+  color: #a78bfa; 
 }
-
 .history-item small {
   font-size: 11px;
-  color: #bbb;
+  color: #aaa;
 }
-
 .history-item a {
   display: inline-block;
   margin-top: 5px;
   font-size: 12px;
-  color: #4da6ff;
+  color: #8be0ff;
 }
-
-#font-controls {
-  display: flex;
-  gap: 8px;
-  margin-left: auto;
-}
-
-#font-controls button {
-  background: linear-gradient(135deg, #03f3f3, #1a1a1a);
-  color: #ffd700;
+#clear-history-btn {
+  background: #b33a3a;
+  color: white;
+  padding: 6px 10px;
   border: none;
-  border-radius: 8px;
-  width: 38px;
-  height: 34px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+#clear-history-btn:hover {
+  background: #c84a4a;
+}
+
+/* --- Modernized Left Panel Buttons (Icons stay still) --- */
+.left-panel button {
+  background: linear-gradient(135deg, #3a3a5a, #2a2a45);
+  border: none;
+  border-radius: 10px;
+  color: #eaeaea;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  gap: 8px;
 }
 
-#font-controls button i {
-  pointer-events: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+/* Distinct gradient styles per button for a vibrant modern look */
+#speak-btn {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
 }
-
-#font-controls button:hover {
-  background: linear-gradient(270deg, #ff6a00, #ff2e63, #ff6a00);
-  color: #fff;
-  box-shadow: 0 0 12px rgba(255, 118, 0, 0.8);
-  transform: scale(1.1);
+#copy-btn {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
 }
-
-#font-controls button:active {
-  transform: scale(0.92);
-  box-shadow: 0 0 8px rgba(255, 118, 0, 0.6);
-}
-
 #voice-btn {
-  background: linear-gradient(135deg, #8e2de2, #ff0080);
-  color: white;
-  border: 2px solid black;
-  border-radius: 12px;
-  font-weight: bold;
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+}
+#history-btn {
+  background: linear-gradient(135deg, #43cea2, #185a9d);
+}
+#share-btn {
+  background: linear-gradient(135deg, #f7971e, #ffd200);
 }
 
-#voice-btn:hover {
-  background: linear-gradient(135deg, #ff0080, #8e2de2);
-  transform: scale(1.05);
-}
-
-
-#language-select {
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 2px solid #333;
-  background: rgba(30, 30, 30, 0.85);
-  color: #f6cece;
-  font-family: "Outfit", sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  appearance: none; /* remove default arrow */
-  background-image: linear-gradient(135deg, #fff, #08ecfd);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Hover effect */
-#language-select:hover {
-  border-color: #0ad5ff;
-  box-shadow: 0 0 12px rgba(10, 213, 255, 0.6);
-  transform: scale(1.05);
-}
-
-/* Focus effect */
-#language-select:focus {
-  outline: none;
-  border-color: #ffd700;
-  box-shadow: 0 0 14px rgba(255, 215, 0, 0.8);
-  background: rgba(40, 40, 40, 0.95);
+/* Subtle motion and glow on hover */
+.left-panel button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 18px rgba(127, 90, 240, 0.5);
   color: #fff;
-  -webkit-text-fill-color: #fff;
 }
 
-/* Add a custom dropdown arrow */
-#language-select::after {
-  content: "▼";
+/* Gentle click feedback */
+.left-panel button:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 10px rgba(127, 90, 240, 0.3);
+}
+
+/* Soft pulse animation for button glow — icons stay static */
+.left-panel button::before {
+  content: "";
   position: absolute;
-  right: 12px;
-  pointer-events: none;
-  color: #0ad5ff;
-  font-size: 12px;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.left-panel button:hover::before {
+  opacity: 1;
+  animation: softPulse 1.6s infinite alternate;
+}
+@keyframes softPulse {
+  from {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1.05);
+    opacity: 0.6;
+  }
 }
 
-/* 1. Header Circles (Close, Back, Minimize) */
-.macicon > i:active {
-  transform: scale(1); /* Slightly smaller than hover for a 'pop' effect */
-  filter: brightness(0.85);
+/* Icons remain fixed but slightly brighter on hover */
+/* ==== Left Panel Icons — Black, Clean, Minimal ==== */
+.left-panel button i {
+  font-size: 16px;
+  margin-right: 10px;
+  color: #000000 !important; /* solid black */
+  text-shadow: none !important;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.left-panel button:hover i {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+.left-panel button:active i {
+  transform: scale(0.95);
+  opacity: 0.8;
 }
 
 
-.options button:not(#increase-font):not(#decrease-font):active,
-.dropdown button:active,
-.share-btn:active,
-.dropdown-btn:active,
-#clear-history-btn:active {
-    transform: scale(0.92); /* Same effect as the font-size buttons */
-    filter: brightness(0.95);
-    transition: transform 0.1s ease-out; /* A quick, responsive press */
+
+
+
+/* --- Yellow Apple Logo Before Title with Blue-Cyan Glow --- */
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* space between icon and text */
 }
+
+.title .fa-apple {
+  font-size: 22px;
+  color: #f7d204 !important; /* Force yellow color */
+  -webkit-text-fill-color: #f7d204 !important; /* Override gradient fill */
+  -webkit-background-clip: border-box !important; /* Disable text clipping for icon */
+  text-shadow:
+    0 0 6px rgba(0, 255, 255, 0.7),
+    0 0 12px rgba(0, 200, 255, 0.6),
+    0 0 20px rgba(0, 180, 255, 0.5),
+    0 0 28px rgba(0, 255, 255, 0.4);
+  margin-right: 6px;
+  transition: all 0.3s ease;
+}
+
 
 

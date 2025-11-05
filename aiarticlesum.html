@@ -317,6 +317,35 @@
                     </button>
                 </div>
 
+        </div>
+        <!-- insert this inside the .options div next to #summary-type -->
+        <select style="border-radius: 10px; margin-left: 15px; " id="language-select" title="Select language">
+            <option value="auto">🌐 Auto-detect (Default)</option>
+            <option value="en-US">English (en-US)</option>
+            <option value="hi-IN">हिन्दी / Hindi (hi-IN)</option>
+            <option value="es-ES">Español / Spanish (es-ES)</option>
+            <option value="fr-FR">Français / French (fr-FR)</option>
+            <option value="de-DE">Deutsch / German (de-DE)</option>
+            <option value="pt-BR">Português (pt-BR)</option>
+            <option value="zh-CN">中文 / Chinese (zh-CN)</option>
+            <option value="ar-SA">العربية / Arabic (ar-SA)</option>
+            <option value="ru-RU">Русский / Russian (ru-RU)</option>
+            <option value="or-IN">🇮🇳 Odia (ଓଡ଼ିଆ)</option>
+
+            <!-- add more language codes as needed -->
+        </select>
+
+        <!-- Add jsPDF -->
+
+        <div id="font-controls">
+            <button id="increase-font" title="Increase text size">
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+            </button>
+            <button id="decrease-font" title="Decrease text size">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </button>
+        </div>
+
 
             </div>
             <!-- insert this inside the .options div next to #summary-type -->
@@ -346,6 +375,7 @@
                     <i class="fa-solid fa-magnifying-glass-minus"></i>
                 </button>
             </div>
+
         </div>
     </div>
     <!-- Then load your extension logic -->
