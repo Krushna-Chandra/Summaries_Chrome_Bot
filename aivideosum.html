@@ -132,6 +132,44 @@
                     Select a summary type and click 'Summarize' to generate a summary.
                 </div>
             </div> </div> </div> 
+
+            <div class="left-icon" id="toggleBtn">
+                <span>F</span>
+                <span>O</span>
+                <span>N</span>
+                <span>T</span>
+            </div>
+
+            <!-- Sidebar Font Panel -->
+            <div class="panel" id="sidePanel">
+                <!-- font picker header (keeps your existing header/title) -->
+                <!-- Font Picker (replace previous font-list markup) -->
+                <div class="font-panel-content">
+                    <div class="font-top" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="font-toggle-btn">Aa</button>
+                        <div class="font-title-display">Font: <span id="activeFontName">Default</span></div>
+                        </div>
+                    </div>
+
+                    <input id="fontSearch" class="font-search" placeholder="Search fonts (type to filter) — e.g. Roboto, Poppins..." />
+
+                    <div class="font-tabs">
+                        <button class="font-tab active" data-tab="localFonts">Local Fonts</button>
+                        <button class="font-tab" data-tab="systemFonts">System Fonts</button>
+                        <button class="font-tab" data-tab="customFonts">Custom Fonts</button>
+                        <button class="font-tab" data-tab="favoriteFonts">⭐Fav</button>
+                    </div>
+
+                    <div id="localFonts" class="font-list show"></div>
+                    <div id="systemFonts" class="font-list"></div>
+                    <div id="customFonts" class="font-list"></div>
+                    <div id="favoriteFonts" class="font-list"></div>
+                </div>
+
+
+            </div>
+
     
     <script src="lib/jspdf.umd.min.js"></script>
     <script src="aivideosum.js"></script>
