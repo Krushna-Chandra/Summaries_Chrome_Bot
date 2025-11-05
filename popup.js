@@ -225,7 +225,6 @@ async function getGeminiSummary(text, summaryType, apiKey, language) {
 }
 
 // --------------- Save Summary to History ---------------
-
 async function saveSummaryToHistory(tab, summary, type) {
   const entry = {
     url: tab.url,
@@ -251,9 +250,7 @@ function loadHistory() {
   const resultDiv = document.getElementById("result");
 
   if (showingHistory) {
-    
     // 👈 Already showing history → restore last summary or default message
-
     resultDiv.innerHTML =
       lastSummaryContent ||
       "Select a summary type and click ' 👆🏻 Summarize This Page' to generate a summary.";
@@ -262,7 +259,6 @@ function loadHistory() {
   }
 
   // 👇 Save current content before overwriting with history
-
   lastSummaryContent = resultDiv.innerHTML;
 
   chrome.storage.local.get(["summaryHistory"], (data) => {
@@ -591,7 +587,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // 🌈 Apply theme
-
   function applyTheme(themeKey) {
     const theme = themes[themeKey];
     if (!theme) return;
@@ -601,14 +596,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🔄 Update icons
-
   function updateIcons(showNotch, showCheck) {
     if (notch) notch.style.display = showNotch ? "block" : "none";
     if (check) check.style.opacity = showCheck ? "1" : "0";
   }
 
   // 💾 Save theme
-
   function saveTheme(themeKey) {
     chrome.storage.local.set({ customBackground: themeKey }, () => {
       if (chrome.runtime.lastError) {
